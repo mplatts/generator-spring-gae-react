@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<groupId><%= slugify(project) %></groupId>
+	<artifactId><%= slugify(project) %></artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+
+	<parent>
+		<groupId>com.threewks.thundr</groupId>
+		<artifactId>thundr-gae-app</artifactId>
+		<version>5</version>
+	</parent>
+
+	<scm>
+		<connection><%= _.unescape('${scm.url}')%></connection>
+		<url><%= _.unescape('${scm.url}')%></url>
+		<developerConnection><%= _.unescape('${scm.url}')%></developerConnection>
+	</scm>
+
+	<properties>
+		<scm.url>scm:git:<%= gitPath %></scm.url>
+		<maven.build.timestamp.format>yyyyMMdd-HHmmss</maven.build.timestamp.format>
+		<appId><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></appId>
+		<appVersion><%= _.unescape('${user.name}')%></appVersion>
+    <gae.version>1.9.50</gae.version>
+
+		<!-- Usd by parent for thundr-gae -->
+		<thundr.version>3.0.0</thundr.version>
+	</properties>
+
+	<!-- Profiles define the environments available. The active profile determines what environment you're deploying to when running appengine:update or similar -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>uat</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-scm-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>tag-deployment</id>
+								<phase>package</phase>
+								<goals>
+									<goal>tag</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>prod</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-scm-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>tag-deployment</id>
+								<phase>package</phase>
+								<goals>
+									<goal>tag</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<repositories>
+		<repository>
+			<id>3wks-maven-repo</id>
+			<url>s3://3wks-maven-repo/release</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<!-- Additional or overridden dependencies go here -->
+	</dependencies>
+
+	<build>
+		<pluginManagement>
+		<plugins>
+				<plugin>
+					<artifactId>maven-scm-plugin</artifactId>
+					<version>1.9.5</version>
+					<configuration>
+						<tag><%= _.unescape('${appId}-v-${appVersion}-${build.time}')%></tag>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<!-- Maven's build timezone is always in UTC so that's why we use this. See http://stackoverflow.com/a/35578881/945789 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.12</version>
+				<executions>
+					<execution>
+						<id>timestamp-property</id>
+						<goals>
+							<goal>timestamp-property</goal>
+						</goals>
+						<phase>initialize</phase>
+						<configuration>
+							<name>build.time</name>
+							<pattern>yyyyMMdd-HHmmss</pattern>
+							<locale>en_AU</locale>
+							<timeZone>AET</timeZone>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- This plugin runs the static asset build at the appropriate lifecycle points of the maven build -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<executions>
+					<execution> <!-- Clean static resources during mvn clean -->
+						<id>clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>run</argument>
+								<argument>clean</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution> <!-- Build static resources during mvn generate-sources -->
+						<id>build</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<phase>generate-sources</phase>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>run</argument>
+								<argument>build</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution> <!-- Run static resource tests during mvn test -->
+						<id>test</id>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<phase>test</phase>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>run</argument>
+								<argument>test</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.google.appengine</groupId>
+				<artifactId>appengine-maven-plugin</artifactId>
+				<version><%= _.unescape('${gae.version}')%></version>
+				<configuration>
+					<address>0.0.0.0</address>
+					<port>8081</port>
+					<disableUpdateCheck>true</disableUpdateCheck>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<extensions>
+			<extension>
+				<groupId>org.kuali.maven.wagons</groupId>
+				<artifactId>maven-s3-wagon</artifactId>
+				<version>1.2.1</version>
+			</extension>
+		</extensions>
+	</build>
+
+	<modelVersion>4.0.0</modelVersion>
+</project>
