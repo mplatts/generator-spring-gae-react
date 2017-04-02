@@ -148,6 +148,9 @@
 						</goals>
 						<phase>generate-sources</phase>
 						<configuration>
+              <environmentVariables>
+                <NODE_ENV>production</NODE_ENV>
+              </environmentVariables>
 							<executable>npm</executable>
 							<arguments>
 								<argument>run</argument>
