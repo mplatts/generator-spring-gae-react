@@ -25,7 +25,7 @@ yo thundr-gae-react
 - [x] Add README doc to generated project
 - [x] Generate favicon set
 - [ ] Compress images
-- [ ] Split vendor and application bundles and use chunkhash
+- [x] Split vendor and application bundles and use chunkhash
 - [ ] Sample API endpoint
 - [ ] Sample frontend tests
 

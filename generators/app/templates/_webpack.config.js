@@ -37,7 +37,7 @@ const webpackConfig = {
   ],
 
   output: {
-    filename: 'bundle.js',
+    filename: '[name].js',
     path: targetDir + '/static',
     publicPath: '/static/',
   },
@@ -50,6 +50,19 @@ const webpackConfig = {
   },
 
   plugins: [
+    // Split vender modules out into own chunk to improve compile times
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module) {
+        return module.context && module.context.indexOf('node_modules') !== -1;
+      }
+    }),
+
+    // Split webpack bootstrap/manifest out to improve compile times and caching
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+    }),
+
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -194,6 +207,9 @@ if (isDevelopment) {
     },
   };
 } else {
+  // Hash bundles for cache busting
+  webpackConfig.output.filename = '[name].[hash].js';
+
   webpackConfig.module.rules.push(
     {
       test: /\.jsx?$/,
