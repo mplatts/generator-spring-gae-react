@@ -12,7 +12,7 @@ test-output/
 *.ipr
 *.iws
 .idea
-
+.vscode
 atlassian-ide-plugin.xml
 
 pom.xml.versionsBackup

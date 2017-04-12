@@ -6,9 +6,11 @@
     ],
     "env": {
         "browser": true,
-        "jasmine": true
+        "jasmine": true,
+        "node": true
     },
     "rules": {
+        "no-case-declarations": 0,
         "react/forbid-prop-types": 0,
         "react/jsx-space-before-closing": 0,
         "react/jsx-tag-spacing": 0

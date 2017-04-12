@@ -11,13 +11,14 @@ import App from './components/App';
 injectTapEventPlugin();
 
 // Define render as a function so we can re-render when using Hot Module Replacement
-const render = Component =>
+const render = (Component) => {
   ReactDOM.render(
     <AppContainer>
       <Component />
     </AppContainer>,
     document.getElementById('root'),
   );
+};
 
 // Perform initial render
 render(App);

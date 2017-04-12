@@ -1,9 +1,10 @@
-/* eslint-disable comma-dangle */
-
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+const merge = require('webpack-merge');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const parseString = require('xml2js').parseString;
 
@@ -19,26 +20,17 @@ const targetDir = (function getTargetDir() {
     version = result.project.version[0];
   });
 
-  return path.resolve(__dirname, 'target/' + artifactId + '-' + version);
+  return path.resolve(__dirname, `target/${artifactId}-${version}`);
 }());
 
 
-
-// Environment flags
-const environment = process.env.NODE_ENV || 'development';
-const isDevelopment = environment === 'development';
-
 /**
- * Base Webpack configuration.
+ * Common Webpack configuration.
  */
-const webpackConfig = {
-  entry: [
-    './src/main/static/javascript/index.jsx',
-  ],
-
+const commonConfig = {
   output: {
     filename: '[name].js',
-    path: targetDir + '/static',
+    path: `${targetDir}/static`,
     publicPath: '/static/',
   },
 
@@ -50,33 +42,23 @@ const webpackConfig = {
   },
 
   plugins: [
-    // Split vender modules out into own chunk to improve compile times
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      minChunks: function (module) {
+      minChunks(module) {
+        // this assumes your vendor imports exist in the node_modules directory
         return module.context && module.context.indexOf('node_modules') !== -1;
-      }
+      },
     }),
 
-    // Split webpack bootstrap/manifest out to improve compile times and caching
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest',
+      name: 'manifest', // But since there are no more common modules between them we end up with just the runtime code included in the manifest file
     }),
 
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
       },
-      DEVELOPMENT: isDevelopment,
-    }),
-
-    // Automatically generates index.html
-    new HtmlWebpackPlugin({
-      title: '<%= project %>',
-
-      template: path.resolve(sourceDir, 'index.ejs'),
-
-      filename: targetDir + '/index.html',
+      DEVELOPMENT: process.env.NODE_ENV !== 'production',
     }),
 
     new FaviconsWebpackPlugin({
@@ -93,6 +75,20 @@ const webpackConfig = {
       // Inject the html into the html-webpack-plugin
       inject: true,
     }),
+
+    // Automatically generates index.html
+    new HtmlWebpackPlugin({
+      title: '<%= project %>',
+
+      template: path.resolve(sourceDir, 'index.ejs'),
+
+      filename: `${targetDir}/index.html`,
+
+      alwaysWriteToDisk: true,
+    }),
+
+    // Support for alwaysWriteToDisk config in HtmlWebpackPlugin
+    new HtmlWebpackHarddiskPlugin(),
   ],
 
   module: {
@@ -100,8 +96,11 @@ const webpackConfig = {
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       {
         enforce: 'pre',
-        test: /\.js$/,
-        use: 'source-map-loader',
+        test: /\.jsx?$/,
+        use: [
+          { loader: 'eslint-loader', options: { emitWarning: true } },
+          'source-map-loader',
+        ],
       },
 
       // Load library CSS styles
@@ -168,62 +167,102 @@ const webpackConfig = {
   },
 };
 
-if (isDevelopment) {
-  webpackConfig.entry.unshift(
+
+/**
+ * Development server configuration overrides.
+ */
+const developmentConfig = {
+  entry: [
     'react-hot-loader/patch', // activate HMR for React
 
     'webpack-dev-server/client?http://localhost:3000',  // bundle the client for webpack-dev-serve
 
-    'webpack/hot/only-dev-server' // bundle the client for hot reloading
-  );
+    'webpack/hot/only-dev-server', // bundle the client for hot reloading
 
-  webpackConfig.plugins.push(
+    './src/main/static/javascript/index.jsx',
+  ],
+
+  plugins: [
     // Enable HMR globally
     new webpack.HotModuleReplacementPlugin(),
 
     // Prints more readable module names in the browser console on HMR updates
-    new webpack.NamedModulesPlugin()
-  );
+    new webpack.NamedModulesPlugin(),
+  ],
 
-  webpackConfig.module.rules.push(
-    {
-      test: /\.jsx?$/,
-      include: path.resolve(sourceDir, 'javascript'),
-      use: [
-        'react-hot-loader/webpack',  // Enable HMR support in loader chain
-        'babel-loader'
-      ],
-    }
-  );
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        include: path.resolve(sourceDir, 'javascript'),
+        use: [
+          'react-hot-loader/webpack',  // Enable HMR support in loader chain
+          'babel-loader',
+        ],
+      },
+    ],
+  },
 
-  webpackConfig.devServer = {
+  devServer: {
     port: 3000,
     contentBase: targetDir,
     hot: true,
     historyApiFallback: true,
     proxy: {
+      '/_ah': 'http://localhost:8080',
       '/api': 'http://localhost:8080',
-      '**/*.pdf': 'http://localhost:8080',
+      '/admin/api': 'http://localhost:8080',
+      '/admin/gmail': 'http://localhost:8080',
+      '/magic': 'http://localhost:8080',
     },
-  };
-} else {
-  // Hash bundles for cache busting
-  webpackConfig.output.filename = '[name].[hash].js';
+    overlay: {
+      errors: true,
+      warnings: false,
+    },
+  },
+};
 
-  webpackConfig.module.rules.push(
-    {
-      test: /\.jsx?$/,
-      include: path.resolve(sourceDir, 'javascript'),
-      use: [
-        'babel-loader'
-      ],
-    }
-  );
 
-  webpackConfig.plugins.push(
+/**
+ * Production/deployment configuration overrides.
+ */
+const productionConfig = {
+  entry: [
+    './src/main/static/javascript/index.jsx',
+  ],
+
+  output: {
+    // Hash bundles for easy and agressive caching
+    filename: '[name].[hash].js',
+  },
+
+  plugins: [
+    // Ensure old builds are cleaned out
+    new CleanWebpackPlugin([
+      path.join(targetDir, 'static'),
+    ]),
+
     // Minify JS in non-development environments
-    new webpack.optimize.UglifyJsPlugin()
-  );
-}
+    new webpack.optimize.UglifyJsPlugin(),
+  ],
 
-module.exports = webpackConfig;
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        include: path.resolve(sourceDir, 'javascript'),
+        use: [
+          'babel-loader',
+        ],
+      },
+    ],
+  },
+};
+
+// Grab the appropriate configuration for the environment
+const environmentConfig = process.env.NODE_ENV === 'production'
+  ? productionConfig
+  : developmentConfig;
+
+// Merge common config with environment specific configuration
+module.exports = merge(commonConfig, environmentConfig);
