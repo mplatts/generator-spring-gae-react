@@ -2,11 +2,11 @@
   "name": "generator-thundr-gae-react",
   "version": "1.0.2",
   "description": "Yeoman generator for a React app that runs atop Thundr on Google App Engine",
-  "homepage": "https://github.com/kuhnza/generator-thundr-gae-react",
+  "homepage": "https://github.com/3wks/generator-thundr-gae-react",
   "author": {
     "name": "Dave Kuhn",
-    "email": "david.s.kuhn@gmail.com",
-    "url": "https://github.com/kuhnza"
+    "email": "dave@3wks.com.au",
+    "url": "https://github.com/3wks"
   },
   "files": [
     "generators"
@@ -48,7 +48,7 @@
       "mocha": true
     }
   },
-  "repository": "kuhnza/generator-thundr-gae-react",
+  "repository": "3wks/generator-thundr-gae-react",
   "scripts": {
     "prepublish": "gulp prepublish",
     "test": "gulp"
