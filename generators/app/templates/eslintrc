@@ -1,18 +1,24 @@
 {
-	"extends": "airbnb",
-    "parser": "babel-eslint",
-    "plugins": [
-        "react"
-    ],
-    "env": {
-        "browser": true,
-        "jasmine": true,
-        "node": true
-    },
-    "rules": {
-        "no-case-declarations": 0,
-        "react/forbid-prop-types": 0,
-        "react/jsx-space-before-closing": 0,
-        "react/jsx-tag-spacing": 0
-    }
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "plugins": [
+    "react",
+    "jest"
+  ],
+  "env": {
+    "browser": true,
+    "jasmine": true,
+    "node": true,
+    "jest/globals": true
+  },
+  "globals": {
+    "DEVELOPMENT": false,
+    "PRODUCTION": false,
+  },
+  "rules": {
+    "no-case-declarations": 0,
+    "react/forbid-prop-types": 0,
+    "react/jsx-space-before-closing": 0,
+    "react/jsx-tag-spacing": 0
+  }
 }

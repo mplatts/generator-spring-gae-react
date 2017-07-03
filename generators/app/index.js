@@ -94,7 +94,6 @@ module.exports = Generator.extend({
     mkdirp('src/main/static/fonts');
     mkdirp('src/main/static/images');
     mkdirp('src/test/java/');
-    mkdirp('src/test/javascript/');
   },
 
   install: function () {
