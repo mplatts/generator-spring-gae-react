@@ -96,16 +96,6 @@ const commonConfig = {
 
   module: {
     rules: [
-      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      {
-        enforce: 'pre',
-        test: /\.jsx?$/,
-        use: [
-          { loader: 'eslint-loader', options: { emitWarning: true } },
-          'source-map-loader',
-        ],
-      },
-
       // Load library CSS styles
       {
         test: /\.css$/,
@@ -198,6 +188,16 @@ const developmentConfig = {
 
   module: {
     rules: [
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      {
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        use: [
+          'source-map-loader',
+        ],
+        exclude: /node_modules/,
+      },
+
       {
         test: /\.jsx?$/,
         include: path.resolve(sourceDir, 'javascript'),
@@ -254,6 +254,17 @@ const productionConfig = {
 
   module: {
     rules: [
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      {
+        enforce: 'pre',
+        test: /\.jsx?$/,
+        use: [
+          { loader: 'eslint-loader', options: { emitWarning: true } },
+          'source-map-loader',
+        ],
+        exclude: /node_modules/,
+      },
+
       {
         test: /\.jsx?$/,
         include: path.resolve(sourceDir, 'javascript'),
