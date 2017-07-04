@@ -111,6 +111,7 @@ const commonConfig = {
         test: /\.less$/,
         include: [
           path.resolve(sourceDir, 'less'),
+          path.resolve(sourceDir, 'javascript'),
         ],
         use: [
           'style-loader',
