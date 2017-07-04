@@ -5,7 +5,7 @@ import React from 'react';
  */
 const HomePage = () => (
   <div>
-    <h1>Hello 3wks!</h1>
+    <h1 className="display-1">Hello 3wks!</h1>
   </div>
 );
 

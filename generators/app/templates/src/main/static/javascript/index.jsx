@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AppContainer } from 'react-hot-loader';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import 'normalize.css';
+
 import loadPolyfills from './polyfills';
 import App from './components/App';
 import '../less/styles/main.less';
@@ -12,12 +13,7 @@ injectTapEventPlugin();
 
 // Define render as a function so we can re-render when using Hot Module Replacement
 const render = (Component) => {
-  ReactDOM.render(
-    <AppContainer>
-      <Component />
-    </AppContainer>,
-    document.getElementById('root'),
-  );
+  ReactDOM.render(<Component />, document.getElementById('root'));
 };
 
 loadPolyfills(() => {

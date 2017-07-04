@@ -40,27 +40,6 @@ module.exports = Generator.extend({
       }
     }, this.props);
 
-    this.fs.copyTpl(
-      this.templatePath('_pom.xml'),
-      this.destinationPath('pom.xml'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_package.json'),
-      this.destinationPath('package.json'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_webpack.config.js'),
-      this.destinationPath('webpack.config.js'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_README.md'),
-      this.destinationPath('README.md'),
-      context
-    );
-
     this.fs.copy(
       this.templatePath('babelrc'),
       this.destinationPath('.babelrc')
@@ -83,11 +62,38 @@ module.exports = Generator.extend({
     );
     this.fs.copy(
       this.templatePath('src'),
-      this.destinationPath('src')
+      this.destinationPath('src'),
+      { globOptions: { ignore: '**/_*' } }
     );
     this.fs.copy(
       this.templatePath('etc'),
       this.destinationPath('etc')
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('_pom.xml'),
+      this.destinationPath('pom.xml'),
+      context
+    );
+    this.fs.copyTpl(
+      this.templatePath('_package.json'),
+      this.destinationPath('package.json'),
+      context
+    );
+    this.fs.copyTpl(
+      this.templatePath('_webpack.config.js'),
+      this.destinationPath('webpack.config.js'),
+      context
+    );
+    this.fs.copyTpl(
+      this.templatePath('_README.md'),
+      this.destinationPath('README.md'),
+      context
+    );
+    this.fs.copyTpl(
+      this.templatePath('src/main/static/javascript/components/_Layout.jsx'),
+      this.destinationPath('src/main/static/javascript/components/Layout.jsx'),
+      context
     );
 
     mkdirp('src/main/static/');

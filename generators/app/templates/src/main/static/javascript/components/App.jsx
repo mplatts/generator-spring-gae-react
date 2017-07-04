@@ -1,13 +1,19 @@
 import React from 'react';
+import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import store from '../store';
 import getRoutes from '../routes';
 
 const App = () => (
-  <Provider store={store}>
-    { getRoutes(store.getState, store.dispatch) }
-  </Provider>
+  <AppContainer>
+    <Provider store={store}>
+      <MuiThemeProvider>
+        { getRoutes(store.getState, store.dispatch) }
+      </MuiThemeProvider>
+    </Provider>
+  </AppContainer>
 );
 
 export default App;

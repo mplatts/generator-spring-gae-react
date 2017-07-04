@@ -1,6 +1,12 @@
-@import "~bootstrap/less/bootstrap.less";
 @import "../mixins/mixins.less";
 
-#root {
-    padding-top: 70px;  /* account for static navbar */
+.default-layout {
+  display: flex;
+  flex-direction: column;
+
+  .main {
+    flex: 1 1;
+    display: flex;
+    padding: 32px 24px;
+  }
 }
