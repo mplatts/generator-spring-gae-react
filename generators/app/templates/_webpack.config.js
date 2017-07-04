@@ -212,9 +212,7 @@ const developmentConfig = {
     proxy: {
       '/_ah': 'http://localhost:8080',
       '/api': 'http://localhost:8080',
-      '/admin/api': 'http://localhost:8080',
-      '/admin/gmail': 'http://localhost:8080',
-      '/magic': 'http://localhost:8080',
+      '/system': 'http://localhost:8080',
     },
     overlay: {
       errors: true,
