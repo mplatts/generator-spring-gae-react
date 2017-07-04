@@ -23,6 +23,8 @@ const targetDir = (function getTargetDir() {
   return path.resolve(__dirname, `target/${artifactId}-${version}`);
 }());
 
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const isProduction = NODE_ENV === 'production';
 
 /**
  * Common Webpack configuration.
@@ -56,9 +58,10 @@ const commonConfig = {
 
     new webpack.DefinePlugin({
       'process.env': {
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        NODE_ENV: JSON.stringify(NODE_ENV),
       },
-      DEVELOPMENT: process.env.NODE_ENV !== 'production',
+      PRODUCTION: JSON.stringify(isProduction),
+      DEVELOPMENT: JSON.stringify(!isProduction),
     }),
 
     new FaviconsWebpackPlugin({
@@ -173,6 +176,8 @@ const commonConfig = {
  * Development server configuration overrides.
  */
 const developmentConfig = {
+  devtool: 'cheap-eval-source-map',
+
   entry: [
     'react-hot-loader/patch', // activate HMR for React
 
@@ -226,6 +231,8 @@ const developmentConfig = {
  * Production/deployment configuration overrides.
  */
 const productionConfig = {
+  devtool: 'source-map',
+
   entry: [
     './src/main/static/javascript/index.jsx',
   ],
@@ -259,9 +266,7 @@ const productionConfig = {
 };
 
 // Grab the appropriate configuration for the environment
-const environmentConfig = process.env.NODE_ENV === 'production'
-  ? productionConfig
-  : developmentConfig;
+const environmentConfig = isProduction ? productionConfig : developmentConfig;
 
 // Merge common config with environment specific configuration
 module.exports = merge(commonConfig, environmentConfig);
