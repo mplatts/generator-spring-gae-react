@@ -125,6 +125,7 @@ const commonConfig = {
           {
             loader: 'postcss-loader',
             options: {
+              sourceMap: true,
               plugins() {
                 return [require('autoprefixer')];  // eslint-disable-line global-require
               },
