@@ -1,4 +1,4 @@
-# generator-react-thundr-gae [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+# generator-thundr-gae-react [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
 > Yeoman generator for a React app that runs atop Thundr on Google App Engine
 
 ## Installation
@@ -28,6 +28,7 @@ yo thundr-gae-react
 - [x] Split vendor and application bundles and use chunkhash
 - [ ] Sample API endpoint
 - [ ] Sample frontend tests
+- [ ] Basic login and user management
 
 ## Getting To Know Yeoman
 
@@ -38,12 +39,12 @@ yo thundr-gae-react
 
 ## License
 
-MIT © [Dave Kuhn]()
+MIT © [3wks](https://www.3wks.com.au)
 
 
 [npm-image]: https://badge.fury.io/js/generator-thundr-gae-react.svg
 [npm-url]: https://npmjs.org/package/generator-thundr-gae-react
-[travis-image]: https://travis-ci.org/kuhnza/generator-thundr-gae-react.svg?branch=master
-[travis-url]: https://travis-ci.org/kuhnza/generator-thundr-gae-react
-[daviddm-image]: https://david-dm.org/kuhnza/generator-thundr-gae-react.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/kuhnza/generator-thundr-gae-react
+[travis-image]: https://travis-ci.org/3wks/generator-thundr-gae-react.svg?branch=master
+[travis-url]: https://travis-ci.org/3wks/generator-thundr-gae-react
+[daviddm-image]: https://david-dm.org/3wks/generator-thundr-gae-react.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/3wks/generator-thundr-gae-react

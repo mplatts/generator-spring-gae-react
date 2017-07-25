@@ -3,15 +3,13 @@ var path = require('path');
 var assert = require('yeoman-assert');
 var helpers = require('yeoman-test');
 
-describe('generator-react-thundr-gae:app', function () {
-  before(function () {
+describe('generator-thundr-gae-react:app', () => {
+  beforeAll(() => {
     return helpers.run(path.join(__dirname, '../generators/app'))
-      .withArguments(['skip-install'])
-      .withPrompts({project: 'Test Project'})
-      .toPromise();
+      .withPrompts({someAnswer: true});
   });
 
-  it('creates files', function () {
+  it('creates files', () => {
     assert.file([
       'package.json',
       'pom.xml',

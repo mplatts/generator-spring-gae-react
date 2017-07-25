@@ -1,19 +1,19 @@
 'use strict';
-var Generator = require('yeoman-generator');
-var chalk = require('chalk');
-var yosay = require('yosay');
-var mkdirp = require('mkdirp');
-var _ = require('lodash');
-var slugify = require('slugify');
+const Generator = require('yeoman-generator');
+const chalk = require('chalk');
+const yosay = require('yosay');
+const mkdirp = require('mkdirp');
+const _ = require('lodash');
+const slugify = require('slugify');
 
-module.exports = Generator.extend({
-  prompting: function () {
+module.exports = class extends Generator {
+  prompting() {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the supreme ' + chalk.red('generator-thundr-gae-react') + ' generator!'
+      'Welcome to the excellent ' + chalk.red('generator-thundr-gae-react') + ' generator!'
     ));
 
-    var prompts = [
+    const prompts = [
       {
         name: 'project',
         message: 'What is the name of this project?',
@@ -26,13 +26,13 @@ module.exports = Generator.extend({
       }
     ];
 
-    return this.prompt(prompts).then(function (props) {
+    return this.prompt(prompts).then(props => {
       // To access props later use this.props.someAnswer;
       this.props = props;
-    }.bind(this));
-  },
+    });
+  }
 
-  writing: function () {
+  writing() {
     var context = Object.assign({
       _: _,
       slugify: function (value) {
@@ -100,11 +100,11 @@ module.exports = Generator.extend({
     mkdirp('src/main/static/fonts');
     mkdirp('src/main/static/images');
     mkdirp('src/test/java/');
-  },
+  }
 
-  install: function () {
+  install() {
     if (!this.options['skip-install']) {
       this.spawnCommand('mvn', ['install']);
     }
   }
-});
+};

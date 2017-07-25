@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Dave Kuhn",
+      "authorEmail": "dave@3wks.com.au",
+      "authorUrl": "https://www.3wks.com.au"
+    }
+  }
+}
