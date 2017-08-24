@@ -3,8 +3,8 @@ const Generator = require('yeoman-generator');
 const chalk = require('chalk');
 const yosay = require('yosay');
 const mkdirp = require('mkdirp');
+const slugify = value => require('slugify')(value).toLowerCase();
 const _ = require('lodash');
-const slugify = require('slugify');
 
 module.exports = class extends Generator {
   prompting() {
@@ -16,12 +16,24 @@ module.exports = class extends Generator {
     const prompts = [
       {
         name: 'project',
+        message: 'What is the ID of this project?',
+        store: true,
+        default: slugify(this.appname)
+      },
+      {
+        name: 'projectName',
         message: 'What is the name of this project?',
-        store: true
+        store: true,
+        default: _.startCase(this.appname)
       },
       {
         name: 'gitPath',
         message: 'What is the HTTPS git path for this project?',
+        store: true
+      },
+      {
+        name: 'adminEmail',
+        message: 'What email address should we use to create the initial admin login?',
         store: true
       }
     ];
@@ -33,73 +45,42 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    var context = Object.assign({
-      _: _,
-      slugify: function (value) {
-        return slugify(value).toLowerCase();
-      }
-    }, this.props);
+    const context = Object.assign({}, this.props, {
+      project: slugify(this.props.project),
+      slugify,
+      _
+    });
 
-    this.fs.copy(
-      this.templatePath('babelrc'),
-      this.destinationPath('.babelrc')
-    );
-    this.fs.copy(
-      this.templatePath('editorconfig'),
-      this.destinationPath('.editorconfig')
-    );
-    this.fs.copy(
-      this.templatePath('eslintrc'),
-      this.destinationPath('.eslintrc')
-    );
-    this.fs.copy(
-      this.templatePath('gitignore'),
-      this.destinationPath('.gitignore')
-    );
-    this.fs.copy(
-      this.templatePath('java-version'),
-      this.destinationPath('.java-version')
-    );
-    this.fs.copy(
-      this.templatePath('src'),
-      this.destinationPath('src'),
-      { globOptions: { ignore: '**/_*' } }
-    );
-    this.fs.copy(
-      this.templatePath('etc'),
-      this.destinationPath('etc')
-    );
+    const copyTpl = (src, dest) => {
+      const destName = dest || src;
+      const srcParam = !_.isArray(src) ?
+        this.templatePath(src) :
+        _.map(src, entry => _.startsWith(entry, '!') ? entry : this.templatePath(entry));
 
-    this.fs.copyTpl(
-      this.templatePath('_pom.xml'),
-      this.destinationPath('pom.xml'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_package.json'),
-      this.destinationPath('package.json'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_webpack.config.js'),
-      this.destinationPath('webpack.config.js'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('_README.md'),
-      this.destinationPath('README.md'),
-      context
-    );
-    this.fs.copyTpl(
-      this.templatePath('src/main/static/javascript/components/_Layout.jsx'),
-      this.destinationPath('src/main/static/javascript/components/Layout.jsx'),
-      context
-    );
+      return this.fs.copyTpl(srcParam, this.destinationPath(destName), context);
+    };
 
-    mkdirp('src/main/static/');
-    mkdirp('src/main/static/fonts');
-    mkdirp('src/main/static/images');
-    mkdirp('src/test/java/');
+    const copy = (src, dest) => {
+      const destName = dest || src;
+      return this.fs.copy(this.templatePath(src), this.destinationPath(destName));
+    };
+
+    copy('babelrc', '.babelrc');
+    copy('editorconfig', '.editorconfig');
+    copy('eslintrc', '.eslintrc');
+    copy('gitignore', '.gitignore');
+    copy('java-version', '.java-version');
+    copy('etc');
+    copy('src');
+
+    copyTpl('pom.xml');
+    copyTpl('package.json');
+    copyTpl('webpack.config.js');
+    copyTpl('README.md');
+    copyTpl('src/main/client/javascript/pages/admin/AdminLayout.jsx');
+    copyTpl('src/main/resources');
+
+    mkdirp('src/main/client/fonts');
   }
 
   install() {

@@ -1,4 +1,4 @@
-import rootReducer from '../../../../src/main/static/javascript/reducers';
+import rootReducer from '../../../main/client/javascript/reducers';
 
 describe('Root reducer', () => {
 

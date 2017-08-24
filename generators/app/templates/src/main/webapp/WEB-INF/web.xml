@@ -33,11 +33,12 @@
         </user-data-constraint>
     </security-constraint>
 
+
     <!-- Secure admin, cron and task paths -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Admin pages</web-resource-name>
-            <url-pattern>/admin/*</url-pattern>
+            <web-resource-name>System pages</web-resource-name>
+            <url-pattern>/system/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
