@@ -4,7 +4,7 @@ const login = credentials =>
   requestJSON('/users/login', 'POST', credentials);
 
 const logout = () =>
-  requestJSON('/users/logout');
+  requestJSON('/users/logout', 'POST');
 
 const me = () =>
   requestJSON('/users/me', 'GET');
