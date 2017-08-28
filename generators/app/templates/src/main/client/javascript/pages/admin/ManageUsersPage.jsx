@@ -27,7 +27,7 @@ const UserTable = ({ users }) => (
           <TableRowColumn>{user.name}</TableRowColumn>
           <TableRowColumn>
             <div className="roles">
-              {user.roles.map(role => <Chip key={role} className="role" backgroundColor={theme.palette.accent1Color}>{role}</Chip>)}
+              {user.roles.map(role => <Chip key={role} className="role" backgroundColor={theme.palette.primary1Color} labelColor="white">{role}</Chip>)}
             </div>
           </TableRowColumn>
           <TableRowColumn>{user.status}</TableRowColumn>
@@ -54,7 +54,7 @@ class ManageUsersPage extends Component {
 
     return (
       <div className="manage-users-page">
-        <h1 className="display-1">Users</h1>
+        <h1 className="display-1">Manage users</h1>
 
         <RaisedButton className="invite-user-btn" label="Invite User" icon={<SendIcon />} />
 

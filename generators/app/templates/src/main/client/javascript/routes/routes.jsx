@@ -19,20 +19,20 @@ import ManageUsersPage from '../pages/admin/ManageUsersPage';
  */
 const getRoutes = () => (
   <Router history={history}>
+    <Route path="/login" component={LoginPage} />
+
+    <Route
+      path="/admin"
+      component={AdminLayout}
+      onEnter={composeOnEnterHooks(loginRequired, hasAnyRole('admin'))}
+    >
+      <IndexRoute component={DashboardPage} />
+      <Route path="users" component={ManageUsersPage} />
+      <Route path="*" component={NotFoundPage} />
+    </Route>
+
     <Route path="/" component={Layout}>
       <IndexRoute component={HomePage} />
-      <Route path="/login" component={LoginPage} />
-
-      <Route
-        path="/admin"
-        component={AdminLayout}
-        onEnter={composeOnEnterHooks(loginRequired, hasAnyRole('admin'))}
-      >
-        <IndexRoute component={DashboardPage} />
-        <Route path="users" component={ManageUsersPage} />
-        <Route path="*" component={NotFoundPage} />
-      </Route>
-
       <Route path="*" component={NotFoundPage} />
     </Route>
   </Router>

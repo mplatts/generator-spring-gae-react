@@ -16,23 +16,20 @@ class MenuDrawer extends Component {
     loggedInUser: object,
     logout: func.isRequired,
     navigateTo: func.isRequired,
-    onRequestChange: func,
   };
 
   static defaultProps = {
     loggedInUser: {},
-    onRequestChange: () => {},
   };
 
   render() {
-    const { loggedInUser, logout, navigateTo, onRequestChange, ...rest } = this.props;
+    const { loggedInUser, logout, navigateTo, ...rest } = this.props;
 
     return (
       <Drawer
         {...rest}
         docked={false}
         width={280}
-        onRequestChange={onRequestChange}
       >
         <ProfileCard user={loggedInUser} />
 
@@ -74,4 +71,14 @@ const mapDispatchToProps = dispatch => ({
   navigateTo: path => dispatch(push(path)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuDrawer);
+const mergeProps = (stateProps, dispatchProps, ownProps) => ({
+  ...stateProps,
+  ...dispatchProps,
+  ...ownProps,
+  navigateTo: (path) => {
+    ownProps.onRequestChange(false);  // ensure drawer closes upon navigation
+    dispatchProps.navigateTo(path);
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps, mergeProps)(MenuDrawer);
