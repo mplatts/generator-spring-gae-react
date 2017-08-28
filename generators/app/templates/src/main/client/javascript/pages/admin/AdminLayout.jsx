@@ -1,52 +1,49 @@
-import React from 'react';
-import Avatar from 'react-avatar';
-import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import { arrayOf, func, node, object, oneOfType } from 'prop-types';
-import { AppBar, IconButton, IconMenu, MenuItem } from 'material-ui';
-import { getLoggedInUser } from '../../reducers';
-import api from '../../services/api';
+import React, { Component } from 'react';
+import { arrayOf, node, oneOfType } from 'prop-types';
+import { AppBar } from 'material-ui';
+import MenuDrawer from './menu/MenuDrawer';
 
-const AdminLayout = ({ children, loggedInUser, logout }) => (
-  <div className="admin-layout">
-    <AppBar
-      title="<%= projectName %>"
-      iconElementRight={
-        <IconMenu
-          iconButtonElement={
-            <IconButton tooltip={loggedInUser.name || loggedInUser.email}>
-              <Avatar name={loggedInUser.name} email={loggedInUser.email} round size={32} />
-            </IconButton>
-          }
-          anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-          targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-        >
-          <MenuItem primaryText="Sign out" onClick={logout} />
-        </IconMenu>
-      }
-    />
-    <div className="main">
-      { children }
-    </div>
-  </div>
-);
+class AdminLayout extends Component {
+  static propTypes = {
+    children: oneOfType([node, arrayOf(node)]).isRequired,
+  };
 
-AdminLayout.propTypes = {
-  children: oneOfType([node, arrayOf(node)]).isRequired,
-  loggedInUser: object,
-  logout: func.isRequired,
-};
+  static defaultProps = {
+    loggedInUser: {},
+  };
 
-AdminLayout.defaultProps = {
-  loggedInUser: {},
-};
+  constructor(props) {
+    super(props);
 
-const mapStateToProps = state => ({
-  loggedInUser: getLoggedInUser(state),
-});
+    this.state = { drawerOpen: false };
+  }
 
-const mapDispatchToProps = dispatch => ({
-  logout: () => api.users.logout().then(() => dispatch(push('/'))),
-});
+  toggleDrawer = () => {
+    this.setState({ drawerOpen: !this.state.drawerOpen });
+  };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminLayout);
+  render() {
+    const { drawerOpen } = this.state;
+    const { children } = this.props;
+
+    return (
+      <div className="admin-layout">
+        <AppBar
+          title="Test React"
+          onLeftIconButtonTouchTap={this.toggleDrawer}
+        />
+
+        <MenuDrawer
+          open={drawerOpen}
+          onRequestChange={open => this.setState({ drawerOpen: open })}
+        />
+
+        <div className="main">
+          { children }
+        </div>
+      </div>
+    );
+  }
+}
+
+export default AdminLayout;

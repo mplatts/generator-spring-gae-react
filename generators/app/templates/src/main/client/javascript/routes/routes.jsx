@@ -12,6 +12,7 @@ import DashboardPage from '../pages/admin/DashboardPage';
 import HomePage from '../pages/HomePage';
 import NotFoundPage from '../pages/NotFoundPage';
 import LoginPage from '../pages/login/LoginPage';
+import ManageUsersPage from '../pages/admin/ManageUsersPage';
 
 /**
  * Define frontend routes.
@@ -28,6 +29,8 @@ const getRoutes = () => (
         onEnter={composeOnEnterHooks(loginRequired, hasAnyRole('admin'))}
       >
         <IndexRoute component={DashboardPage} />
+        <Route path="users" component={ManageUsersPage} />
+        <Route path="*" component={NotFoundPage} />
       </Route>
 
       <Route path="*" component={NotFoundPage} />

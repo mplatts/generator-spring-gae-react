@@ -24,13 +24,12 @@ export const loginRequired = (nextState, replace, callback) => {
   }
 
   dispatch(fetchUser())
-    .then(() => {
-      callback();
-    })
-    .catch((error) => {
-      replace(withLogin(nextState.location.pathname));
-      callback(error);
-    });
+    .then(
+      () => { callback(); },
+      (error) => {
+        replace(withLogin(nextState.location.pathname));
+        callback(error);
+      });
 };
 
 export const hasAnyRole = (...roles) => (nextState, replace, callback) => {

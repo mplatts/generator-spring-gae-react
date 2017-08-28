@@ -2,9 +2,6 @@ import React from 'react';
 import { RaisedButton } from 'material-ui';
 import { Link } from 'react-router';
 
-/**
- * Page telling the user that their application was submitted successfully.
- */
 const NotFoundPage = () => (
   <div>
     <h1 className="display-1">Not Found</h1>
