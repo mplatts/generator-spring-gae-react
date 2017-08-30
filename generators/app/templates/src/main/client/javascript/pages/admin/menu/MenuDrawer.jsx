@@ -8,8 +8,8 @@ import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import PersonIcon from 'material-ui/svg-icons/social/person';
 import PeopleIcon from 'material-ui/svg-icons/social/people';
 import ProfileCard from './ProfileCard';
+import * as authActions from '../../../actions/auth';
 import { getLoggedInUser } from '../../../reducers';
-import api from '../../../services/api';
 
 class MenuDrawer extends Component {
   static propTypes = {
@@ -45,7 +45,7 @@ class MenuDrawer extends Component {
         />
 
         <Divider />
-        <Subheader>Me</Subheader>
+        <Subheader>My account</Subheader>
 
         <MenuItem
           primaryText="Profile"
@@ -67,7 +67,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  logout: () => api.users.logout().then(() => dispatch(push('/'))),
+  logout: () =>
+    dispatch(authActions.logout())
+      .then(() => dispatch(push('/'))),
   navigateTo: path => dispatch(push(path)),
 });
 

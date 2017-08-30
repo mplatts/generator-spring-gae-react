@@ -1,5 +1,11 @@
 import { requestJSON } from './http';
 
+const invite = userDetails =>
+  requestJSON('/users/invite', 'POST', userDetails);
+
+const redeemInvite = (inviteCode, userDetails) =>
+  requestJSON(`/users/invite/${inviteCode}`, 'POST', userDetails);
+
 const list = () =>
   requestJSON('/users');
 
@@ -13,8 +19,10 @@ const me = () =>
   requestJSON('/users/me', 'GET');
 
 export default {
+  invite,
   list,
   login,
   logout,
   me,
+  redeemInvite,
 };

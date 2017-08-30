@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import Alert from 'react-s-alert';
 import { Link } from 'react-router';
+import { SubmissionError } from 'redux-form';
 import { arrayOf } from 'prop-types';
 import { Chip, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
@@ -7,6 +9,8 @@ import AppPropTypes from '../../components/AppPropTypes';
 import api from '../../services/api';
 import theme from '../../theme';
 import './ManageUsersPage.less';
+import FormDialog from '../../components/forms/FormDialog';
+import InviteUserForm from '../../components/forms/InviteUserForm';
 
 const UserTable = ({ users }) => (
   <Table className="user-table" multiSelectable>
@@ -42,23 +46,61 @@ UserTable.propTypes = {
 };
 
 class ManageUsersPage extends Component {
-  state = { users: [] };
+  state = { inviteUserDialogOpen: false, users: [] };
 
   componentDidMount() {
-    api.users.list()
-      .then(users => this.setState({ users }));
+    this.fetchUsers();
   }
 
+  fetchUsers() {
+    api.users.list()
+      .then(users => this.setState({ users }))
+      .catch(error => Alert.error(`Error fetching users: ${error.message}`));
+  }
+
+  handleInviteUser = values =>
+    api.users.invite(values)
+      .then(() => {
+        Alert.success('User invite sent!');
+        this.closeInviteUserDialog();
+      })
+      .catch((error) => {
+        throw new SubmissionError({ _error: error.message });
+      });
+
+  openInviteUserDialog = () => {
+    this.setState({ inviteUserDialogOpen: true });
+  };
+
+  closeInviteUserDialog = () => {
+    this.setState({ inviteUserDialogOpen: false });
+  };
+
   render() {
-    const { users } = this.state;
+    const { inviteUserDialogOpen, users } = this.state;
 
     return (
       <div className="manage-users-page">
         <h1 className="display-1">Manage users</h1>
 
-        <RaisedButton className="invite-user-btn" label="Invite User" icon={<SendIcon />} />
+        <RaisedButton
+          className="invite-user-btn"
+          label="Invite User"
+          icon={<SendIcon />}
+          onClick={this.openInviteUserDialog}
+        />
 
         <UserTable users={users} />
+
+        <FormDialog
+          title="Invite user"
+          submitButtonText="Invite"
+          formComponent={InviteUserForm}
+          formName="inviteUser"
+          open={inviteUserDialogOpen}
+          onCancel={this.closeInviteUserDialog}
+          onSubmit={this.handleInviteUser}
+        />
       </div>
     );
   }

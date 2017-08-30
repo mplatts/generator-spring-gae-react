@@ -24,11 +24,26 @@ export const login = credentials => (dispatch) => {
   dispatch({ type: 'REQUEST_LOGIN' });
 
   return users.login(credentials)
-    .then(() => (
-      dispatch({ type: 'REQUEST_LOGIN_SUCCESS' })
-    ))
+    .then((user) => {
+      dispatch({ type: 'REQUEST_LOGIN_SUCCESS', user });
+      return user;
+    })
     .catch((error) => {
       dispatch({ type: 'REQUEST_LOGIN_FAILURE', error });
+      throw error;
+    });
+};
+
+export const register = (inviteCode, userDetails) => (dispatch) => {
+  dispatch({ type: 'REQUEST_REGISTER' });
+
+  return users.redeemInvite(inviteCode, userDetails)
+    .then((user) => {
+      dispatch({ type: 'REQUEST_REGISTER_SUCCESS', user });
+      return user;
+    })
+    .catch((error) => {
+      dispatch({ type: 'REQUEST_REGISTER_FAILURE', error });
       throw error;
     });
 };
@@ -37,9 +52,10 @@ export const logout = () => (dispatch) => {
   dispatch({ type: 'REQUEST_LOGOUT' });
 
   return users.logout()
-    .then(() => (
-      dispatch({ type: 'REQUEST_LOGOUT_SUCCESS' })
-    ))
+    .then(() => {
+      dispatch({ type: 'REQUEST_LOGOUT_SUCCESS' });
+      return null;
+    })
     .catch((error) => {
       dispatch({ type: 'REQUEST_LOGOUT_FAILURE', error });
       throw error;

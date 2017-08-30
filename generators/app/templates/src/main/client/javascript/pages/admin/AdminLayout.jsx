@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import Alert from 'react-s-alert';
 import { arrayOf, node, oneOfType } from 'prop-types';
 import { AppBar } from 'material-ui';
+import 'react-s-alert/dist/s-alert-default.css';
+import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import MenuDrawer from './menu/MenuDrawer';
+
 
 class AdminLayout extends Component {
   static propTypes = {
@@ -28,8 +32,10 @@ class AdminLayout extends Component {
 
     return (
       <div className="admin-layout">
+        <Alert effect="slide" position="bottom-right" stack />
+
         <AppBar
-          title="Test React"
+          title="<%= projectName %>"
           onLeftIconButtonTouchTap={this.toggleDrawer}
         />
 

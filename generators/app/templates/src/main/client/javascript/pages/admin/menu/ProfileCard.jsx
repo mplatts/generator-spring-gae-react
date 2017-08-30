@@ -21,7 +21,7 @@ const ProfileCard = ({ user }) => (
             {user.name || user.email}
           </div>
           <div className="email">
-            {!user.name && user.email}
+            {user.name && user.email}
           </div>
         </div>
       }

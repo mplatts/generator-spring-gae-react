@@ -11,8 +11,9 @@ import AdminLayout from '../pages/admin/AdminLayout';
 import DashboardPage from '../pages/admin/DashboardPage';
 import HomePage from '../pages/HomePage';
 import NotFoundPage from '../pages/NotFoundPage';
-import LoginPage from '../pages/login/LoginPage';
+import LoginPage from '../pages/LoginPage';
 import ManageUsersPage from '../pages/admin/ManageUsersPage';
+import RegisterPage from '../pages/RegisterPage';
 
 /**
  * Define frontend routes.
@@ -20,6 +21,7 @@ import ManageUsersPage from '../pages/admin/ManageUsersPage';
 const getRoutes = () => (
   <Router history={history}>
     <Route path="/login" component={LoginPage} />
+    <Route path="/register/:inviteCode" component={RegisterPage} />
 
     <Route
       path="/admin"
