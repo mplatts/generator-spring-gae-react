@@ -1,49 +1,74 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import RaisedButton from 'material-ui/RaisedButton';
 import PropTypes from 'prop-types';
 import { email, required } from './validators';
 
-const LoginForm = ({ handleSubmit, submitting }) => (
-  <form onSubmit={handleSubmit} noValidate>
-    <Field
-      name="username"
-      component={TextField}
-      hintText="Your email address"
-      floatingLabelText="Email"
-      type="email"
-      validate={[
-        required('Email address is required'),
-        email('Enter a valid email'),
-      ]}
-      fullWidth
-    />
-    <Field
-      name="password"
-      hintText="Your password"
-      floatingLabelText="Password"
-      component={TextField}
-      type="password"
-      validate={required('Password is required')}
-      fullWidth
-    />
+class LoginForm extends Component {
+  static propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+    submitting: PropTypes.bool.isRequired,
+  };
 
-    <div className="actions">
-      <RaisedButton
-        label={submitting ? 'Signing in...' : 'Sign in'}
-        type="submit"
-        disabled={submitting}
-        primary
-        fullWidth
-      />
-    </div>
-  </form>
-);
+  state = { showPassword: false };
 
-LoginForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool.isRequired,
-};
+  render() {
+    const { handleSubmit, submitting } = this.props;
+    const { showPassword } = this.state;
+
+    return (
+      <form onSubmit={handleSubmit} noValidate>
+        <Field
+          name="username"
+          component={TextField}
+          hintText="Your email address"
+          floatingLabelText="Email"
+          type="email"
+          validate={[
+            required('Email address is required'),
+            email('Enter a valid email'),
+          ]}
+          fullWidth
+        />
+
+        {showPassword &&
+          <Field
+            name="password"
+            hintText="Your password"
+            floatingLabelText="Password"
+            component={TextField}
+            type="password"
+            validate={required('Password is required')}
+            fullWidth
+          />}
+
+        <div className="actions">
+          {showPassword
+            ? <RaisedButton
+              label={submitting ? 'Signing in...' : 'Sign in'}
+              type="submit"
+              disabled={submitting}
+              primary
+              fullWidth
+            />
+            : <div className="inline-btn-group">
+              <RaisedButton
+                label="Type password"
+                type="button"
+                onClick={() => this.setState({ showPassword: true })}
+              />
+              <RaisedButton
+                label={submitting ? 'Sending...' : 'Send magic link'}
+                type="submit"
+                disabled={submitting}
+                primary
+              />
+            </div> }
+        </div>
+      </form>
+    );
+  }
+}
 
 export default reduxForm({ form: 'login' })(LoginForm);

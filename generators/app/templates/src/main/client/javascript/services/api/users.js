@@ -12,6 +12,9 @@ const list = () =>
 const login = credentials =>
   requestJSON('/users/login', 'POST', credentials);
 
+const requestMagicLink = email =>
+  requestJSON('/users/login/magic', 'POST', { email });
+
 const logout = () =>
   requestJSON('/users/logout', 'POST');
 
@@ -25,4 +28,5 @@ export default {
   logout,
   me,
   redeemInvite,
+  requestMagicLink,
 };
