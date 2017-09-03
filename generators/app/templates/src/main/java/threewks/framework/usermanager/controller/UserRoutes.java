@@ -16,6 +16,7 @@ public class UserRoutes {
         router.get("/api/v1/users", UserController.class, "listAll");
         router.get("/api/v1/users/search", UserController.class, "search");
         router.get("/api/v1/users/me", UserController.class, "me");
+        router.get("/api/v1/users/{username}", UserController.class, "get");
         router.put("/api/v1/users/{username}", UserController.class, "save");
         router.post("/api/v1/users/invite", UserController.class, "invite");
         router.post("/api/v1/users/invite/{code}", UserController.class, "redeemInvite");

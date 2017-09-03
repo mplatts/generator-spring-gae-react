@@ -100,9 +100,13 @@ public class AppUserService {
         thundrUserService.logout(session, user);
     }
 
-    public AppUser get(String loginIdentifier) {
-        LoginIdentifier mapping = loginIdentifierService.get(loginIdentifier);
-        return mapping == null ? null : mapping.getUser();
+    public AppUser get(String loginIdentifierOrUsername) {
+        LoginIdentifier mapping = loginIdentifierService.get(loginIdentifierOrUsername);
+        AppUser user = mapping == null ? null : mapping.getUser();
+        if (user == null) {
+            user = thundrUserService.get(loginIdentifierOrUsername);
+        }
+        return user;
     }
 
     /**

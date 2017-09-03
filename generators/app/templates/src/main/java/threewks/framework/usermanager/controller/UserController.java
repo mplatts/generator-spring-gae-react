@@ -54,6 +54,12 @@ public class UserController {
     }
 
     @Authenticated
+    @Authorised(any = Roles.Admin)
+    public JsonView get(String username) {
+        return new JsonView(TO_USER_DTO.apply(userService.get(username)));
+    }
+
+    @Authenticated
     public JsonView save(String username, UpdateUserRequestDto request) {
         UserDto dto = TO_USER_DTO.apply(userService.save(username, request));
         return new JsonView(dto);
