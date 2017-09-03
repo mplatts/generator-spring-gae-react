@@ -21,7 +21,14 @@ const logout = () =>
 const me = () =>
   requestJSON('/users/me', 'GET');
 
+const get = userId =>
+  requestJSON(`/users/${userId}`);
+
+const save = user =>
+  requestJSON(`/users/${user.username}`, 'PUT', user);
+
 export default {
+  get,
   invite,
   list,
   login,
@@ -29,4 +36,5 @@ export default {
   me,
   redeemInvite,
   requestMagicLink,
+  save,
 };

@@ -14,6 +14,7 @@ import NotFoundPage from '../pages/NotFoundPage';
 import LoginPage from '../pages/LoginPage';
 import ManageUsersPage from '../pages/admin/ManageUsersPage';
 import RegisterPage from '../pages/RegisterPage';
+import UserProfilePage from '../pages/admin/UserProfilePage';
 
 /**
  * Define frontend routes.
@@ -30,6 +31,7 @@ const getRoutes = () => (
     >
       <IndexRoute component={DashboardPage} />
       <Route path="users" component={ManageUsersPage} />
+      <Route path="users/:userId" component={UserProfilePage} />
       <Route path="*" component={NotFoundPage} />
     </Route>
 
