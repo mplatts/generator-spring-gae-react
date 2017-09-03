@@ -8,11 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import threewks.framework.usermanager.controller.dto.UserDto;
 import threewks.framework.usermanager.model.AppUser;
-import threewks.framework.usermanager.service.UserInviteService;
 import threewks.framework.usermanager.service.AppUserService;
+import threewks.framework.usermanager.service.UserInviteService;
 
 import java.util.Arrays;
 import java.util.List;

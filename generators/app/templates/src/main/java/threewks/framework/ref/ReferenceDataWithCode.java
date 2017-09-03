@@ -11,9 +11,9 @@ public interface ReferenceDataWithCode extends ReferenceData {
      */
     Function<ReferenceDataWithCode, ReferenceDataDto> TO_DTO_TRANSFORMER = new Function<ReferenceDataWithCode, ReferenceDataDto>() {
         @Override
-        public ReferenceDataDto apply(ReferenceDataWithCode ReferenceDataWithCode) {
-            return ReferenceDataWithCode == null ? null : new ReferenceDataDto(ReferenceDataWithCode.name(), ReferenceDataWithCode.getDescription(),
-                "code", ReferenceDataWithCode.getCode());
+        public ReferenceDataDto apply(ReferenceDataWithCode referenceData) {
+            return referenceData == null ? null :
+                new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal(), "code", referenceData.getCode());
         }
     };
 

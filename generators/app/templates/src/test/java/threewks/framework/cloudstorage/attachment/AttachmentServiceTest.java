@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import threewks.framework.cloudstorage.GoogleCloudStorageJsonApiClient;
 import threewks.framework.shared.util.PropertyHelper;
 
@@ -59,9 +59,6 @@ public class AttachmentServiceTest {
 
     @Test
     public void getUploadUrl_willFail_whenAttachmentFolderNotAllowed() throws Exception {
-        when(cloudStorage.initiateResumableUpload(eq(DEFAULT_BUCKET), any(String.class), eq("file-name.pdf"), eq("type"), eq("origin")))
-            .thenReturn("https://some-cloud-address.com");
-
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Folder not permitted for GCS attachments: some-folder");
 

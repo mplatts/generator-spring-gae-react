@@ -2,6 +2,7 @@ package threewks.framework.ref;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import threewks.util.Assert;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,21 +10,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 public class ReferenceDataService {
 
     private final Map<String, List<ReferenceDataDto>> referenceData = new LinkedHashMap<>();
     private final Map<Class<? extends ReferenceData>, Function<? extends ReferenceData, ReferenceDataDto>> customTransformers = new LinkedHashMap<>();
 
     /**
-     *
      * <p>
      * Add a custom transformer for a specific subclass of {@link ReferenceData}. Custom transformers can add properties to {@link ReferenceDataDto#props}.
      * Custom transformers will be matched in sequence, finding the first one that is assignable to the enum class. This means that you should define the
      * more specific ones first.
      * </p>
-     *
+     * <p>
      * <p>
      * <strong>This must be called before {@link #registerClasses(Class[])}</strong>, otherwise it will throw an {@link IllegalStateException}.
      * </p>
@@ -45,7 +43,7 @@ public class ReferenceDataService {
      */
     public ReferenceDataService registerClasses(Class<? extends ReferenceData>... referenceDataClasses) {
         for (Class<? extends ReferenceData> referenceDataClass : referenceDataClasses) {
-            checkArgument(Enum.class.isAssignableFrom(referenceDataClass), "ReferenceData implementation must be an enum. Offending class: %s", referenceDataClass.getName());
+            Assert.isTrue(Enum.class.isAssignableFrom(referenceDataClass), "ReferenceData implementation must be an enum. Offending class: %s", referenceDataClass.getName());
 
             Function<? extends ReferenceData, ReferenceDataDto> transformer = getTransformer(referenceDataClass);
             List<ReferenceDataDto> entries = transform(referenceDataClass, transformer);

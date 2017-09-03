@@ -27,26 +27,26 @@ public class ReferenceDataServiceTest {
     }
 
     @Test
-    public void getReferenceData_WillReturnEmptyMap_ByDefault() {
+    public void getReferenceData_willReturnEmptyMap_ByDefault() {
         Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
 
         assertThat(result.isEmpty(), is(true));
     }
 
     @Test
-    public void getReferenceData_WillReturnJsonFriendlyMap_WhenClassesRegistered() {
+    public void getReferenceData_willReturnJsonFriendlyMap_whenClassesRegistered() {
         service = new ReferenceDataService().registerClasses(TestEnum1.class, TestEnum2.class);
 
         Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
 
         assertThat(result.entrySet(), hasSize(2));
         List<ReferenceDataDto> testEnum1 = result.get("TestEnum1");
-        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", "ONE"), new ReferenceDataDto("TWO", "Two", "TWO")));
-        assertThat(result.get("TestEnum2"), contains(new ReferenceDataDto("A", "A desc"), new ReferenceDataDto("B", "B desc", "B")));
+        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", 0, "ONE"), new ReferenceDataDto("TWO", "Two", 1, "TWO")));
+        assertThat(result.get("TestEnum2"), contains(new ReferenceDataDto("A", "A desc", 0), new ReferenceDataDto("B", "B desc", 1, "B")));
     }
 
     @Test
-    public void getReferenceData_WillReturnJsonFriendlyMapWithCode_WhenMatchingCustomTransformerRegistered() {
+    public void getReferenceData_willReturnJsonFriendlyMapWithCode_whenMatchingCustomTransformerRegistered() {
         service = new ReferenceDataService()
             .withCustomTransformer(ReferenceDataWithCode.class, ReferenceDataWithCode.TO_DTO_TRANSFORMER)
             .registerClasses(TestEnum1WithCode.class, TestEnum2WithCode.class);
@@ -54,12 +54,12 @@ public class ReferenceDataServiceTest {
         Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
 
         assertThat(result.entrySet(), hasSize(2));
-        assertThat(result.get("TestEnum1WithCode"), contains(new ReferenceDataDto("ONE", "One", "code", "one-code"), new ReferenceDataDto("TWO", "Two", "code", "two-code")));
-        assertThat(result.get("TestEnum2WithCode"), contains(new ReferenceDataDto("A", "A desc", "code", "a-desc-code"), new ReferenceDataDto("B", "B desc", "code", "b-desc-code")));
+        assertThat(result.get("TestEnum1WithCode"), contains(new ReferenceDataDto("ONE", "One", 0, "code", "one-code"), new ReferenceDataDto("TWO", "Two", 1, "code", "two-code")));
+        assertThat(result.get("TestEnum2WithCode"), contains(new ReferenceDataDto("A", "A desc", 0, "code", "a-desc-code"), new ReferenceDataDto("B", "B desc", 1, "code", "b-desc-code")));
     }
 
     @Test
-    public void getReferenceData_WillIgnoreCustomTransformer_WhenNotAssignableToEnumClass() {
+    public void getReferenceData_willIgnoreCustomTransformer_whenNotAssignableToEnumClass() {
         service = new ReferenceDataService()
             .withCustomTransformer(ReferenceDataWithCode.class, ReferenceDataWithCode.TO_DTO_TRANSFORMER)
             .registerClasses(TestEnum1.class);
@@ -68,12 +68,12 @@ public class ReferenceDataServiceTest {
 
         assertThat(result.entrySet(), hasSize(1));
         List<ReferenceDataDto> testEnum1 = result.get("TestEnum1");
-        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", "ONE"), new ReferenceDataDto("TWO", "Two", "TWO")));
+        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", 0, "ONE"), new ReferenceDataDto("TWO", "Two", 1, "TWO")));
     }
 
 
     @Test
-    public void registerClasses_WillFail_WhenNotAnEnum() {
+    public void registerClasses_willFail_whenNotAnEnum() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("ReferenceData implementation must be an enum. Offending class: threewks.framework.ref.ReferenceDataServiceTest$NotAnEnum");
 
@@ -85,7 +85,7 @@ public class ReferenceDataServiceTest {
     }
 
     @Test
-    public void withCustomTransformer_WillFail_WhenCalledAfterRegisterClasses() {
+    public void withCustomTransformer_willFail_whenCalledAfterRegisterClasses() {
         thrown.expect(IllegalStateException.class);
         thrown.expectMessage("Custom transformers must be added before classes are registered");
 
@@ -168,6 +168,11 @@ public class ReferenceDataServiceTest {
         @Override
         public String name() {
             return "A name";
+        }
+
+        @Override
+        public int ordinal() {
+            return 0;
         }
 
         @Override

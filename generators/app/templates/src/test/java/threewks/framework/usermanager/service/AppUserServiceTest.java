@@ -7,10 +7,8 @@ import com.threewks.thundr.user.Roles;
 import com.threewks.thundr.user.authentication.Authentication;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 import threewks.BaseTest;
 import threewks.TestData;
 import threewks.framework.usermanager.context.SecurityContextHolder;
@@ -39,7 +37,6 @@ import static org.mockito.Mockito.when;
 import static threewks.MockHelpers.returnFirstArgument;
 import static threewks.TestData.user;
 
-@RunWith(MockitoJUnitRunner.class)
 public class AppUserServiceTest extends BaseTest {
 
     private static final String EMAIL = "foo@example.org";

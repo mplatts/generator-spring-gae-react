@@ -14,15 +14,15 @@ public class ReferenceDataDtoTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void init_WillNotAddMapProperty_WhenNoValueSupplied() {
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", "keyWithoutVal");
+    public void init_willNotAddMapProperty_whenNoValueSupplied() {
+        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "keyWithoutVal");
 
         assertThat(dto.getProps().entrySet(), hasSize(0));
     }
 
     @Test
-    public void getProp_WillCast() {
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", "newProp", 99);
+    public void getProp_willCast() {
+        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "newProp", 99);
         int result = dto.getProp("newProp");
 
         assertThat(result, is(99));
@@ -31,10 +31,10 @@ public class ReferenceDataDtoTest {
 
     @SuppressWarnings("unused")
     @Test
-    public void getProp_WillError_WhenInvalidCast() {
+    public void getProp_willError_whenInvalidCast() {
         thrown.expect(ClassCastException.class);
 
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", "newProp", 99);
+        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "newProp", 99);
 
         String result = dto.getProp("newProp");
     }

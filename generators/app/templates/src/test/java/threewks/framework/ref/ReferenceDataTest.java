@@ -2,7 +2,7 @@ package threewks.framework.ref;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -13,11 +13,12 @@ import static org.junit.Assert.assertThat;
 public class ReferenceDataTest {
 
     @Test
-    public void transformer_WillTransformToDto() {
+    public void transformer_willTransformToDto() {
         ReferenceDataDto result = ReferenceData.TO_DTO_TRANSFORMER.apply(TestReferenceData.VAL1);
 
         assertThat(result.getId(), is("VAL1"));
         assertThat(result.getDescription(), is("description"));
+        assertThat(result.getOrdinal(), is(0));
         assertThat(result.getProps().entrySet(), hasSize(0));
     }
 

@@ -13,17 +13,22 @@ public interface ReferenceData {
     String name();
 
     /**
+     * Will already be implemented by enum. Used to help sorting in the client without having to reference the complete set. Do not use for business logic!
+     */
+    int ordinal();
+
+    /**
      * Description to use for business/ui.
      */
     String getDescription();
 
     /**
      * Transform the enum to a map which can be used in a JSON representation of the data.
-        */
+     */
     Function<ReferenceData, ReferenceDataDto> TO_DTO_TRANSFORMER = new Function<ReferenceData, ReferenceDataDto>() {
         @Override
         public ReferenceDataDto apply(ReferenceData referenceData) {
-            return referenceData == null ? null : new ReferenceDataDto(referenceData.name(), referenceData.getDescription());
+            return referenceData == null ? null : new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal());
         }
     };
 }
