@@ -26,9 +26,9 @@ yo thundr-gae-react
 - [x] Generate favicon set
 - [ ] Compress images
 - [x] Split vendor and application bundles and use chunkhash
-- [ ] Sample API endpoint
+- [x] Sample API endpoint
 - [ ] Sample frontend tests
-- [ ] Basic login and user management
+- [x] Basic login and user management
 
 ## Getting To Know Yeoman
 
