@@ -49,9 +49,8 @@ const error = (state = null, action) => {
 export const getUser = state =>
   state.user;
 
-export const getIsAuthenticated = state => (
-  state.user && state.user.isAuthenticated
-);
+export const getIsAuthenticated = state =>
+  state.isAuthenticated;
 
 export default combineReducers({
   user,
