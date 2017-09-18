@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import 'normalize.css';
 
-import loadPolyfills from './polyfills';
 import App from './components/App';
 import '../less/styles/main.less';
 
@@ -16,12 +15,11 @@ const render = (Component) => {
   ReactDOM.render(<Component />, document.getElementById('root'));
 };
 
-loadPolyfills(() => {
-  // Perform initial render
-  render(App);
+// Perform initial render
+render(App);
 
-  // Wire in Hot Module Replacement
-  if (module.hot) {
-    module.hot.accept('./components/App', () => render(App));
-  }
-});
+// Wire in Hot Module Replacement
+if (module.hot) {
+  module.hot.accept('./components/App', () => render(App));
+}
+
