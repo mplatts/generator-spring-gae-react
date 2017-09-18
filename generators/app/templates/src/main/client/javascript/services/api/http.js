@@ -52,9 +52,24 @@ export const request = (path, method = 'GET', body = null, headers = {}) => {
     });
 };
 
+const hasHeader = (headers = {}, headerName) =>
+  Object
+    .keys(headers)
+    .some(key => key.toLowerCase() === headerName.toLowerCase());
+
+const requestWithData = (path, method, data, headers = {}) => {
+  const headerContentType = 'Content-Type';
+  // Don't modify for FormData or request with existing content-type header set
+  if (data instanceof FormData || hasHeader(headers, headerContentType)) {
+    return request(path, method, data, headers);
+  }
+  // Otherwise default to JSON
+  return request(path, method, JSON.stringify(data), { [headerContentType]: 'application/json', ...headers });
+};
+
 export const requestJSON = (path, method, data, headers = {}) => (
   (data
-      ? request(path, method, JSON.stringify(data), { 'Content-Type': 'application/json', ...headers })
+      ? requestWithData(path, method, data, headers)
       : request(path, method, null, headers)
   ).then(response => (response.status !== 204 ? response.json() : null))
 );
