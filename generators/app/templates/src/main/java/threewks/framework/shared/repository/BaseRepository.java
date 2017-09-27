@@ -16,8 +16,8 @@ import java.util.List;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public abstract class BaseRepository<E, K> extends AbstractRepository<E, K> {
-
     public static final char SEARCH_LAST_CHAR = '\ufffd';
+    private static final int BATCH_SIZE = 200;
 
 
     public BaseRepository(Class<E> entityType, ETransformer<K, Key<E>> toKey, ETransformer<Key<E>, K> fromKey, SearchConfig searchConfig) {
@@ -68,12 +68,12 @@ public abstract class BaseRepository<E, K> extends AbstractRepository<E, K> {
     }
 
     /**
-     * Delete up to 1000 entities and return the count of deletions.
+     * Delete all entities in batches of {@value BATCH_SIZE}.
      *
      * @return number of entities deleted
      */
-    public long delete1000() {
-        Query<E> query = ofy().load().type(entityType).limit(1000);
+    public long deleteAll() {
+        Query<E> query = ofy().load().type(entityType).limit(BATCH_SIZE);
         QueryResultIterator<Key<E>> iterator = query.keys().iterator();
         List<Key<E>> keysToDelete = new ArrayList<>();
         long numDeleted = 0;
@@ -142,7 +142,7 @@ public abstract class BaseRepository<E, K> extends AbstractRepository<E, K> {
      */
     public int reindex(ReindexOperation<E> reindexOperation) {
         List<Key<E>> keys = load().keys().list();
-        return super.reindex(fromKeys.from(keys), 200, reindexOperation);
+        return super.reindex(fromKeys.from(keys), BATCH_SIZE, reindexOperation);
     }
 
     private final ReindexOperation<E> IDENTITY_REINDEX_OP = new ReindexOperation<E>() {

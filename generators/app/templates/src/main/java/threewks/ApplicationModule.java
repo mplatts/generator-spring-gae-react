@@ -102,7 +102,7 @@ public class ApplicationModule extends BaseModule {
     }
 
     private void configureQueues(UpdatableInjectionContext injectionContext) {
-        // Default queue is adequite for most cases, unless of course you need fine grained control over queue behaviour
+        // Default queue is adequate for most cases, unless of course you need fine grained control over queue behaviour
         // for specific task types in which case named queues are the way to go.
         injectionContext.inject(QueueFactory.getDefaultQueue()).as(Queue.class);
     }
