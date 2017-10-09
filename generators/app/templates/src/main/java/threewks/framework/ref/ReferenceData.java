@@ -1,6 +1,6 @@
 package threewks.framework.ref;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 /**
  * Interface to allow an enum to be marked as reference data with simple name and description for UI.
@@ -25,10 +25,5 @@ public interface ReferenceData {
     /**
      * Transform the enum to a map which can be used in a JSON representation of the data.
      */
-    Function<ReferenceData, ReferenceDataDto> TO_DTO_TRANSFORMER = new Function<ReferenceData, ReferenceDataDto>() {
-        @Override
-        public ReferenceDataDto apply(ReferenceData referenceData) {
-            return referenceData == null ? null : new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal());
-        }
-    };
+    Function<ReferenceData, ReferenceDataDto> TO_DTO_TRANSFORMER = referenceData -> referenceData == null ? null : new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal());
 }

@@ -40,13 +40,7 @@ public class MockHelpers {
      * <code>
      */
     public static <T> void returnFirstArgument(T methodCall) {
-        when(methodCall).thenAnswer(new Answer<Object>() {
-
-            @Override
-            public Object answer(InvocationOnMock invocation) throws Throwable {
-                return invocation.getArgument(0);
-            }
-        });
+        when(methodCall).thenAnswer(invocation -> invocation.getArgument(0));
     }
 
     /**

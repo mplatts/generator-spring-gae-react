@@ -11,20 +11,10 @@ public abstract class StringRepository<E> extends BaseRepository<E, String> {
     }
 
     static <E> ETransformer<String, Key<E>> fromString(final Class<E> type) {
-        return new ETransformer<String, Key<E>>() {
-            @Override
-            public Key<E> from(String from) {
-                return Key.create(type, from);
-            }
-        };
+        return from -> Key.create(type, from);
     }
 
     static <E> ETransformer<Key<E>, String> toString(final Class<E> type) {
-        return new ETransformer<Key<E>, String>() {
-            @Override
-            public String from(Key<E> from) {
-                return from.getName();
-            }
-        };
+        return Key::getName;
     }
 }

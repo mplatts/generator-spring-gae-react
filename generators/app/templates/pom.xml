@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <groupId><%= project %></groupId>
-    <artifactId><%= project %></artifactId>
+    <groupId>test-react</groupId>
+    <artifactId>test-react</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
@@ -13,14 +13,14 @@
     </parent>
 
     <scm>
-        <connection><%= _.unescape('${scm.url}')%></connection>
-        <url><%= _.unescape('${scm.url}')%></url>
-        <developerConnection><%= _.unescape('${scm.url}')%></developerConnection>
+        <connection>${scm.url}</connection>
+        <url>${scm.url}</url>
+        <developerConnection>${scm.url}</developerConnection>
     </scm>
 
     <properties>
-        <scm.url>scm:git:<%= gitPath %></scm.url>
-        <appId><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></appId>
+        <scm.url>scm:git:</scm.url>
+        <appId>${project.artifactId}-${project.activeProfiles[0].id}</appId>
         <appVersion>1</appVersion>
         <gae.version>1.9.56</gae.version>
 
@@ -174,12 +174,22 @@
                     <artifactId>maven-scm-plugin</artifactId>
                     <version>1.9.5</version>
                     <configuration>
-                        <tag><%= _.unescape('${appId}-v-${appVersion}-${build.time}')%></tag>
+                        <tag>${appId}-v-${appVersion}-${build.time}</tag>
                     </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
             <!-- Maven's build timezone is always in UTC so that's why we use this. See http://stackoverflow.com/a/35578881/945789 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -256,7 +266,7 @@
             <plugin>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
-                <version><%= _.unescape('${gae.version}')%></version>
+                <version>${gae.version}</version>
                 <configuration>
                     <address>0.0.0.0</address>
                     <port>8081</port>

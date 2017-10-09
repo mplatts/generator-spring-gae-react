@@ -86,12 +86,7 @@ public class UserInviteServiceTest extends BaseTest {
         MockHelpers.returnFirstArgument(userService.activate(any(AppUser.class), anyString()));
         MockHelpers.returnFirstArgument(userService.register(any(AppUser.class), anyString()));
 
-        when(userService.registerInvited(anyString())).thenAnswer(new Answer<User>() {
-            @Override
-            public User answer(InvocationOnMock invocation) throws Throwable {
-                return user((String) invocation.getArguments()[0]);
-            }
-        });
+        when(userService.registerInvited(anyString())).thenAnswer((Answer<User>) invocation -> user((String) invocation.getArguments()[0]));
 
         mailer = new MockMailer();
 
@@ -386,13 +381,8 @@ public class UserInviteServiceTest extends BaseTest {
         AppUser issuer = user("foo@example.org");
         Roles roles = new Roles(Roles.User);
         UserInviteLink inviteLink = new UserInviteLink(code, issuer, email, roles);
-        when(userService.registerInvited(anyString())).thenAnswer(new Answer<User>() {
-            @Override
-            public User answer(InvocationOnMock invocation) throws Throwable {
-                return user((String) invocation.getArguments()[0])
-                    .setStatus(UserStatus.ACTIVE);
-            }
-        });
+        when(userService.registerInvited(anyString())).thenAnswer((Answer<User>) invocation -> user((String) invocation.getArguments()[0])
+            .setStatus(UserStatus.ACTIVE));
 
         String hashedCode = UserInviteLink.hash(code);
         when(userInviteLinkRepository.get(hashedCode)).thenReturn(inviteLink);

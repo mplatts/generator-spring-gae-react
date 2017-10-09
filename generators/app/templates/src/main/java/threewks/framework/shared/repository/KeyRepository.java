@@ -19,11 +19,6 @@ public abstract class KeyRepository<E> extends BaseRepository<E, Key<E>> {
     }
 
     static <E> ETransformer<Key<E>, Key<E>> noopTransformer() {
-        return new ETransformer<Key<E>, Key<E>>() {
-            @Override
-            public Key<E> from(Key<E> from) {
-                return from;
-            }
-        };
+        return from -> from;
     }
 }

@@ -9,12 +9,7 @@ public interface ReferenceDataWithCode extends ReferenceData {
     /**
      * Transform the enum to a map which can be used in a JSON representation of the data.
      */
-    Function<ReferenceDataWithCode, ReferenceDataDto> TO_DTO_TRANSFORMER = new Function<ReferenceDataWithCode, ReferenceDataDto>() {
-        @Override
-        public ReferenceDataDto apply(ReferenceDataWithCode referenceData) {
-            return referenceData == null ? null :
-                new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal(), "code", referenceData.getCode());
-        }
-    };
+    java.util.function.Function<ReferenceDataWithCode, ReferenceDataDto> TO_DTO_TRANSFORMER = referenceData -> referenceData == null ? null :
+        new ReferenceDataDto(referenceData.name(), referenceData.getDescription(), referenceData.ordinal(), "code", referenceData.getCode());
 
 }

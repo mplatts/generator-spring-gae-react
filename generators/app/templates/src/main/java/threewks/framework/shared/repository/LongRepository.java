@@ -11,20 +11,10 @@ public abstract class LongRepository<E> extends BaseRepository<E, Long> {
     }
 
     static <E> ETransformer<Long, Key<E>> fromLong(final Class<E> type) {
-        return new ETransformer<Long, Key<E>>() {
-            @Override
-            public Key<E> from(Long from) {
-                return Key.create(type, from);
-            }
-        };
+        return from -> Key.create(type, from);
     }
 
     static <E> ETransformer<Key<E>, Long> toLong(final Class<E> type) {
-        return new ETransformer<Key<E>, Long>() {
-            @Override
-            public Long from(Key<E> from) {
-                return from.getId();
-            }
-        };
+        return Key::getId;
     }
 }

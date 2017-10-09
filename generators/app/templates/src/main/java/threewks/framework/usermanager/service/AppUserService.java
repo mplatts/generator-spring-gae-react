@@ -66,17 +66,14 @@ public class AppUserService {
 
         user.setEmail(user.getEmail().toLowerCase());  // ensure email is lowercase
 
-        return ofy().transact(new Work<AppUser>() {
-            @Override
-            public AppUser run() {
-                loginIdentifierService.checkAvailability(user.getEmail());
+        return ofy().transact(() -> {
+            loginIdentifierService.checkAvailability(user.getEmail());
 
-                LoginIdentifier loginIdentifier = new LoginIdentifier(user);
-                loginIdentifierService.put(loginIdentifier);
+            LoginIdentifier loginIdentifier = new LoginIdentifier(user);
+            loginIdentifierService.put(loginIdentifier);
 
-                Authentication authentication = new PasswordAuthentication(user.getUsername(), password);
-                return thundrUserService.put(user, authentication);
-            }
+            Authentication authentication = new PasswordAuthentication(user.getUsername(), password);
+            return thundrUserService.put(user, authentication);
         });
     }
 
@@ -136,29 +133,26 @@ public class AppUserService {
 
         checkIsSelfOrAdmin(username);
 
-        return ofy().transact(new Work<AppUser>() {
-            @Override
-            public AppUser run() {
-                AppUser user = thundrUserService.get(username);
-                Assert.entityExists(user, AppUser.class, username);
+        return ofy().transact(() -> {
+            AppUser user = thundrUserService.get(username);
+            Assert.entityExists(user, AppUser.class, username);
 
-                String normalisedEmail = request.getEmail() != null ? request.getEmail().toLowerCase() : null;
-                if (normalisedEmail != null && !StringUtils.equals(user.getEmail(), normalisedEmail)) {
-                    Assert.isEmail(request.getEmail(), "Must provide a valid email");
+            String normalisedEmail = request.getEmail() != null ? request.getEmail().toLowerCase() : null;
+            if (normalisedEmail != null && !StringUtils.equals(user.getEmail(), normalisedEmail)) {
+                Assert.isEmail(request.getEmail(), "Must provide a valid email");
 
-                    user.setEmail(normalisedEmail);
+                user.setEmail(normalisedEmail);
 
-                    LoginIdentifier loginIdentifier = loginIdentifierService.get(user.getEmail());
-                    loginIdentifierService.delete(loginIdentifier);
-                    loginIdentifierService.put(new LoginIdentifier(user));
-                }
-
-                Set<String> roles = request.getRoles();
-                user.setRoles(new Roles(roles.toArray(new String[roles.size()])));
-                user.setName(request.getName());
-
-                return userRepository.put(user);
+                LoginIdentifier loginIdentifier = loginIdentifierService.get(user.getEmail());
+                loginIdentifierService.delete(loginIdentifier);
+                loginIdentifierService.put(new LoginIdentifier(user));
             }
+
+            Set<String> roles = request.getRoles();
+            user.setRoles(new Roles(roles.toArray(new String[roles.size()])));
+            user.setName(request.getName());
+
+            return userRepository.put(user);
         });
     }
 

@@ -1,14 +1,10 @@
 package threewks.framework.ref;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import threewks.util.Assert;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ReferenceDataService {
 
@@ -41,30 +37,34 @@ public class ReferenceDataService {
      *
      * @return this object
      */
-    public ReferenceDataService registerClasses(Class<? extends ReferenceData>... referenceDataClasses) {
+    @SafeVarargs
+    public final ReferenceDataService registerClasses(Class<? extends ReferenceData>... referenceDataClasses) {
         for (Class<? extends ReferenceData> referenceDataClass : referenceDataClasses) {
             Assert.isTrue(Enum.class.isAssignableFrom(referenceDataClass), "ReferenceData implementation must be an enum. Offending class: %s", referenceDataClass.getName());
 
-            Function<? extends ReferenceData, ReferenceDataDto> transformer = getTransformer(referenceDataClass);
-            List<ReferenceDataDto> entries = transform(referenceDataClass, transformer);
+            List<ReferenceDataDto> entries = transform(referenceDataClass);
             referenceData.put(referenceDataClass.getSimpleName(), entries);
         }
         return this;
     }
 
-    private Function<? extends ReferenceData, ReferenceDataDto> getTransformer(Class<? extends ReferenceData> referenceDataClass) {
-        for (Map.Entry<Class<? extends ReferenceData>, Function<? extends ReferenceData, ReferenceDataDto>> customTransformer : customTransformers.entrySet()) {
-            if (customTransformer.getKey().isAssignableFrom(referenceDataClass)) {
-                return customTransformer.getValue();
-            }
-        }
-        return ReferenceData.TO_DTO_TRANSFORMER;
+    @SuppressWarnings("unchecked")
+    private <T extends ReferenceData> Function<T, ReferenceDataDto> getTransformer(Class<T> referenceDataClass) {
+        Optional transformer = customTransformers
+            .entrySet()
+            .stream()
+            .filter(entry -> entry.getKey().isAssignableFrom(referenceDataClass))
+            .map(Map.Entry::getValue)
+            .findFirst();
+        return (Function<T, ReferenceDataDto>) transformer.orElse(ReferenceData.TO_DTO_TRANSFORMER);
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ReferenceData> List<ReferenceDataDto> transform(Class<T> referenceDataClass, Function<? extends ReferenceData, ReferenceDataDto> transformer) {
-        List<ReferenceDataDto> proxy = Lists.transform(getEnumConstants(referenceDataClass), (Function<? super T, ReferenceDataDto>) transformer);
-        return new ArrayList<>(proxy);
+    private <T extends ReferenceData> List<ReferenceDataDto> transform(Class<T> referenceDataClass) {
+        return getEnumConstants(referenceDataClass)
+            .stream()
+            .map(getTransformer(referenceDataClass))
+            .collect(Collectors.toList());
     }
 
     private <T extends ReferenceData> List<T> getEnumConstants(Class<T> referenceDataClass) {

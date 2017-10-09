@@ -24,12 +24,12 @@ public class PropertyHelper {
 
     public List<String> getPropertyList(String key, String... defaultValues) {
         String rawValue = getNullableProperty(key);
-        return rawValue == null ? toCollection(defaultValues, new ArrayList<String>()) : toStringList(rawValue);
+        return rawValue == null ? toCollection(defaultValues, new ArrayList<>()) : toStringList(rawValue);
     }
 
     public Set<String> getPropertySet(String key, String... defaultValues) {
         String rawValue = getNullableProperty(key);
-        return rawValue == null ? toCollection(defaultValues, new LinkedHashSet<String>()) : toStringSet(rawValue);
+        return rawValue == null ? toCollection(defaultValues, new LinkedHashSet<>()) : toStringSet(rawValue);
     }
 
     private String getNullableProperty(String key) {
@@ -44,7 +44,7 @@ public class PropertyHelper {
      * @return elements in a {@link List < String >} or else an empty {@link List < String >}.
      */
     public static List<String> toStringList(String source) {
-        return toCollection(source, new ArrayList<String>());
+        return toCollection(source, new ArrayList<>());
     }
 
     /**
@@ -55,7 +55,7 @@ public class PropertyHelper {
      * @return elements in a {@link Set < String >} or else an empty {@link Set < String >}.
      */
     public static Set<String> toStringSet(String source) {
-        return toCollection(source, new LinkedHashSet<String>());
+        return toCollection(source, new LinkedHashSet<>());
     }
 
     private static <T extends Collection<String>> T toCollection(String source, T collectionInstance) {

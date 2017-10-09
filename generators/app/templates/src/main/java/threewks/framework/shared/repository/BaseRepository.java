@@ -145,10 +145,5 @@ public abstract class BaseRepository<E, K> extends AbstractRepository<E, K> {
         return super.reindex(fromKeys.from(keys), BATCH_SIZE, reindexOperation);
     }
 
-    private final ReindexOperation<E> IDENTITY_REINDEX_OP = new ReindexOperation<E>() {
-        @Override
-        public List<E> apply(List<E> batch) {
-            return batch;
-        }
-    };
+    private final ReindexOperation<E> IDENTITY_REINDEX_OP = batch -> batch;
 }

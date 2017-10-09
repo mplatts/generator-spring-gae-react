@@ -33,8 +33,8 @@ public class MagicLinkServiceTest {
     private static final String HOST = "http://hostname";
     private static final String SENDER = "sender@example.org";
     private static final String CODE = "ABC123";
-    private static final String MAGIC_LINK_EXPIRY = new String("5");
-    private static final Integer TWO_WEEKS_IN_MINUTES = new Integer(20160);
+    private static final String MAGIC_LINK_EXPIRY = "5";
+    private static final Integer TWO_WEEKS_IN_MINUTES = 20160;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();

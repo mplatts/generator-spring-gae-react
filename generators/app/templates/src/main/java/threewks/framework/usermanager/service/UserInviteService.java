@@ -69,23 +69,20 @@ public class UserInviteService {
             roles = inviteeRoles;
         }
 
-        return ofy().transact(new Work<AppUser>() {
-            @Override
-            public AppUser run() {
-                LoginIdentifier loginIdentifier = loginIdentifierService.get(inviteeEmail);
+        return ofy().transact(() -> {
+            LoginIdentifier loginIdentifier = loginIdentifierService.get(inviteeEmail);
 
-                AppUser user = loginIdentifier == null ? userService.registerInvited(inviteeEmail) : loginIdentifier.getUser();
+            AppUser user = loginIdentifier == null ? userService.registerInvited(inviteeEmail) : loginIdentifier.getUser();
 
-                Assert.isFalse(user.isActive(), "Cannot issue invite. User account already activated.");
+            Assert.isFalse(user.isActive(), "Cannot issue invite. User account already activated.");
 
-                String code = secureRandomAlphanumeric(100);
-                UserInviteLink invite = new UserInviteLink(code, issuer, user.getEmail(), roles);
-                userInviteLinkRepository.put(invite);
+            String code = secureRandomAlphanumeric(100);
+            UserInviteLink invite = new UserInviteLink(code, issuer, user.getEmail(), roles);
+            userInviteLinkRepository.put(invite);
 
-                queueUserInviteEmail(user.getEmail(), code);
+            queueUserInviteEmail(user.getEmail(), code);
 
-                return user;
-            }
+            return user;
         });
     }
 
@@ -118,29 +115,26 @@ public class UserInviteService {
 
         final String hashedCode = UserInviteLink.hash(code);
 
-        return ofy().transact(new Work<AppUser>() {
-            @Override
-            public AppUser run() {
-                UserInviteLink invite = userInviteLinkRepository.get(hashedCode);
+        return ofy().transact(() -> {
+            UserInviteLink invite = userInviteLinkRepository.get(hashedCode);
 
-                Assert.notNull(invite, "Invalid invite code");
-                Assert.isFalse(invite.isRedeemed(), "Invite code has already been redeemed");
-                Assert.isFalse(invite.hasExpired(), "Invite code has expired. Please ask your administrator to issue you an new one.");
+            Assert.notNull(invite, "Invalid invite code");
+            Assert.isFalse(invite.isRedeemed(), "Invite code has already been redeemed");
+            Assert.isFalse(invite.hasExpired(), "Invite code has expired. Please ask your administrator to issue you an new one.");
 
-                invite.setRedeemed(true);
-                userInviteLinkRepository.put(invite);
+            invite.setRedeemed(true);
+            userInviteLinkRepository.put(invite);
 
-                AppUser user = userService.get(invite.getEmail());
-                if (user == null) {
-                    user = userService.registerInvited(invite.getEmail());
-                }
-
-                Assert.isFalse(user.isActive(), "Cannot issue invite. User account already activated.");
-
-                user.setRoles(invite.getRoles());
-                user.setName(name);
-                return userService.activate(user, password);
+            AppUser user = userService.get(invite.getEmail());
+            if (user == null) {
+                user = userService.registerInvited(invite.getEmail());
             }
+
+            Assert.isFalse(user.isActive(), "Cannot issue invite. User account already activated.");
+
+            user.setRoles(invite.getRoles());
+            user.setName(name);
+            return userService.activate(user, password);
         });
     }
 

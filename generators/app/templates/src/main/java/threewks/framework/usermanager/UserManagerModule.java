@@ -11,6 +11,7 @@ import com.threewks.thundr.gmail.GmailModule;
 import com.threewks.thundr.handlebars.HandlebarsModule;
 import com.threewks.thundr.injection.BaseModule;
 import com.threewks.thundr.injection.UpdatableInjectionContext;
+import com.threewks.thundr.mail.BaseMailer;
 import com.threewks.thundr.mail.Mailer;
 import com.threewks.thundr.module.DependencyRegistry;
 import com.threewks.thundr.route.Router;
@@ -59,9 +60,9 @@ public class UserManagerModule extends BaseModule {
         // for gmail API as the setup stores the creds established at setup time in DS
         injectionContext.inject(AppEngineDataStoreFactory.getDefaultInstance()).as(DataStoreFactory.class);
         injectionContext.inject(UrlFetchTransport.getDefaultInstance()).as(HttpTransport.class);
-        injectionContext
-            .inject(Environment.is(Environment.DEV) ? LoggingMailer.class : GmailMailer.class)
-            .as(Mailer.class);
+
+        Class<? extends Mailer> mailerClass = Environment.is(Environment.DEV) ? LoggingMailer.class : GmailMailer.class;
+        injectionContext.inject(mailerClass).as(Mailer.class);
     }
 
     @Override

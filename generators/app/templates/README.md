@@ -6,14 +6,9 @@ This project was generated using the [React Thundr GAE generator][generator-thun
 
 Before you can run this app up you'll need to check you have the following tools:
 
-* Java 7*
+* Java 8
 * Maven 3
 * Node >= 6.9.1
-
-> *Yes you read that right: **Java 7**. App Engine doesn't support Java 8 yet so I suggest you head
-> over to David Cai's excellent guide to [Install multiple JDKs on Mac][install-multiple-jdk-on-mac].
-> This project includes a `.java-version` dot file which will tell jEnv to use JDK 7 when running 
-> which will hopefully make your life a lot easier.
 
 ## Getting Started
 
@@ -51,5 +46,4 @@ When you're ready to deploy your application you can:
 
   Where environment name matches a profile in your `pom.xml`.
 
-[install-multiple-jdk-on-mac]: http://davidcai.github.io/blog/posts/install-multiple-jdk-on-mac/
 [generator-thundr-gae-react]: https://github.com/3wks/generator-thundr-gae-react
