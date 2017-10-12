@@ -28,6 +28,13 @@ public abstract class BaseEntity {
     public interface PreLoadAuditRefs {
     }
 
+    public static class Fields {
+        public static final String updated = "updated";
+        public static final String updatedBy = "updatedBy";
+        public static final String created = "created";
+        public static final String createdBy = "createdBy";
+    }
+
     @Index
     @SearchIndex(as = IndexType.BigDecimal)
     private DateTime created;
@@ -35,7 +42,7 @@ public abstract class BaseEntity {
     // Only pre-load when specifically asked, using the marker interface
     @Load(PreLoadAuditRefs.class)
     @Index
-    @SearchIndex
+    @SearchIndex(as = IndexType.Identifier)
     private Ref<AppUser> createdBy;
 
     @Index
@@ -45,7 +52,7 @@ public abstract class BaseEntity {
     // Only pre-load when specifically asked, using the marker interface
     @Load(PreLoadAuditRefs.class)
     @Index
-    @SearchIndex
+    @SearchIndex(as = IndexType.Identifier)
     private Ref<AppUser> updatedBy;
 
     @Ignore
