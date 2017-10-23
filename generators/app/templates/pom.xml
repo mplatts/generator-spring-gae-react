@@ -22,7 +22,7 @@
         <scm.url>scm:git:</scm.url>
         <appId>${project.artifactId}-${project.activeProfiles[0].id}</appId>
         <appVersion>1</appVersion>
-        <gae.version>1.9.56</gae.version>
+        <gae.version>1.9.58</gae.version>
 
         <!-- Usd by parent for thundr-gae -->
         <thundr.version>3.0.0</thundr.version>
