@@ -16,7 +16,6 @@ class UserProfilePage extends Component {
   state = {
     isFetching: true,
     user: null,
-    error: null,
   };
 
   componentDidMount() {
@@ -27,10 +26,11 @@ class UserProfilePage extends Component {
   fetchUser(userId) {
     this.setState({ isFetching: true });
 
-    api.users.get(userId)
+    api.users
+      .get(userId)
       .then(user => this.setState({ isFetching: false, user }))
       .catch((error) => {
-        this.setState({ isFetching: false, error });
+        this.setState({ isFetching: false });
 
         if (error.type !== 'NotFoundException') {
           Alert.error(error.message);
@@ -39,7 +39,8 @@ class UserProfilePage extends Component {
   }
 
   handleSubmit = values =>
-    api.users.save(values)
+    api.users
+      .save(values)
       .then(() => Alert.success('User updated'))
       .catch((error) => {
         Alert.error(error.message);
@@ -59,13 +60,7 @@ class UserProfilePage extends Component {
 
     return (
       <div>
-        <Avatar
-          className="avatar"
-          name={user.name}
-          email={user.email}
-          size={96}
-          round
-        />
+        <Avatar className="avatar" name={user.name} email={user.email} size={96} round />
 
         <UserProfileForm initialValues={user} onSubmit={this.handleSubmit} />
       </div>

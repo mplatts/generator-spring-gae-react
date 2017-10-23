@@ -24,38 +24,34 @@ export const request = (path, method = 'GET', body = null, headers = {}) => {
     config.body = body;
   }
 
-  return fetch(url, config)
-    .then((response) => {
-      if (response.ok) {
-        return response;
+  return fetch(url, config).then((response) => {
+    if (response.ok) {
+      return response;
+    }
+
+    return response.text().then((text) => {
+      let error;
+
+      try {
+        // Attempt to parse body as JSON, fallback to plain text if parsing fails
+        const data = JSON.parse(text);
+        error = new Error(data.message);
+        error.type = data.type;
+      } catch (e) {
+        // Fallback to plain text
+        error = new Error(response.statusText);
       }
 
-      return response.text()
-        .then((text) => {
-          let error;
+      error.status = response.status;
+      error.payload = text;
 
-          try {
-            // Attempt to parse body as JSON, fallback to plain text if parsing fails
-            const data = JSON.parse(text);
-            error = new Error(data.message);
-            error.type = data.type;
-          } catch (e) {
-            // Fallback to plain text
-            error = new Error(response.statusText);
-          }
-
-          error.status = response.status;
-          error.payload = text;
-
-          throw error;
-        });
+      throw error;
     });
+  });
 };
 
 const hasHeader = (headers = {}, headerName) =>
-  Object
-    .keys(headers)
-    .some(key => key.toLowerCase() === headerName.toLowerCase());
+  Object.keys(headers).some(key => key.toLowerCase() === headerName.toLowerCase());
 
 const requestWithData = (path, method, data, headers = {}) => {
   const headerContentType = 'Content-Type';
@@ -64,12 +60,12 @@ const requestWithData = (path, method, data, headers = {}) => {
     return request(path, method, data, headers);
   }
   // Otherwise default to JSON
-  return request(path, method, JSON.stringify(data), { [headerContentType]: 'application/json', ...headers });
+  return request(path, method, JSON.stringify(data), {
+    [headerContentType]: 'application/json',
+    ...headers,
+  });
 };
 
-export const requestJSON = (path, method, data, headers = {}) => (
-  (data
-      ? requestWithData(path, method, data, headers)
-      : request(path, method, null, headers)
-  ).then(response => (response.status !== 204 ? response.json() : null))
-);
+export const requestJSON = (path, method, data, headers = {}) =>
+  (data ? requestWithData(path, method, data, headers) : request(path, method, null, headers))
+    .then(response => (response.status !== 204 ? response.json() : null));

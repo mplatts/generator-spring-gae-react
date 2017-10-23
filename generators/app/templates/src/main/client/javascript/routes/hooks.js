@@ -11,7 +11,9 @@ const withLogin = nextPage => ({ pathname: '/login', query: { next: nextPage } }
 
 export const composeOnEnterHooks = (...hooks) => (nextState, replace, callback) => {
   applyEachSeries(hooks, nextState, replace, (error) => {
-    if (error) { console.error('hook error:', error); } // eslint-disable-line no-console
+    if (error) {
+      console.error('hook error:', error);
+    } // eslint-disable-line no-console
     callback();
   });
 };
@@ -23,13 +25,15 @@ export const loginRequired = (nextState, replace, callback) => {
     return;
   }
 
-  dispatch(fetchUser())
-    .then(
-      () => { callback(); },
-      (error) => {
-        replace(withLogin(nextState.location.pathname));
-        callback(error);
-      });
+  dispatch(fetchUser()).then(
+    () => {
+      callback();
+    },
+    (error) => {
+      replace(withLogin(nextState.location.pathname));
+      callback(error);
+    },
+  );
 };
 
 export const hasAnyRole = (...roles) => (nextState, replace, callback) => {

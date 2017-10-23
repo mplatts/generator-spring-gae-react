@@ -25,14 +25,11 @@ class LoginForm extends Component {
           hintText="Your email address"
           floatingLabelText="Email"
           type="email"
-          validate={[
-            required('Email address is required'),
-            email('Enter a valid email'),
-          ]}
+          validate={[required('Email address is required'), email('Enter a valid email')]}
           fullWidth
         />
 
-        {showPassword &&
+        {showPassword && (
           <Field
             name="password"
             hintText="Your password"
@@ -41,18 +38,20 @@ class LoginForm extends Component {
             type="password"
             validate={required('Password is required')}
             fullWidth
-          />}
+          />
+        )}
 
         <div className="actions">
-          {showPassword
-            ? <RaisedButton
+          {showPassword ? (
+            <RaisedButton
               label={submitting ? 'Signing in...' : 'Sign in'}
               type="submit"
               disabled={submitting}
               primary
               fullWidth
             />
-            : <div className="inline-btn-group">
+          ) : (
+            <div className="inline-btn-group">
               <RaisedButton
                 label="Type password"
                 type="button"
@@ -64,7 +63,8 @@ class LoginForm extends Component {
                 disabled={submitting}
                 primary
               />
-            </div> }
+            </div>
+          )}
         </div>
       </form>
     );

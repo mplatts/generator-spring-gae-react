@@ -38,10 +38,10 @@ class LoginPage extends Component {
         });
     }
     return api.users.requestMagicLink(values.username)
-        .then(() => this.setState({ magicLinkSent: true }))
-        .catch((error) => {
-          throw new SubmissionError({ _error: error.message });
-        });
+      .then(() => this.setState({ magicLinkSent: true }))
+      .catch((error) => {
+        throw new SubmissionError({ _error: error.message });
+      });
   };
 
   render() {

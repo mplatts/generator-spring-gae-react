@@ -5,13 +5,9 @@ import { submit } from 'redux-form';
 import { Dialog, FlatButton } from 'material-ui';
 
 class FormDialog extends Component {
-
   static propTypes = {
     title: PropTypes.string.isRequired,
-    formComponent: PropTypes.oneOfType([
-      PropTypes.func,
-      PropTypes.object,
-    ]).isRequired,
+    formComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.object]).isRequired,
     formName: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     onCancel: PropTypes.func.isRequired,
@@ -60,15 +56,8 @@ class FormDialog extends Component {
     } = this.props;
 
     const actions = [
-      <FlatButton
-        label={cancelButtonText}
-        onTouchTap={onCancel}
-      />,
-      onDelete && <FlatButton
-        label={deleteButtonText}
-        secondary
-        onTouchTap={this.handleDelete}
-      />,
+      <FlatButton label={cancelButtonText} onTouchTap={onCancel} />,
+      onDelete && <FlatButton label={deleteButtonText} secondary onTouchTap={this.handleDelete} />,
       <FlatButton
         label={submitButtonText}
         primary
@@ -78,12 +67,7 @@ class FormDialog extends Component {
     ];
 
     return (
-      <Dialog
-        title={title}
-        open={open}
-        onRequestClose={onCancel}
-        actions={actions}
-      >
+      <Dialog title={title} open={open} onRequestClose={onCancel} actions={actions}>
         <FormComponent onSubmit={onSubmit} {...rest} />
       </Dialog>
     );

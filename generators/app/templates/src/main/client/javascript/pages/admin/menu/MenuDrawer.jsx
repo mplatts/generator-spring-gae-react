@@ -23,7 +23,9 @@ class MenuDrawer extends Component {
   };
 
   render() {
-    const { loggedInUser, logout, navigateTo, ...rest } = this.props;
+    const {
+      loggedInUser, logout, navigateTo, ...rest
+    } = this.props;
 
     return (
       <Drawer
@@ -78,7 +80,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...dispatchProps,
   ...ownProps,
   navigateTo: (path) => {
-    ownProps.onRequestChange(false);  // ensure drawer closes upon navigation
+    ownProps.onRequestChange(false); // ensure drawer closes upon navigation
     dispatchProps.navigateTo(path);
   },
 });

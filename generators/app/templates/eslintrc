@@ -16,9 +16,12 @@
     "PRODUCTION": false,
   },
   "rules": {
+    "jsx-a11y/anchor-is-valid": 0,
     "no-case-declarations": 0,
+    "no-console": 0,
     "react/forbid-prop-types": 0,
     "react/jsx-space-before-closing": 0,
-    "react/jsx-tag-spacing": 0
+    "react/jsx-tag-spacing": 0,
+    "react/no-typos": 0
   }
 }

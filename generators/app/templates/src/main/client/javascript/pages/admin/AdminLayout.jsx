@@ -6,14 +6,9 @@ import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import MenuDrawer from './menu/MenuDrawer';
 
-
 class AdminLayout extends Component {
   static propTypes = {
     children: oneOfType([node, arrayOf(node)]).isRequired,
-  };
-
-  static defaultProps = {
-    loggedInUser: {},
   };
 
   constructor(props) {
@@ -34,19 +29,14 @@ class AdminLayout extends Component {
       <div className="admin-layout">
         <Alert effect="slide" position="bottom-right" stack />
 
-        <AppBar
-          title="<%= projectName %>"
-          onLeftIconButtonTouchTap={this.toggleDrawer}
-        />
+        <AppBar title="Busker Thundr React" onLeftIconButtonTouchTap={this.toggleDrawer} />
 
         <MenuDrawer
           open={drawerOpen}
           onRequestChange={open => this.setState({ drawerOpen: open })}
         />
 
-        <div className="main">
-          { children }
-        </div>
+        <div className="main">{children}</div>
       </div>
     );
   }

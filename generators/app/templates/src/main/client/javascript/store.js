@@ -5,16 +5,9 @@ import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 
-const middleware = [
-  routerMiddleware(browserHistory),
-  thunk,
-];
+const middleware = [routerMiddleware(browserHistory), thunk];
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(
-    applyMiddleware(...middleware),
-  ));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(...middleware)));
 
 // Create an enhanced history that syncs navigation events with the store
 export const history = syncHistoryWithStore(browserHistory, store);
