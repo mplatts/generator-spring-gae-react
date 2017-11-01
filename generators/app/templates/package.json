@@ -74,12 +74,9 @@
   },
   "jest": {
     "roots": [
-      "<rootDir>/src/main/static/javascript",
+      "<rootDir>/src/main/client/javascript",
       "<rootDir>/src/test/javascript"
     ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/target/"
-    ]
+    "testPathIgnorePatterns": ["/node_modules/", "/target/"]
   }
 }
