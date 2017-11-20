@@ -269,7 +269,7 @@
                 <version><%= _.unescape('${gae.version}')%></version>
                 <configuration>
                     <address>0.0.0.0</address>
-                    <port>8081</port>
+                    <port>8080</port>
                     <disableUpdateCheck>true</disableUpdateCheck>
                 </configuration>
             </plugin>
