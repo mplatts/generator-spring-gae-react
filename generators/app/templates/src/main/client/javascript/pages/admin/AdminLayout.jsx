@@ -29,7 +29,7 @@ class AdminLayout extends Component {
       <div className="admin-layout">
         <Alert effect="slide" position="bottom-right" stack />
 
-        <AppBar title="Busker Thundr React" onLeftIconButtonTouchTap={this.toggleDrawer} />
+        <AppBar title="<%= projectName %>" onLeftIconButtonTouchTap={this.toggleDrawer} />
 
         <MenuDrawer
           open={drawerOpen}
