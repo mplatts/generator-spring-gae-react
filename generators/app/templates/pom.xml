@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.threewks.thundr</groupId>
         <artifactId>thundr-gae-app</artifactId>
-        <version>5</version>
+        <version>8.0</version>
     </parent>
 
     <scm>
@@ -22,7 +22,7 @@
         <scm.url>scm:git:<%= gitPath %></scm.url>
         <appId><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></appId>
         <appVersion>1</appVersion>
-        <gae.version>1.9.58</gae.version>
+        <gae.version>1.9.59</gae.version>
 
         <!-- Usd by parent for thundr-gae -->
         <thundr.version>3.0.0</thundr.version>
@@ -107,6 +107,28 @@
             <artifactId>thundr-handlebars</artifactId>
             <version>${thundr.version}</version>
         </dependency>
+        <!-- Force a newer version of handlebars than the one pulled in by thundr-handlebars to get some bugfixes -->
+        <dependency>
+            <groupId>com.github.jknack</groupId>
+            <artifactId>handlebars</artifactId>
+            <version>4.0.6</version>
+        </dependency>
+        <!-- Force a modern version of commons-lang3 since there was a clash with handlebars and onelogin -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.objectify</groupId>
+            <artifactId>objectify</artifactId>
+            <version>5.1.21</version>
+        </dependency>
+        <dependency>
+            <groupId>net.dongliu</groupId>
+            <artifactId>gson-java8-datatype</artifactId>
+            <version>1.0.3</version>
+        </dependency>
 
         <!-- Additional or overridden dependencies go here -->
         <dependency>
@@ -125,7 +147,6 @@
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-gson</artifactId>
             <version>RELEASE</version>
-            <scope>compile</scope>
             <exclusions>
                 <exclusion>
                     <artifactId>httpclient</artifactId>
@@ -150,20 +171,13 @@
         <dependency>
             <groupId>org.hashids</groupId>
             <artifactId>hashids</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.3</version>
         </dependency>
 
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.10.3</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.9.0</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -180,16 +194,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-
             <!-- Maven's build timezone is always in UTC so that's why we use this. See http://stackoverflow.com/a/35578881/945789 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

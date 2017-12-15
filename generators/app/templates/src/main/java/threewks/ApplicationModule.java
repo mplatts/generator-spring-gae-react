@@ -3,7 +3,9 @@ package threewks;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.common.collect.Sets;
+import com.google.gson.GsonBuilder;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.impl.translate.TranslatorFactory;
 import com.threewks.thundr.configuration.Environment;
 import com.threewks.thundr.gae.GaeModule;
@@ -15,18 +17,27 @@ import com.threewks.thundr.module.DependencyRegistry;
 import com.threewks.thundr.route.Router;
 import com.threewks.thundr.route.controller.FilterRegistry;
 import com.threewks.thundr.session.SessionService;
+import com.threewks.thundr.transformer.TransformerManager;
 import com.threewks.thundr.user.controller.SessionFilter;
 import com.threewks.thundr.user.gae.UserGaeModule;
+import net.dongliu.gson.GsonJava8TypeAdapterFactory;
 import threewks.controller.Routes;
 import threewks.framework.filter.ExceptionMappingFilter;
+import threewks.framework.objectify.Jsr310Translators;
 import threewks.framework.ref.ReferenceDataService;
 import threewks.framework.ref.ReferenceDataWithCode;
+import threewks.framework.search.LocalDateToBigDecimal;
+import threewks.framework.search.OffsetDateTimeToBigDecimal;
+import threewks.framework.search.RefToString;
 import threewks.framework.usermanager.UserManagerModule;
 import threewks.framework.usermanager.context.SecurityContextFilter;
 import threewks.framework.usermanager.context.SessionHelper;
 import threewks.service.bootstrap.BootstrapService;
 import threewks.util.DoesNotExistException;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Set;
 
 import static threewks.framework.filter.ExceptionMappingFilter.LogLevel.ERROR_WITH_STACKTRACE;
@@ -44,10 +55,17 @@ public class ApplicationModule extends BaseModule {
     }
 
     @Override
+    public void initialise(UpdatableInjectionContext injectionContext) {
+        super.initialise(injectionContext);
+        configureObjectify();
+    }
+
+    @Override
     public void configure(UpdatableInjectionContext injectionContext) {
         super.configure(injectionContext);
 
-        configureObjectify();
+        configureGsonTypeAdapters(injectionContext.get(GsonBuilder.class));
+        configureTransformerManager(injectionContext.get(TransformerManager.class));
         configureHelpers(injectionContext);
         configureFilters(injectionContext);
         configureReferenceData(injectionContext);
@@ -124,9 +142,16 @@ public class ApplicationModule extends BaseModule {
     }
 
     public static Set<TranslatorFactory> objectifyTranslatorFactories() {
-        return Sets.newHashSet(
+        Set<TranslatorFactory> translators = Sets.newHashSet(
             // Add BigDecimal support here when you need it. BigDecimalLongTransformer requires a decision to be made about expected precision (default 6).
         );
+
+        translators.addAll(Jsr310Translators.translators());
+        return translators;
+    }
+
+    private void configureGsonTypeAdapters(GsonBuilder gsonBuilder) {
+        gsonBuilder.registerTypeAdapterFactory(new GsonJava8TypeAdapterFactory());
     }
 
     @SuppressWarnings("unchecked")
@@ -138,6 +163,13 @@ public class ApplicationModule extends BaseModule {
             );
         injectionContext.inject(referenceDataService).as(ReferenceDataService.class);
     }
+
+    private void configureTransformerManager(TransformerManager transformerManager) {
+        transformerManager.register(OffsetDateTime.class, BigDecimal.class, new OffsetDateTimeToBigDecimal());
+        transformerManager.register(LocalDate.class, BigDecimal.class, new LocalDateToBigDecimal());
+        transformerManager.register(Ref.class, String.class, new RefToString());
+    }
+
 
     @SuppressWarnings("unchecked")
     private static void injectAsSelf(UpdatableInjectionContext injectionContext, Class... classes) {
