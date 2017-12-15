@@ -134,7 +134,7 @@
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-appengine</artifactId>
-            <version>RELEASE</version>
+            <version>1.23.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava-jdk5</artifactId>
@@ -146,7 +146,7 @@
         <dependency>
             <groupId>com.google.api-client</groupId>
             <artifactId>google-api-client-gson</artifactId>
-            <version>RELEASE</version>
+            <version>1.23.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>httpclient</artifactId>
