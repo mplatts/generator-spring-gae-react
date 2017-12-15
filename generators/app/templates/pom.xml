@@ -24,7 +24,7 @@
         <appVersion>1</appVersion>
         <gae.version>1.9.59</gae.version>
 
-        <!-- Usd by parent for thundr-gae -->
+        <!-- Used by parent for thundr-gae -->
         <thundr.version>3.0.0</thundr.version>
     </properties>
 
@@ -87,13 +87,13 @@
         <dependency>
             <groupId>com.threewks.thundr</groupId>
             <artifactId>thundr-gae-user</artifactId>
-            <version>${thundr.version}</version>
+            <version>3.0.2</version>
         </dependency>
 
         <dependency>
             <groupId>com.threewks.thundr</groupId>
             <artifactId>thundr-contrib-gmail</artifactId>
-            <version>${thundr.version}</version>
+            <version>3.0.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.google.guava</groupId>
@@ -117,7 +117,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.6</version>
+            <version>3.7</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.objectify</groupId>
@@ -127,7 +127,7 @@
         <dependency>
             <groupId>net.dongliu</groupId>
             <artifactId>gson-java8-datatype</artifactId>
-            <version>1.0.3</version>
+            <version>1.1.0</version>
         </dependency>
 
         <!-- Additional or overridden dependencies go here -->
@@ -177,7 +177,15 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.10.3</version>
+            <version>1.11.2</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.13.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
