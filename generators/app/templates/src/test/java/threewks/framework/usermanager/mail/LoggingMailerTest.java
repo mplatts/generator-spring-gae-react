@@ -18,7 +18,7 @@ import java.util.TreeMap;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -97,7 +97,7 @@ public class LoggingMailerTest {
 
     @SuppressWarnings("ConfusingArgumentToVarargsMethod")
     private Map<String, String> emails(String... emails) {
-        Map<String, String> map = Expressive.map(emails);
+        Map<String, String> map = Expressive.map((Object[]) emails);
         // Make map consistent ordering for ease of assertions
         return new TreeMap<>(map);
     }

@@ -3,12 +3,10 @@ package threewks;
 import com.googlecode.objectify.Ref;
 import com.threewks.thundr.gae.objectify.repository.Repository;
 import com.threewks.thundr.test.TestSupport;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 
 import java.util.List;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
