@@ -33,6 +33,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static threewks.MockHelpers.returnFirstArgument;
 import static threewks.TestData.user;
@@ -59,7 +60,7 @@ public class AppUserServiceTest extends BaseTest {
     private AppUser user;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         user = user(EMAIL);
         LoginIdentifier loginIdentifier = spy(new LoginIdentifier(user));
 
@@ -77,7 +78,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void activate() throws Exception {
+    public void activate() {
         String email = "bar@example.org";
         AppUser user = userService.activate(user(email), "password");
 
@@ -88,7 +89,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void activate_willFail_whenUserIsNull() throws Exception {
+    public void activate_willFail_whenUserIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot activate. User is required");
 
@@ -96,7 +97,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void activate_willFail_whenPasswordIsNull() throws Exception {
+    public void activate_willFail_whenPasswordIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot activate. Password is required");
 
@@ -104,7 +105,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void activate_willFail_whenPasswordIsBlank() throws Exception {
+    public void activate_willFail_whenPasswordIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot activate. Password is required");
 
@@ -112,7 +113,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void registerInvited() throws Exception {
+    public void registerInvited() {
         String email = "bar@example.org";
         AppUser user = userService.registerInvited(email);
 
@@ -124,7 +125,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void registerInvited_willFail_whenEmailIsNull() throws Exception {
+    public void registerInvited_willFail_whenEmailIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Email is required");
 
@@ -132,7 +133,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void registerInvited_willFail_whenEmailIsBlank() throws Exception {
+    public void registerInvited_willFail_whenEmailIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Email is required");
 
@@ -140,7 +141,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register() throws Exception {
+    public void register() {
         AppUser user = user("bar@example.org");
 
         AppUser registeredUser = userService.register(user, PASSWORD);
@@ -149,14 +150,14 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register_willThrowException_whenLoginIdentifierUnavailable() throws Exception {
+    public void register_willThrowException_whenLoginIdentifierUnavailable() {
         thrown.expect(LoginIdentifierUnavailableException.class);
 
         userService.register(user, PASSWORD);
     }
 
     @Test
-    public void register_willThrowException_whenUserIsNull() throws Exception {
+    public void register_willThrowException_whenUserIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("User is required");
 
@@ -164,7 +165,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register_willThrowException_whenEmailIsNull() throws Exception {
+    public void register_willThrowException_whenEmailIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Email is required");
 
@@ -172,7 +173,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register_willThrowException_whenEmailIsInvalid() throws Exception {
+    public void register_willThrowException_whenEmailIsInvalid() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Must provide a valid email");
 
@@ -183,7 +184,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register_willLowerCaseEmail_whenEmailIsMixedCase() throws Exception {
+    public void register_willLowerCaseEmail_whenEmailIsMixedCase() {
         String email = "Foo.Bar@example.org";
         AppUser user = new AppUser(randomUUID().toString());
         user.setEmail(email);
@@ -194,7 +195,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void register_willThrowException_whenPasswordIsNull() throws Exception {
+    public void register_willThrowException_whenPasswordIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Password is required");
 
@@ -202,7 +203,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void login_willReturnUser_whenCredentialsMatch_andUserIsActive() throws Exception {
+    public void login_willReturnUser_whenCredentialsMatch_andUserIsActive() {
         user.setStatus(UserStatus.ACTIVE);
 
         AppUser result = userService.login(session, EMAIL, PASSWORD);
@@ -211,7 +212,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void login_willNotReturnUser_whenUserIsNotActive() throws Exception {
+    public void login_willNotReturnUser_whenUserIsNotActive() {
         user.setStatus(UserStatus.INVITED);
 
         AppUser result = userService.login(session, EMAIL, PASSWORD);
@@ -220,21 +221,21 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void login_willReturnNull_whenUserDoesNotExist() throws Exception {
+    public void login_willReturnNull_whenUserDoesNotExist() {
         AppUser user = userService.login(session, "bar@example.org", PASSWORD);
 
         assertThat(user, is(nullValue()));
     }
 
     @Test
-    public void login_willReturnNull_whenPasswordInvalid() throws Exception {
+    public void login_willReturnNull_whenPasswordInvalid() {
         AppUser user = userService.login(session, EMAIL, "invalid");
 
         assertThat(user, is(nullValue()));
     }
 
     @Test
-    public void login_willThrowException_whenLoginIdentifierIsNull() throws Exception {
+    public void login_willThrowException_whenLoginIdentifierIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Email is required");
 
@@ -242,11 +243,14 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void save_willSucceed_whenUpdatingSelf() throws Exception {
+    public void save_willSucceed_whenUpdatingSelf() {
         SecurityContextHolder.get().setUser(user);
         String newEmail = "bar@example.org";
         Set<String> roles = Sets.newHashSet("bloop");
         String newName = "Foo Bar";
+
+        LoginIdentifier existingIdentifier = new LoginIdentifier(user);
+        when(loginIdentifierService.get(EMAIL)).thenReturn(existingIdentifier);
 
         UpdateUserRequestDto request = new UpdateUserRequestDto()
             .setEmail(newEmail)
@@ -260,10 +264,13 @@ public class AppUserServiceTest extends BaseTest {
         assertThat(saved.getEmail(), is(newEmail));
         assertThat(saved.getRoles(), is(new Roles(roles.toArray(new String[roles.size()]))));
         assertThat(saved.getName(), is(newName));
+
+        verify(loginIdentifierService).delete(existingIdentifier);
+        verify(loginIdentifierService).put(eq(new LoginIdentifier(saved)));
     }
 
     @Test
-    public void save_willSucceed_whenUpdatingAnotherUserAndAdmin() throws Exception {
+    public void save_willSucceed_whenUpdatingAnotherUserAndAdmin() {
         String newName = "Foo Bar";
 
         UpdateUserRequestDto request = new UpdateUserRequestDto()
@@ -281,7 +288,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void save_willFail_whenUpdatingAnotherUserAndNotAdmin() throws Exception {
+    public void save_willFail_whenUpdatingAnotherUserAndNotAdmin() {
         thrown.expect(ForbiddenException.class);
         thrown.expectMessage("Not permitted");
 
@@ -293,7 +300,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void save_willFail_whenEmailIsInvalid() throws Exception {
+    public void save_willFail_whenEmailIsInvalid() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Must provide a valid email");
 
@@ -311,7 +318,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void save_willFail_whenEmailIsAlreadyInUse() throws Exception {
+    public void save_willFail_whenEmailIsAlreadyInUse() {
         String newEmail = "existing@example.org";
 
         doThrow(new LoginIdentifierUnavailableException(newEmail)).when(loginIdentifierService).checkAvailability(newEmail);
@@ -332,7 +339,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void save_willLowerCaseEmail_whenEmailIsMixedCase() throws Exception {
+    public void save_willLowerCaseEmail_whenEmailIsMixedCase() {
         SecurityContextHolder.get().setUser(user);
         String newEmail = "Foo.Bar@example.org";
         Set<String> roles = Sets.newHashSet("bloop");
@@ -369,7 +376,7 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
-    public void search() throws Exception {
+    public void search() {
         List<AppUser> expected = new ArrayList<>();
         doReturn(expected).when(userRepository).searchByEmail("some-email");
 

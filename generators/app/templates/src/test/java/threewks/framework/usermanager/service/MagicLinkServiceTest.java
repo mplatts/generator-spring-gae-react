@@ -61,7 +61,7 @@ public class MagicLinkServiceTest {
     private MagicLinkService test;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mailer = new MockMailer();
 
         test = new MagicLinkService(magicLinkRepository, userService, router, queue, mailer, HOST, SENDER, MAGIC_LINK_EXPIRY);
@@ -73,7 +73,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void loginWithCode_willLogUserIn_whenMagicCodeIsFoundAndNotExpired() throws Exception {
+    public void loginWithCode_willLogUserIn_whenMagicCodeIsFoundAndNotExpired() {
         AppUser actualResult = test.loginWithCode(testSession, CODE);
 
         assertThat(actualResult, is(testUser));
@@ -81,7 +81,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void loginWithCode_willNotLogin_whenMagicCodeIsNotFound() throws Exception {
+    public void loginWithCode_willNotLogin_whenMagicCodeIsNotFound() {
         when(magicLinkRepository.get(isA(String.class))).thenReturn(null);
 
         try {
@@ -93,7 +93,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void loginWithCode_willThrowException_whenMagicCodeIsNotFound() throws Exception {
+    public void loginWithCode_willThrowException_whenMagicCodeIsNotFound() {
         when(magicLinkRepository.get(isA(String.class))).thenReturn(null);
 
         expectedException.expect(MagicLinkException.class);
@@ -103,7 +103,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void loginWithCode_willNotLogin_whenMagicCodeHasExpired() throws Exception {
+    public void loginWithCode_willNotLogin_whenMagicCodeHasExpired() {
         when(magicLink.hasExpired()).thenReturn(true);
 
         try {
@@ -115,7 +115,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void loginWithCode_willThrowException_whenMagicCodeHasExpired() throws Exception {
+    public void loginWithCode_willThrowException_whenMagicCodeHasExpired() {
         when(magicLink.hasExpired()).thenReturn(true);
 
         expectedException.expect(MagicLinkException.class);
@@ -125,7 +125,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void constructor_willDefaultMagicLinkExpiryToTwoWeeks_whenNonNumericExpiryEntered() throws Exception {
+    public void constructor_willDefaultMagicLinkExpiryToTwoWeeks_whenNonNumericExpiryEntered() {
         test = new MagicLinkService(magicLinkRepository, userService, router, queue, mailer, HOST, SENDER, "not a number");
 
         Integer actualResult = TestSupport.getField(test, "magicLinkExpiryInMinutes");
@@ -133,7 +133,7 @@ public class MagicLinkServiceTest {
     }
 
     @Test
-    public void constructor_willDefaultMagicLinkExpiryToTwoWeeks_whenNullExpiryEntered() throws Exception {
+    public void constructor_willDefaultMagicLinkExpiryToTwoWeeks_whenNullExpiryEntered() {
         test = new MagicLinkService(magicLinkRepository, userService, router, queue, mailer, HOST, SENDER, null);
 
         Integer actualResult = TestSupport.getField(test, "magicLinkExpiryInMinutes");

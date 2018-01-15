@@ -140,10 +140,10 @@ public class AppUserService {
                 Assert.isEmail(request.getEmail(), "Must provide a valid email");
 
                 loginIdentifierService.checkAvailability(normalisedEmail);
-                user.setEmail(normalisedEmail);
-
                 LoginIdentifier loginIdentifier = loginIdentifierService.get(user.getEmail());
                 loginIdentifierService.delete(loginIdentifier);
+
+                user.setEmail(normalisedEmail);
                 loginIdentifierService.put(new LoginIdentifier(user));
             }
 

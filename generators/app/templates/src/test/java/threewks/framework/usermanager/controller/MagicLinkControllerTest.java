@@ -28,12 +28,12 @@ public class MagicLinkControllerTest {
     private MagicLinkController magicLinkController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         magicLinkController = new MagicLinkController(magicLinkService);
     }
 
     @Test
-    public void requestMagicLink() throws Exception {
+    public void requestMagicLink() {
         JsonView view = magicLinkController.requestMagicLink("foo@example.org", null);
 
         assertThat(view, is(notNullValue()));
@@ -42,7 +42,7 @@ public class MagicLinkControllerTest {
     }
 
     @Test
-    public void login() throws Exception {
+    public void login() {
         RedirectView view = magicLinkController.login(session, "dontyouknowitsmagic", null);
 
         assertThat(view, is(notNullValue()));
@@ -50,7 +50,7 @@ public class MagicLinkControllerTest {
     }
 
     @Test
-    public void login_willReturnCustomRedirect_whenNextParameterSupplied() throws Exception {
+    public void login_willReturnCustomRedirect_whenNextParameterSupplied() {
         RedirectView view = magicLinkController.login(session, "dontyouknowitsmagic", "/thingy");
 
         assertThat(view, is(notNullValue()));

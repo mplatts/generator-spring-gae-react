@@ -11,7 +11,6 @@ import com.threewks.thundr.gmail.GmailModule;
 import com.threewks.thundr.handlebars.HandlebarsModule;
 import com.threewks.thundr.injection.BaseModule;
 import com.threewks.thundr.injection.UpdatableInjectionContext;
-import com.threewks.thundr.mail.BaseMailer;
 import com.threewks.thundr.mail.Mailer;
 import com.threewks.thundr.module.DependencyRegistry;
 import com.threewks.thundr.route.Router;

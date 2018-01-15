@@ -17,7 +17,7 @@ public class RefToStringTest extends BaseTest {
     private final RefToString toString = new RefToString();
 
     @Test
-    public void from() throws Exception {
+    public void from() {
         Key<AppUser> key = Key.create(AppUser.class, "ref");
         Ref<AppUser> ref = Ref.create(key);
         String webSafeString = toString.from(ref);
@@ -26,7 +26,7 @@ public class RefToStringTest extends BaseTest {
     }
 
     @Test
-    public void from_whenNull_willReturnNull() throws Exception {
+    public void from_whenNull_willReturnNull() {
         assertThat(toString.from(null), is(nullValue()));
     }
 

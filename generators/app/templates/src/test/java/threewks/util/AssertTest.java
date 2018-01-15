@@ -163,7 +163,7 @@ public class AssertTest {
     }
 
     @Test
-    public void isEmail() throws Exception {
+    public void isEmail() {
         List<String> emails = Arrays.asList(
             "foo@example.org",
             "foo+1@example.org",
@@ -178,7 +178,7 @@ public class AssertTest {
     }
 
     @Test
-    public void isEmail_willError_whenStringIsNull() throws Exception {
+    public void isEmail_willError_whenStringIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid email address");
 
@@ -186,7 +186,7 @@ public class AssertTest {
     }
 
     @Test
-    public void isEmail_willError_whenStringIsBlank() throws Exception {
+    public void isEmail_willError_whenStringIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid email address");
 
@@ -195,7 +195,7 @@ public class AssertTest {
 
 
     @Test
-    public void isEmail_willError_whenNotEmail() throws Exception {
+    public void isEmail_willError_whenNotEmail() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid email address");
 
@@ -203,7 +203,7 @@ public class AssertTest {
     }
 
     @Test
-    public void isEmail_willError_whenEmailMissingTld() throws Exception {
+    public void isEmail_willError_whenEmailMissingTld() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid email address");
 
@@ -211,7 +211,7 @@ public class AssertTest {
     }
 
     @Test
-    public void isEmail_willError_whenEmailIsFriendly() throws Exception {
+    public void isEmail_willError_whenEmailIsFriendly() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid email address");
 

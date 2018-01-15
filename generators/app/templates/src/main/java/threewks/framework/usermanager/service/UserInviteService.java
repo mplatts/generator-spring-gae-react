@@ -3,7 +3,6 @@ package threewks.framework.usermanager.service;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.common.collect.ImmutableMap;
-import com.googlecode.objectify.Work;
 import com.threewks.thundr.logger.Logger;
 import com.threewks.thundr.mail.Mailer;
 import com.threewks.thundr.route.Route;

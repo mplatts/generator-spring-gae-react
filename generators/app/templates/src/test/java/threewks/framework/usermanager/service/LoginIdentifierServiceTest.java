@@ -27,19 +27,19 @@ public class LoginIdentifierServiceTest extends BaseTest {
     private LoginIdentifier loginIdentifier;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         loginIdentifier = new LoginIdentifier(new AppUser("foo"));
 
         service = new LoginIdentifierService(loginIdentifierRepository);
     }
 
     @Test
-    public void get_willReturnNull_whenLoginIdentifierIsNull() throws Exception {
+    public void get_willReturnNull_whenLoginIdentifierIsNull() {
         assertThat(service.get(null), is(nullValue()));
     }
 
     @Test
-    public void get_willLowerCaseLoginIdentifier_whenLoginIdentifierIsMixedCase() throws Exception {
+    public void get_willLowerCaseLoginIdentifier_whenLoginIdentifierIsMixedCase() {
         String loginIdentifier = "Foo.Bar@example.org";
 
         service.get(loginIdentifier);
@@ -48,26 +48,26 @@ public class LoginIdentifierServiceTest extends BaseTest {
     }
 
     @Test
-    public void checkAvailability_willNotThrowException_whenLoginIdentifierIsAvailable() throws Exception {
+    public void checkAvailability_willNotThrowException_whenLoginIdentifierIsAvailable() {
         service.checkAvailability(LOGIN_IDENTIFIER);
     }
 
     @Test
-    public void checkAvailability_willThrowException_whenLoginIdentifierIsNull() throws Exception {
+    public void checkAvailability_willThrowException_whenLoginIdentifierIsNull() {
         thrown.expect(IllegalArgumentException.class);
 
         service.checkAvailability(null);
     }
 
     @Test
-    public void checkAvailability_willThrowException_whenLoginIdentifierIsBlank() throws Exception {
+    public void checkAvailability_willThrowException_whenLoginIdentifierIsBlank() {
         thrown.expect(IllegalArgumentException.class);
 
         service.checkAvailability(" ");
     }
 
     @Test
-    public void checkAvailability_willThrowException_whenLoginIdentifierExists() throws Exception {
+    public void checkAvailability_willThrowException_whenLoginIdentifierExists() {
         thrown.expect(LoginIdentifierUnavailableException.class);
 
         when(loginIdentifierRepository.get(LOGIN_IDENTIFIER)).thenReturn(loginIdentifier);
@@ -76,7 +76,7 @@ public class LoginIdentifierServiceTest extends BaseTest {
     }
 
     @Test
-    public void checkAvailability_willThrowException_whenLoginIdentifierExistsIgnoringCase() throws Exception {
+    public void checkAvailability_willThrowException_whenLoginIdentifierExistsIgnoringCase() {
         thrown.expect(LoginIdentifierUnavailableException.class);
 
         when(loginIdentifierRepository.get(LOGIN_IDENTIFIER)).thenReturn(loginIdentifier);

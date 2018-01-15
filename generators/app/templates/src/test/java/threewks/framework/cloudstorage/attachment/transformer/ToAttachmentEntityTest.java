@@ -19,7 +19,7 @@ public class ToAttachmentEntityTest extends BaseTest {
     public RunWithUser runWithUser = new RunWithUser();
 
     @Test
-    public void apply() throws Exception {
+    public void apply() {
         AttachmentDto dto = new AttachmentDto()
             .setBucket("bucket")
             .setContentType("content-type")

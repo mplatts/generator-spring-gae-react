@@ -38,13 +38,13 @@ public class UserControllerTest {
     private UserController userController;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         userController = new UserController(userService, userInviteService);
     }
 
     @Test
     @SuppressWarnings("unchecked")
-    public void list() throws Exception {
+    public void list() {
         assertThat(UserController.class, hasMethodAnnotation("listAll", Authenticated.class));
         assertThat(UserController.class, hasMethodAnnotation("listAll", Authorised.class));
 
@@ -66,7 +66,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void me() throws Exception {
+    public void me() {
         assertThat(UserController.class, hasMethodAnnotation("me", Authenticated.class));
 
         JsonView view = userController.me(user("foo@example.org"));

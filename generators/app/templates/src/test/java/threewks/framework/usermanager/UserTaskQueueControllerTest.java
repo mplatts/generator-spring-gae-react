@@ -27,7 +27,7 @@ public class UserTaskQueueControllerTest {
     private UserTaskQueueController controller;
 
     @Test
-    public void sendUserInviteEmail() throws Exception {
+    public void sendUserInviteEmail() {
         String email = "foo@example.org";
         String code = "abc123";
         StringView view = controller.sendUserInviteEmail(email, code);
@@ -38,7 +38,7 @@ public class UserTaskQueueControllerTest {
     }
 
     @Test
-    public void sendMagicLinkEmail() throws Exception {
+    public void sendMagicLinkEmail() {
         String email = "foo@example.org";
         StringView view = controller.sendMagicLinkEmail(email, null);
 

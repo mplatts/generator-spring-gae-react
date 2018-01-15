@@ -19,7 +19,6 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import threewks.BaseTest;
 import threewks.MockHelpers;
@@ -79,7 +78,7 @@ public class UserInviteServiceTest extends BaseTest {
     private UserInviteService userInviteService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         inviteUserRoute = new Route(HttpMethod.POST, "/task/send-invite", "task.notify.inviteUser");
         when(router.getNamedRoute(inviteUserRoute.getName())).thenReturn(inviteUserRoute);
 
@@ -102,7 +101,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willPlaceTaskOnQueue() throws Exception {
+    public void invite_willPlaceTaskOnQueue() {
         AppUser issuer = user("foo@example.org");
         String inviteeEmail = "bar@example.org";
         Roles inviteeRoles = new Roles(Roles.User);
@@ -131,7 +130,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willRegisterInvitedUser_whenUserDoesNotExist() throws Exception {
+    public void invite_willRegisterInvitedUser_whenUserDoesNotExist() {
         AppUser issuer = user("foo@example.org");
         String inviteeEmail = "bar@example.org";
         Roles inviteeRoles = new Roles(Roles.User);
@@ -144,7 +143,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willSucceed_whenInactiveUserAlreadyRegistered() throws Exception {
+    public void invite_willSucceed_whenInactiveUserAlreadyRegistered() {
         String inviteeEmail = "bar@example.org";
 
         AppUser user = user(inviteeEmail);
@@ -168,7 +167,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willFail_whenUserAlreadyActive() throws Exception {
+    public void invite_willFail_whenUserAlreadyActive() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. User account already activated.");
 
@@ -189,7 +188,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willDefaultRoleToUser_whenRolesIsNull() throws Exception {
+    public void invite_willDefaultRoleToUser_whenRolesIsNull() {
         AppUser issuer = user("foo@example.org");
         String inviteeEmail = "bar@example.org";
         SecurityContextHolder.get().setUser(issuer);
@@ -202,7 +201,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willThrowException_whenInviteeIssuerIsNull() throws Exception {
+    public void invite_willThrowException_whenInviteeIssuerIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. Issuer must be provided.");
 
@@ -210,7 +209,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willThrowException_whenInviteeInviteeEmailIsNull() throws Exception {
+    public void invite_willThrowException_whenInviteeInviteeEmailIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. Invitee email address must be provided.");
 
@@ -221,7 +220,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willThrowException_whenInviteeInviteeEmailIsBlank() throws Exception {
+    public void invite_willThrowException_whenInviteeInviteeEmailIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. Invitee email address must be provided.");
 
@@ -232,7 +231,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void invite_willThrowException_whenInviteeInviteeEmailIsInvalid() throws Exception {
+    public void invite_willThrowException_whenInviteeInviteeEmailIsInvalid() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. Invitee email address must be a valid email address.");
 
@@ -243,7 +242,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void inviteIfRequired_willInvokeInvite_whenLoginIdentifierIsNull() throws Exception {
+    public void inviteIfRequired_willInvokeInvite_whenLoginIdentifierIsNull() {
         AppUser issuer = user("foo@example.org");
         String inviteeEmail = "bar@example.org";
         SecurityContextHolder.get().setUser(issuer);
@@ -257,7 +256,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void inviteIfRequired_willReturnUser_whenUserIsActive() throws Exception {
+    public void inviteIfRequired_willReturnUser_whenUserIsActive() {
         AppUser issuer = user("foo@example.org");
         String inviteeEmail = "bar@example.org";
         AppUser user = user(inviteeEmail);
@@ -276,7 +275,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void sendInviteEmail() throws Exception {
+    public void sendInviteEmail() {
         String inviteeEmail = "email";
         String inviteCode = "code";
         userInviteService.sendInviteEmail(inviteeEmail, inviteCode);
@@ -295,7 +294,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem() throws Exception {
+    public void redeem() {
         String code = "code";
         String email = "bar@example.org";
         AppUser issuer = user("foo@example.org");
@@ -316,7 +315,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenCodeIsNull() throws Exception {
+    public void redeem_willThrowError_whenCodeIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invite code is required");
 
@@ -324,7 +323,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenCodeIsBlank() throws Exception {
+    public void redeem_willThrowError_whenCodeIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invite code is required");
 
@@ -332,7 +331,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenNameIsNull() throws Exception {
+    public void redeem_willThrowError_whenNameIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Name is required");
 
@@ -340,7 +339,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenNameIsBlank() throws Exception {
+    public void redeem_willThrowError_whenNameIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Name is required");
 
@@ -348,7 +347,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenPasswordIsNull() throws Exception {
+    public void redeem_willThrowError_whenPasswordIsNull() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Password is required");
 
@@ -356,7 +355,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenPasswordIsBlank() throws Exception {
+    public void redeem_willThrowError_whenPasswordIsBlank() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Password is required");
 
@@ -364,7 +363,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenPasswordIsShorterThanMinimum() throws Exception {
+    public void redeem_willThrowError_whenPasswordIsShorterThanMinimum() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Password must be 8 characters or more in length");
 
@@ -372,7 +371,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenUserAlreadyActivated() throws Exception {
+    public void redeem_willThrowError_whenUserAlreadyActivated() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Cannot issue invite. User account already activated.");
 
@@ -391,7 +390,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenCodeIsInvalid() throws Exception {
+    public void redeem_willThrowError_whenCodeIsInvalid() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invalid invite code");
 
@@ -404,7 +403,7 @@ public class UserInviteServiceTest extends BaseTest {
     }
 
     @Test
-    public void redeem_willThrowError_whenCodeIsExpired() throws Exception {
+    public void redeem_willThrowError_whenCodeIsExpired() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Invite code has expired. Please ask your administrator to issue you an new one.");
 

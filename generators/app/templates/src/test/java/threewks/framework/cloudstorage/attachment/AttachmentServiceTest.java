@@ -40,14 +40,14 @@ public class AttachmentServiceTest {
     private Set<String> permittedAttachmentFolders;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         permittedAttachmentFolders = Sets.newHashSet(AttachmentService.DEFAULT_ATTACHMENTS_FOLDER);
         when(propertyHelper.getPropertySet("gcsAttachmentFolders", AttachmentService.DEFAULT_ATTACHMENTS_FOLDER)).thenReturn(permittedAttachmentFolders);
         attachmentService = new AttachmentService(cloudStorage, DEFAULT_BUCKET, HOST, propertyHelper);
     }
 
     @Test
-    public void getUploadUrl() throws Exception {
+    public void getUploadUrl() {
         permittedAttachmentFolders.add("some-folder");
         when(cloudStorage.initiateResumableUpload(eq(DEFAULT_BUCKET), any(String.class), eq("file-name.pdf"), eq("type"), eq("origin")))
             .thenReturn("https://some-cloud-address.com");
@@ -58,7 +58,7 @@ public class AttachmentServiceTest {
     }
 
     @Test
-    public void getUploadUrl_willFail_whenAttachmentFolderNotAllowed() throws Exception {
+    public void getUploadUrl_willFail_whenAttachmentFolderNotAllowed() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Folder not permitted for GCS attachments: some-folder");
 
@@ -68,7 +68,7 @@ public class AttachmentServiceTest {
     }
 
     @Test
-    public void getUploadUrl_willUseDefaultFolder_whenNoFolderSpecified() throws Exception {
+    public void getUploadUrl_willUseDefaultFolder_whenNoFolderSpecified() {
         when(cloudStorage.initiateResumableUpload(eq(DEFAULT_BUCKET), any(String.class), eq("file-name.pdf"), eq("type"), eq("origin")))
             .thenReturn("https://some-cloud-address.com");
 

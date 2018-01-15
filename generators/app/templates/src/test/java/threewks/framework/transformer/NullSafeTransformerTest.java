@@ -10,12 +10,12 @@ public class NullSafeTransformerTest {
     private StringTransformer transformer = new StringTransformer();
 
     @Test
-    public void apply_WillReturnInput_WhenInputIsNotNull() throws Exception {
+    public void apply_WillReturnInput_WhenInputIsNotNull() {
         assertThat(transformer.apply(123), is("123"));
     }
 
     @Test
-    public void apply_WillReturnNull_WhenInputIsNull() throws Exception {
+    public void apply_WillReturnNull_WhenInputIsNull() {
         assertThat(transformer.apply(null), nullValue());
     }
 
