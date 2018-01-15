@@ -1,6 +1,5 @@
 package threewks.framework.usermanager.service;
 
-import com.googlecode.objectify.Work;
 import com.threewks.thundr.http.exception.ForbiddenException;
 import com.threewks.thundr.session.Session;
 import com.threewks.thundr.user.Roles;
@@ -19,7 +18,6 @@ import threewks.util.Assert;
 import java.util.List;
 import java.util.Set;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static java.util.UUID.randomUUID;
 import static threewks.util.RandomUtil.secureRandomAlphanumeric;
@@ -30,8 +28,8 @@ public class AppUserService {
     private final LoginIdentifierService loginIdentifierService;
 
     public AppUserService(AppUserRepository<AppUser> userRepository,
-                          UserService<AppUser, Session> thundrUserService,
-                          LoginIdentifierService loginIdentifierService) {
+        UserService<AppUser, Session> thundrUserService,
+        LoginIdentifierService loginIdentifierService) {
         this.thundrUserService = thundrUserService;
         this.userRepository = userRepository;
         this.loginIdentifierService = loginIdentifierService;
@@ -141,6 +139,7 @@ public class AppUserService {
             if (normalisedEmail != null && !StringUtils.equals(user.getEmail(), normalisedEmail)) {
                 Assert.isEmail(request.getEmail(), "Must provide a valid email");
 
+                loginIdentifierService.checkAvailability(normalisedEmail);
                 user.setEmail(normalisedEmail);
 
                 LoginIdentifier loginIdentifier = loginIdentifierService.get(user.getEmail());

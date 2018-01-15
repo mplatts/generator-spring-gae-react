@@ -311,6 +311,27 @@ public class AppUserServiceTest extends BaseTest {
     }
 
     @Test
+    public void save_willFail_whenEmailIsAlreadyInUse() throws Exception {
+        String newEmail = "existing@example.org";
+
+        doThrow(new LoginIdentifierUnavailableException(newEmail)).when(loginIdentifierService).checkAvailability(newEmail);
+
+        SecurityContextHolder.get().setUser(user);
+        Set<String> roles = Sets.newHashSet("bloop");
+        String newName = "Foo Bar";
+
+        thrown.expect(LoginIdentifierUnavailableException.class);
+        thrown.expectMessage("Login ID existing@example.org is unavailable");
+
+        UpdateUserRequestDto request = new UpdateUserRequestDto()
+            .setEmail(newEmail)
+            .setRoles(roles)
+            .setName(newName);
+
+        userService.save(user.getUsername(), request);
+    }
+
+    @Test
     public void save_willLowerCaseEmail_whenEmailIsMixedCase() throws Exception {
         SecurityContextHolder.get().setUser(user);
         String newEmail = "Foo.Bar@example.org";
