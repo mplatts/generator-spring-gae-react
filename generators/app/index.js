@@ -5,6 +5,12 @@ const yosay = require('yosay');
 const mkdirp = require('mkdirp');
 const slugify = value => require('slugify')(value).toLowerCase();
 const _ = require('lodash');
+const randomString = require('random-string');
+
+const makeKey = () => randomString({
+  length: 64,
+  special: true,
+});
 
 module.exports = class extends Generator {
   prompting() {
@@ -48,6 +54,10 @@ module.exports = class extends Generator {
     const context = Object.assign({}, this.props, {
       project: slugify(this.props.project),
       slugify,
+      localKey: makeKey(),
+      devKey: makeKey(),
+      uatKey: makeKey(),
+      prodKey: makeKey(),
       _
     });
 

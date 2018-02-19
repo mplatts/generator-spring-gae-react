@@ -3,7 +3,7 @@ spring:
         gae:
             security:
                 remember-me:
-                    key: 'hv^9-iYT0)ho+qz RO8nf QmnnUGH}wFWe^GUh`|B:ot|bIn|+#Y@Ux0z>}Mb.hM'
+                    key: '<%= prodKey %>'
 
     mail:
         host: smtp.gmail.com
