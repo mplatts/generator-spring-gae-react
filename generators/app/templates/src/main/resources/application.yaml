@@ -6,8 +6,8 @@ logging:
         org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod: TRACE
 
 app:
-    name: App name
-    host: https://busker-spring-react-dev.appspot.com
+    name: <%= projectName %>
+    host: https://<%= project %>-dev.appspot.com
 
 tasks:
     email:

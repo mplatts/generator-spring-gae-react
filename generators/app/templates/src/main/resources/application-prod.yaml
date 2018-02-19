@@ -16,4 +16,4 @@ spring:
                     starttls:
                         required: true
 app:
-    host: https://<%= project %>-dev.appspot.com
+    host: https://<%= project %>-prod.appspot.com
