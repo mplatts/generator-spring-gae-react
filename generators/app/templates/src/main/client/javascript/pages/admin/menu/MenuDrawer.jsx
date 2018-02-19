@@ -13,7 +13,7 @@ import { getLoggedInUser } from '../../../reducers';
 
 const MenuDrawer = ({
   loggedInUser, logout, navigateTo, ...rest
-}) => (
+}) => loggedInUser ? (
   <Drawer {...rest} docked={false} width={280}>
     <ProfileCard user={loggedInUser} />
 
@@ -38,7 +38,7 @@ const MenuDrawer = ({
     />
     <MenuItem primaryText="Sign out" leftIcon={<ExitIcon />} onClick={() => logout()} />
   </Drawer>
-);
+) : null;
 
 MenuDrawer.propTypes = {
   loggedInUser: object,

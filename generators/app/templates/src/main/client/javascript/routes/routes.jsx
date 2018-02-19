@@ -27,7 +27,7 @@ const getRoutes = () => (
     <Route
       path="/admin"
       component={AdminLayout}
-      onEnter={composeOnEnterHooks(loginRequired, hasAnyRole('admin'))}
+      onEnter={composeOnEnterHooks(loginRequired, hasAnyRole('ADMIN'))}
     >
       <IndexRoute component={DashboardPage} />
       <Route path="users" component={ManageUsersPage} />

@@ -24,6 +24,7 @@ export const login = credentials => (dispatch) => {
   dispatch({ type: 'REQUEST_LOGIN' });
 
   return users.login(credentials)
+    .then(users.me)
     .then((user) => {
       dispatch({ type: 'REQUEST_LOGIN_SUCCESS', user });
       return user;

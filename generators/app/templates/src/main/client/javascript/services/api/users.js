@@ -16,7 +16,7 @@ const requestMagicLink = email =>
   requestJSON('/users/login/magic', 'POST', { email });
 
 const logout = () =>
-  requestJSON('/logout', 'POST');
+  request('/logout', 'POST');
 
 const me = () =>
   requestJSON('/users/me', 'GET');

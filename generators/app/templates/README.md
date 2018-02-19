@@ -1,6 +1,6 @@
 # <%= projectName %>
 
-This project was generated using the [React Thundr GAE generator][generator-thundr-gae-react]. 
+This project was generated using the [React Spring GAE generator][generator-spring-gae-react]. 
 
 ## Prerequisites
 
@@ -46,4 +46,4 @@ When you're ready to deploy your application you can:
 
   Where environment name matches a profile in your `pom.xml`.
 
-[generator-thundr-gae-react]: https://github.com/3wks/generator-thundr-gae-react
+[generator-spring-gae-react]: https://github.com/3wks/generator-spring-gae-react
