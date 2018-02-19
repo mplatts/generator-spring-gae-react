@@ -31,7 +31,7 @@ const UserProfileForm = ({ handleSubmit, submitting }) => (
     <Field
       name="roles"
       component={MultiselectField}
-      dataSource={['admin', 'user', 'member']}
+      dataSource={['ADMIN', 'USER']}
       format={value => (value === '' ? null : value)}
       floatingLabelText="Roles"
       hintText="Start typing roles..."

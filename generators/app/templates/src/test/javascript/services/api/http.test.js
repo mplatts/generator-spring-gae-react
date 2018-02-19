@@ -25,7 +25,7 @@ describe('Service: http', () => {
     test('will prepend baseUrl to url', () => {
       requestJSON('/something/123', 'GET', { id: 'abc' }, {});
 
-      expect(request.url).toBe('/api/v1/something/123');
+      expect(request.url).toBe('/api/something/123');
     });
 
     test('will default to json if no Content-Type specified', () => {

@@ -1,12 +1,18 @@
 /* eslint-disable no-console */
+import Cookies from 'universal-cookie';
 
-const baseUrl = '/api/v1';
+const baseUrl = '/api';
 
-// required so IE11 does not automatically cache all GET requests
-const noCacheHeaders = {
-  pragma: 'no-cache',
-  'cache-control': 'no-cache',
-};
+const cookies = new Cookies();
+
+const commonHeaders = () => ({
+  Pragma: 'no-cache',
+  'Cache-Control': 'no-cache', // required so IE11 does not automatically cache all GET requests
+  'X-Requested-With': 'XMLHttpRequest', // Suppress the gray basic auth dialog in the browser on 401
+  'X-XSRF-TOKEN': cookies.get('XSRF-TOKEN'), // Ensure CSRF token is sent with every request
+});
+
+export const formEncode = obj => Object.keys(obj).map(k => `${k}=${encodeURIComponent(obj[k])}`).join('&');
 
 export const request = (path, method = 'GET', body = null, headers = {}) => {
   const url = `${baseUrl}${path}`;
@@ -15,7 +21,7 @@ export const request = (path, method = 'GET', body = null, headers = {}) => {
 
   const config = {
     method,
-    headers: { ...noCacheHeaders, ...headers },
+    headers: { ...commonHeaders(), ...headers },
     credentials: 'include',
   };
 

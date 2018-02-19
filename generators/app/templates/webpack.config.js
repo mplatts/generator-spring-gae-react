@@ -85,7 +85,7 @@ const commonConfig = {
 
       template: path.resolve(sourceDir, 'index.ejs'),
 
-      filename: `<%= _.unescape('${targetDir}')%>/WEB-INF/hbs/index.html`,
+      filename: `<%= _.unescape('${targetDir}')%>/WEB-INF/th/index.html`,
 
       alwaysWriteToDisk: true,
     }),
@@ -216,7 +216,7 @@ const developmentConfig = {
     contentBase: targetDir,
     hot: true,
     historyApiFallback: {
-      index: 'WEB-INF/hbs/index.html',
+      index: 'WEB-INF/th/index.html',
     },
     proxy: {
       '/_ah': 'http://localhost:8080',

@@ -10,7 +10,7 @@ import com.googlecode.objectify.annotation.OnSave;
 import org.springframework.contrib.gae.objectify.Refs;
 import org.springframework.contrib.gae.search.IndexType;
 import org.springframework.contrib.gae.search.SearchIndex;
-import threewks.model.model.User;
+import threewks.framework.usermanagement.model.User;
 
 import java.time.OffsetDateTime;
 

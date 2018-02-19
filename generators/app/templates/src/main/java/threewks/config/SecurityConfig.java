@@ -18,7 +18,9 @@ import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import threewks.model.model.User;
+import threewks.framework.usermanagement.model.User;
+import threewks.framework.usermanagement.model.UserAdapterImpl;
+import threewks.framework.usermanagement.service.UserService;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -80,18 +82,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(GET, "/api/reference-data").permitAll()
                 .antMatchers("/system/**", "/task/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
                 .antMatchers("/api/**").authenticated()
+                .antMatchers("/register/**").permitAll()
                 .antMatchers("/**").permitAll();
         // @formatter:on
     }
 
-    //TODO: Re-enable
-//    @Bean
-//    public Class<User> gaeUserClass() {
-//        return User.class;
-//    }
-//
-//    @Bean
-//    public UserAdapter<User> gaeUserHelper(UserService userService) {
-//        return UserAdapterImpl.byEmail(userService);
-//    }
+    @Bean
+    public Class<User> gaeUserClass() {
+        return User.class;
+    }
+
+    @Bean
+    public UserAdapter<User> gaeUserHelper(UserService userService) {
+        return UserAdapterImpl.byEmail(userService);
+    }
 }

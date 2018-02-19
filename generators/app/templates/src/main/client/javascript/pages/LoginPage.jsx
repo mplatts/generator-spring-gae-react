@@ -37,7 +37,7 @@ class LoginPage extends Component {
           throw new SubmissionError({ _error: error.message });
         });
     }
-    return api.users.requestMagicLink(values.username)
+    return api.users.requestMagicLink(values.id)
       .then(() => this.setState({ magicLinkSent: true }))
       .catch((error) => {
         throw new SubmissionError({ _error: error.message });

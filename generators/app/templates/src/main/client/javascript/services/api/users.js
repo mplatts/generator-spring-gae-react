@@ -1,4 +1,4 @@
-import { requestJSON } from './http';
+import { formEncode, request, requestJSON } from './http';
 
 const invite = userDetails =>
   requestJSON('/users/invite', 'POST', userDetails);
@@ -10,13 +10,13 @@ const list = () =>
   requestJSON('/users');
 
 const login = credentials =>
-  requestJSON('/users/login', 'POST', credentials);
+  request('/login', 'POST', formEncode({ ...credentials, 'remember-me': true }), { 'Content-Type': 'application/x-www-form-urlencoded' });
 
 const requestMagicLink = email =>
   requestJSON('/users/login/magic', 'POST', { email });
 
 const logout = () =>
-  requestJSON('/users/logout', 'POST');
+  requestJSON('/logout', 'POST');
 
 const me = () =>
   requestJSON('/users/me', 'GET');
@@ -25,7 +25,7 @@ const get = userId =>
   requestJSON(`/users/${userId}`);
 
 const save = user =>
-  requestJSON(`/users/${user.username}`, 'PUT', user);
+  requestJSON(`/users/${user.id}`, 'PUT', user);
 
 export default {
   get,

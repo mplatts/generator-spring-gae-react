@@ -1,185 +1,87 @@
 package threewks.framework.ref;
 
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
-@SuppressWarnings("unchecked")
+@Service
 public class ReferenceDataServiceTest {
 
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
-    private ReferenceDataService service;
-
-    @Before
-    public void before() {
-        service = new ReferenceDataService();
-    }
-
+    @SuppressWarnings("unchecked")
     @Test
-    public void getReferenceData_willReturnEmptyMap_ByDefault() {
-        Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
+    public void getReferenceData_WillReturnMapOfReferenceData() {
+        ReferenceDataConfig config = new ReferenceDataConfigBuilder()
+            .registerClass(TestRef.class)
+            .registerClass(AnotherTestRef.class)
+            .create();
 
-        assertThat(result.isEmpty(), is(true));
+        ReferenceDataService service = new ReferenceDataService(config);
+
+        Map<String, List<ReferenceDataDto>> referenceData = service.getReferenceData();
+        assertThat(referenceData.size(), is(2));
+        assertThat(referenceData.get("TestRef").size(), is(1));
+        assertThat(referenceData.get("TestRef").get(0).getDescription(), is("TestRef 1"));
+        assertThat(referenceData.get("AnotherTestRef").size(), is(2));
+        assertThat(referenceData.get("AnotherTestRef").get(0).getDescription(), is("AnotherTestRef 1"));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void getReferenceData_willReturnJsonFriendlyMap_whenClassesRegistered() {
-        service = new ReferenceDataService().registerClasses(TestEnum1.class, TestEnum2.class);
+    public void getReferenceData_WillUseCustomTransformersIfSpecified() {
+        ReferenceDataConfig config = new ReferenceDataConfigBuilder()
+            .registerClass(AnotherTestRef.class)
+            .registerCustomTransformer(
+                AnotherTestRef.class,
+                ref -> new ReferenceDataDto(ref.name(), ref.getDescription(), ref.ordinal(), "displayText", ref.getDisplayText()))
+            .create();
 
-        Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
+        ReferenceDataService service = new ReferenceDataService(config);
 
-        assertThat(result.entrySet(), hasSize(2));
-        List<ReferenceDataDto> testEnum1 = result.get("TestEnum1");
-        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", 0, "ONE"), new ReferenceDataDto("TWO", "Two", 1, "TWO")));
-        assertThat(result.get("TestEnum2"), contains(new ReferenceDataDto("A", "A desc", 0), new ReferenceDataDto("B", "B desc", 1, "B")));
+        Map<String, List<ReferenceDataDto>> referenceData = service.getReferenceData();
+        assertThat(referenceData.size(), is(1));
+        assertThat(referenceData.get("AnotherTestRef").get(0).getProp("displayText"), is("AnotherTestRef 1 display"));
+        assertThat(referenceData.get("AnotherTestRef").get(1).getProp("displayText"), is("AnotherTestRef 2 display"));
     }
 
-    @Test
-    public void getReferenceData_willReturnJsonFriendlyMapWithCode_whenMatchingCustomTransformerRegistered() {
-        service = new ReferenceDataService()
-            .withCustomTransformer(ReferenceDataWithCode.class, ReferenceDataWithCode.TO_DTO_TRANSFORMER)
-            .registerClasses(TestEnum1WithCode.class, TestEnum2WithCode.class);
+    private enum TestRef implements ReferenceData {
+        REF_1("TestRef 1");
 
-        Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
+        private String description;
 
-        assertThat(result.entrySet(), hasSize(2));
-        assertThat(result.get("TestEnum1WithCode"), contains(new ReferenceDataDto("ONE", "One", 0, "code", "one-code"), new ReferenceDataDto("TWO", "Two", 1, "code", "two-code")));
-        assertThat(result.get("TestEnum2WithCode"), contains(new ReferenceDataDto("A", "A desc", 0, "code", "a-desc-code"), new ReferenceDataDto("B", "B desc", 1, "code", "b-desc-code")));
-    }
-
-    @Test
-    public void getReferenceData_willIgnoreCustomTransformer_whenNotAssignableToEnumClass() {
-        service = new ReferenceDataService()
-            .withCustomTransformer(ReferenceDataWithCode.class, ReferenceDataWithCode.TO_DTO_TRANSFORMER)
-            .registerClasses(TestEnum1.class);
-
-        Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
-
-        assertThat(result.entrySet(), hasSize(1));
-        List<ReferenceDataDto> testEnum1 = result.get("TestEnum1");
-        assertThat(testEnum1, contains(new ReferenceDataDto("ONE", "One", 0, "ONE"), new ReferenceDataDto("TWO", "Two", 1, "TWO")));
-    }
-
-
-    @Test
-    public void registerClasses_willFail_whenNotAnEnum() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("ReferenceData implementation must be an enum. Offending class: threewks.framework.ref.ReferenceDataServiceTest$NotAnEnum");
-
-        service = new ReferenceDataService().registerClasses(NotAnEnum.class);
-
-        Map<String, List<ReferenceDataDto>> result = service.getReferenceData();
-
-        assertThat(result.isEmpty(), is(true));
-    }
-
-    @Test
-    public void withCustomTransformer_willFail_whenCalledAfterRegisterClasses() {
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Custom transformers must be added before classes are registered");
-
-        service = new ReferenceDataService()
-            .registerClasses(TestEnum1.class)
-            .withCustomTransformer(ReferenceDataWithCode.class, ReferenceDataWithCode.TO_DTO_TRANSFORMER);
-    }
-
-    public enum TestEnum1 implements ReferenceData {
-        ONE("One"), TWO("Two");
-
-        private final String description;
-
-        TestEnum1(String description) {
+        TestRef(String description) {
             this.description = description;
         }
 
+        @Override
         public String getDescription() {
             return description;
         }
     }
 
-    public enum TestEnum1WithCode implements ReferenceDataWithCode {
-        ONE("One", "one-code"), TWO("Two", "two-code");
+    private enum AnotherTestRef implements ReferenceData {
+        REF_1("AnotherTestRef 1", "AnotherTestRef 1 display"),
+        REF_2("AnotherTestRef 2", "AnotherTestRef 2 display");
 
-        private final String description;
-        private final String code;
+        private String description;
+        private String displayText;
 
-        TestEnum1WithCode(String description, String code) {
+        AnotherTestRef(String description, String displayText) {
             this.description = description;
-            this.code = code;
+            this.displayText = displayText;
         }
 
+        @Override
         public String getDescription() {
             return description;
         }
 
-        @Override
-        public String getCode() {
-            return code;
+        public String getDisplayText() {
+            return displayText;
         }
     }
-
-    public enum TestEnum2 implements ReferenceData {
-        A("A desc"), B("B desc");
-
-        private final String description;
-
-        TestEnum2(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
-    public enum TestEnum2WithCode implements ReferenceDataWithCode {
-        A("A desc", "a-desc-code"), B("B desc", "b-desc-code");
-
-        private final String description;
-        private final String code;
-
-        TestEnum2WithCode(String description, String code) {
-            this.description = description;
-            this.code = code;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public class NotAnEnum implements ReferenceData {
-        @Override
-        public String name() {
-            return "A name";
-        }
-
-        @Override
-        public int ordinal() {
-            return 0;
-        }
-
-        @Override
-        public String getDescription() {
-            return "A description";
-        }
-    }
-
-
 }

@@ -1,42 +1,22 @@
 package threewks.framework.ref;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 public class ReferenceDataDtoTest {
-
-    @Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
     @Test
-    public void init_willNotAddMapProperty_whenNoValueSupplied() {
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "keyWithoutVal");
-
-        assertThat(dto.getProps().entrySet(), hasSize(0));
+    public void constructor_WillPopulateProps_FromPropMapParams() {
+        ReferenceDataDto referenceDataDto = new ReferenceDataDto("id", "desc", 1, "key1", 1, "key2", "key-2-value");
+        assertThat(referenceDataDto.getProps().size(), is(2));
+        assertThat(referenceDataDto.getProps().get("key1"), is(1));
+        assertThat(referenceDataDto.getProps().get("key2"), is("key-2-value"));
     }
 
     @Test
-    public void getProp_willCast() {
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "newProp", 99);
-        int result = dto.getProp("newProp");
-
-        assertThat(result, is(99));
+    public void constructor_CanHandle_NoPropMapParams() {
+        ReferenceDataDto referenceDataDto = new ReferenceDataDto("id", "desc", 1);
+        assertThat(referenceDataDto.getProps().size(), is(0));
     }
-
-
-    @SuppressWarnings("unused")
-    @Test
-    public void getProp_willError_whenInvalidCast() {
-        thrown.expect(ClassCastException.class);
-
-        ReferenceDataDto dto = new ReferenceDataDto("id", "description", 1, "newProp", 99);
-
-        String result = dto.getProp("newProp");
-    }
-
 }
