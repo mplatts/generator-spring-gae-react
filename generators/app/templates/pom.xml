@@ -7,9 +7,9 @@
     <version>1.0-SNAPSHOT</version>
 
     <parent>
-        <groupId>com.threewks.thundr</groupId>
-        <artifactId>thundr-gae-app</artifactId>
-        <version>8.0</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
     </parent>
 
     <scm>
@@ -23,10 +23,27 @@
         <appId><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></appId>
         <appVersion>1</appVersion>
         <gae.version>1.9.59</gae.version>
-
-        <!-- Used by parent for thundr-gae -->
-        <thundr.version>3.0.0</thundr.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+        <cloudsdk.version>1.3.1</cloudsdk.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>jcenter</id>
+            <url>http://jcenter.bintray.com</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+    </repositories>
 
     <!-- Profiles define the environments available. The active profile determines what environment you're deploying to when running appengine:update or similar -->
     <profiles>
@@ -76,117 +93,131 @@
         </profile>
     </profiles>
 
-    <repositories>
-        <repository>
-            <id>3wks-maven-repo</id>
-            <url>s3://3wks-maven-repo/release</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
-            <groupId>com.threewks.thundr</groupId>
-            <artifactId>thundr-gae-user</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.threewks.thundr</groupId>
-            <artifactId>thundr-contrib-gmail</artifactId>
-            <version>3.0.2</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+            <!-- Exclude Tomcat so that it doesn't conflict w/ Jetty server -->
             <exclusions>
                 <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava-jdk5</artifactId>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+		</dependency>
 
         <dependency>
-            <groupId>com.threewks.thundr</groupId>
-            <artifactId>thundr-handlebars</artifactId>
-            <version>${thundr.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
-        <!-- Force a newer version of handlebars than the one pulled in by thundr-handlebars to get some bugfixes -->
         <dependency>
-            <groupId>com.github.jknack</groupId>
-            <artifactId>handlebars</artifactId>
-            <version>4.0.6</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
-        <!-- Force a modern version of commons-lang3 since there was a clash with handlebars and onelogin -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-email</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
+            <version>3.6</version>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>5.1.21</version>
-        </dependency>
-        <dependency>
-            <groupId>net.dongliu</groupId>
-            <artifactId>gson-java8-datatype</artifactId>
-            <version>1.1.0</version>
-        </dependency>
-
-        <!-- Additional or overridden dependencies go here -->
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-appengine</artifactId>
-            <version>1.23.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava-jdk5</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-gson</artifactId>
-            <version>1.23.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>httpclient</artifactId>
-                    <groupId>org.apache.httpcomponents</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
             <version>1.6</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.openpojo</groupId>
-            <artifactId>openpojo</artifactId>
-            <version>0.8.6</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hashids</groupId>
-            <artifactId>hashids</artifactId>
-            <version>1.0.3</version>
-        </dependency>
-
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.11.2</version>
         </dependency>
-
-        <!-- Test dependencies -->
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>2.13.0</version>
+            <groupId>com.docraptor</groupId>
+            <artifactId>docraptor</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+
+
+        <!-- Exclude any jul-to-slf4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Include Servlet API -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.objectify</groupId>
+            <artifactId>objectify</artifactId>
+            <version>5.1.21</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.threewks.spring</groupId>
+            <artifactId>spring-boot-gae</artifactId>
+            <version>1.0.0-beta-9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-testing</artifactId>
+            <version>1.9.60</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-1.0-sdk</artifactId>
+            <version>1.9.60</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.appengine</groupId>
+            <artifactId>appengine-api-stubs</artifactId>
+            <version>1.9.60</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -202,6 +233,11 @@
             </plugins>
         </pluginManagement>
         <plugins>
+            <plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
             <!-- Maven's build timezone is always in UTC so that's why we use this. See http://stackoverflow.com/a/35578881/945789 -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -276,24 +312,16 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.google.appengine</groupId>
+                <groupId>com.google.cloud.tools</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
-                <version><%= _.unescape('${gae.version}')%></version>
+                <version><%= _.unescape('${cloudsdk.version}')%></version>
                 <configuration>
-                    <address>0.0.0.0</address>
+                    <project>${app.id}</project>
+                    <version>${app.version}</version>
                     <port>8080</port>
-                    <disableUpdateCheck>true</disableUpdateCheck>
                 </configuration>
             </plugin>
         </plugins>
-
-        <extensions>
-            <extension>
-                <groupId>org.kuali.maven.wagons</groupId>
-                <artifactId>maven-s3-wagon</artifactId>
-                <version>1.2.1</version>
-            </extension>
-        </extensions>
     </build>
 
     <modelVersion>4.0.0</modelVersion>

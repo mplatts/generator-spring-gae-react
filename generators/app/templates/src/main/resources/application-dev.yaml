@@ -1,0 +1,19 @@
+spring:
+    contrib:
+        gae:
+            security:
+                remember-me:
+                    key: 'hv^9-iYT0)ho+qz RO8nf QmnnUGH}wFWe^GUh`|B:ot|bIn|+#Y@Ux0z>}Mb.hM'
+
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: springbuskers@gmail.com
+        password: 3Wks1234
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        required: true
+app:
+    host: https://busker-spring-react-dev.appspot.com

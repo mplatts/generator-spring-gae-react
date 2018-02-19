@@ -1,23 +1,22 @@
 package threewks.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnSave;
-import com.threewks.thundr.gae.objectify.Refs;
-import com.threewks.thundr.search.SearchIndex;
-import com.threewks.thundr.search.gae.meta.IndexType;
-import org.joda.time.DateTime;
-import threewks.framework.usermanager.context.SecurityContextHolder;
-import threewks.framework.usermanager.model.AppUser;
+import org.springframework.contrib.gae.objectify.Refs;
+import org.springframework.contrib.gae.search.IndexType;
+import org.springframework.contrib.gae.search.SearchIndex;
+import threewks.model.model.User;
+
+import java.time.OffsetDateTime;
 
 /**
  * Created and updated timestamps set. On creation updated and created are the same.
  * <p>
- * We deliberately do not expose setters. If you need to set values for tests, use
- * {@link com.threewks.thundr.test.TestSupport#setField(Object, String, Object)}.
  */
 public abstract class BaseEntity {
 
@@ -36,24 +35,24 @@ public abstract class BaseEntity {
     }
 
     @Index
-    @SearchIndex(as = IndexType.BigDecimal)
-    private DateTime created;
+    @SearchIndex(type = IndexType.NUMBER)
+    private OffsetDateTime created;
 
     // Only pre-load when specifically asked, using the marker interface
     @Load(PreLoadAuditRefs.class)
     @Index
-    @SearchIndex(as = IndexType.Identifier)
-    private Ref<AppUser> createdBy;
+    @SearchIndex(type = IndexType.IDENTIFIER)
+    private Ref<User> createdBy;
 
     @Index
-    @SearchIndex(as = IndexType.BigDecimal)
-    private DateTime updated;
+    @SearchIndex(type = IndexType.NUMBER)
+    private OffsetDateTime updated;
 
     // Only pre-load when specifically asked, using the marker interface
     @Load(PreLoadAuditRefs.class)
     @Index
-    @SearchIndex(as = IndexType.Identifier)
-    private Ref<AppUser> updatedBy;
+    @SearchIndex(type = IndexType.IDENTIFIER)
+    private Ref<User> updatedBy;
 
     @Ignore
     private transient boolean skipSettingAuditableFields = false;
@@ -65,38 +64,43 @@ public abstract class BaseEntity {
         skipSettingAuditableFields = true;
     }
 
+    @JsonIgnore
     public boolean isSkipSettingAuditableFields() {
         return skipSettingAuditableFields;
     }
 
-    public DateTime getCreated() {
+    public OffsetDateTime getCreated() {
         return created;
     }
 
-    public AppUser getCreatedBy() {
-        return Refs.unref(createdBy);
+    @JsonIgnore
+    public User getCreatedBy() {
+        return Refs.deref(createdBy);
     }
 
-    public Key<AppUser> getCreatedByKey() {
+    @JsonIgnore
+    public Key<User> getCreatedByKey() {
         return toKey(createdBy);
     }
 
-    public DateTime getUpdated() {
+    public OffsetDateTime getUpdated() {
         return updated;
     }
 
-    public AppUser getUpdatedBy() {
-        return Refs.unref(updatedBy);
+    @JsonIgnore
+    public User getUpdatedBy() {
+        return Refs.deref(updatedBy);
     }
 
-    public Key<AppUser> getUpdatedByKey() {
+    //    @JsonIgnore
+    public Key<User> getUpdatedByKey() {
         return toKey(updatedBy);
     }
 
     @OnSave
     private void setAuditableFieldsOnSave() {
         if (!skipSettingAuditableFields) {
-            updated = DateTime.now();
+            updated = OffsetDateTime.now();
             updatedBy = getCurrentUserRef();
 
             if (created == null) {
@@ -106,13 +110,17 @@ public abstract class BaseEntity {
         }
     }
 
-    private Key<AppUser> toKey(Ref<AppUser> ref) {
+    private Key<User> toKey(Ref<User> ref) {
         return ref == null ? null : ref.getKey();
     }
 
-    protected Ref<AppUser> getCurrentUserRef() {
-        AppUser user = SecurityContextHolder.get().getUser();
-        return Refs.ref(user);
+    private Ref<User> getCurrentUserRef() {
+
+        // TODO: Add user adapter
+//        return UserAdapterImpl.currentUserRef()
+//            .orElse(null);
+
+        return null;
     }
 
 }

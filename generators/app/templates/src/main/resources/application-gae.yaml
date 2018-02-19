@@ -1,0 +1,17 @@
+logging:
+    pattern:
+        console: '%-40.40logger{39} %n%-5p %m%n'
+app:
+    host: https://busker-spring-react-uat.appspot.com
+
+spring:
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: springbuskers@gmail.com
+        password: 3Wks1234
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        required: true
