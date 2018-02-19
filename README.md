@@ -1,34 +1,39 @@
-# generator-thundr-gae-react [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
-> Yeoman generator for a React app that runs atop Thundr on Google App Engine
+# generator-spring-gae-react [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+> Yeoman generator for a React app that runs atop Spring on Google App Engine
 
 ## Installation
 
-First, install [Yeoman](http://yeoman.io) and generator-thundr-gae-react using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+First, install [Yeoman](http://yeoman.io) and generator-spring-gae-react using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
 npm install -g yo
-npm install -g generator-thundr-gae-react
+npm install -g generator-spring-gae-react
 ```
 
 Then generate your new project:
 
 ```bash
-yo thundr-gae-react
+yo spring-gae-react
 ```
 
 ## To Do
 
+### Client
 - [x] LESS
 - [x] Autoprefixer
 - [x] Minification
 - [x] Hot Module Reloading
 - [x] Add README doc to generated project
 - [x] Generate favicon set
-- [ ] Compress images
 - [x] Split vendor and application bundles and use chunkhash
-- [x] Sample API endpoint
+- [ ] Compress images
+- [ ] Error handling + reporting
+
+### Server
+- [ ] Sample API endpoint
 - [ ] Sample frontend tests
-- [x] Basic login and user management
+- [ ] Basic login and user management
+- [ ] Static ref data support
 
 ## Getting To Know Yeoman
 
@@ -42,9 +47,9 @@ yo thundr-gae-react
 MIT © [3wks](https://www.3wks.com.au)
 
 
-[npm-image]: https://badge.fury.io/js/generator-thundr-gae-react.svg
-[npm-url]: https://npmjs.org/package/generator-thundr-gae-react
-[travis-image]: https://travis-ci.org/3wks/generator-thundr-gae-react.svg?branch=master
-[travis-url]: https://travis-ci.org/3wks/generator-thundr-gae-react
-[daviddm-image]: https://david-dm.org/3wks/generator-thundr-gae-react.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/3wks/generator-thundr-gae-react
+[npm-image]: https://badge.fury.io/js/generator-spring-gae-react.svg
+[npm-url]: https://npmjs.org/package/generator-spring-gae-react
+[travis-image]: https://travis-ci.org/3wks/generator-spring-gae-react.svg?branch=master
+[travis-url]: https://travis-ci.org/3wks/generator-spring-gae-react
+[daviddm-image]: https://david-dm.org/3wks/generator-spring-gae-react.svg?theme=shields.io
+[daviddm-url]: https://david-dm.org/3wks/generator-spring-gae-react
