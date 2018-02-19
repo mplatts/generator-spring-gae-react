@@ -8,7 +8,7 @@ import threewks.framework.usermanagement.Role;
 import threewks.framework.usermanagement.dto.UpdateUserRequest;
 import threewks.framework.usermanagement.repository.UserRepository;
 import threewks.framework.usermanagement.service.UserService;
-import threewks.service.bootstrap.Bootstrapper;
+import threewks.framework.service.bootstrap.Bootstrapper;
 
 @Profile("local")
 @Component

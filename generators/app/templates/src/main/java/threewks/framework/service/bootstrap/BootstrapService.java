@@ -1,4 +1,4 @@
-package threewks.service.bootstrap;
+package threewks.framework.service.bootstrap;
 
 import com.googlecode.objectify.ObjectifyService;
 import org.slf4j.Logger;

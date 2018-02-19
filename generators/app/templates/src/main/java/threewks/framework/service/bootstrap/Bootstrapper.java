@@ -1,4 +1,4 @@
-package threewks.service.bootstrap;
+package threewks.framework.service.bootstrap;
 
 public interface Bootstrapper {
     void bootstrap();
