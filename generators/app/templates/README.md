@@ -18,7 +18,7 @@ hot module reloading.
 
 1. **Start the App Engine dev server**
 
-  `mvn appengine:devserver`
+  `mvn appengine:run`
 
   You can check the server is running by opening [localhost:8080](http://localhost:8080). 
   

@@ -11,11 +11,8 @@ class LoginForm extends Component {
     submitting: PropTypes.bool.isRequired,
   };
 
-  state = { showPassword: false };
-
   render() {
     const { handleSubmit, submitting } = this.props;
-    const { showPassword } = this.state;
 
     return (
       <form onSubmit={handleSubmit} noValidate>
@@ -29,42 +26,24 @@ class LoginForm extends Component {
           fullWidth
         />
 
-        {showPassword && (
-          <Field
-            name="password"
-            hintText="Your password"
-            floatingLabelText="Password"
-            component={TextField}
-            type="password"
-            validate={required('Password is required')}
-            fullWidth
-          />
-        )}
+        <Field
+          name="password"
+          hintText="Your password"
+          floatingLabelText="Password"
+          component={TextField}
+          type="password"
+          validate={required('Password is required')}
+          fullWidth
+        />
 
         <div className="actions">
-          {showPassword ? (
-            <RaisedButton
-              label={submitting ? 'Signing in...' : 'Sign in'}
-              type="submit"
-              disabled={submitting}
-              primary
-              fullWidth
-            />
-          ) : (
-            <div className="inline-btn-group">
-              <RaisedButton
-                label="Type password"
-                type="button"
-                onClick={() => this.setState({ showPassword: true })}
-              />
-              <RaisedButton
-                label={submitting ? 'Sending...' : 'Send magic link'}
-                type="submit"
-                disabled={submitting}
-                primary
-              />
-            </div>
-          )}
+          <RaisedButton
+            label={submitting ? 'Signing in...' : 'Sign in'}
+            type="submit"
+            disabled={submitting}
+            primary
+            fullWidth
+          />
         </div>
       </form>
     );
