@@ -30,10 +30,10 @@ yo spring-gae-react
 - [ ] Error handling + reporting
 
 ### Server
-- [ ] Sample API endpoint
+- [x] Sample API endpoint
 - [ ] Sample frontend tests
-- [ ] Basic login and user management
-- [ ] Static ref data support
+- [x] Basic login and user management
+- [x] Static ref data support
 
 ## Getting To Know Yeoman
 
