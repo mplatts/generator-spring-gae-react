@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { combineReducers } from 'redux';
 
 const users = (state = { inviteUserDialogOpen: false, users: [] }, action) => {
   switch (action.type) {

@@ -10,7 +10,7 @@ import './ManageUsersPage.less';
 import FormDialog from '../../components/forms/FormDialog';
 import InviteUserForm from '../../components/forms/InviteUserForm';
 import * as fromMainReducer from '../../reducers';
-import { inviteUser, fetchUsers, closeInviteUserDialog, openInviteUserDialog } from '../../actions/manageusers';
+import { inviteUser, fetchUsers, closeInviteUserDialog, openInviteUserDialog } from '../../actions/manageUsers';
 
 const UserTable = ({ users }) => (
   <Table className="user-table" multiSelectable>

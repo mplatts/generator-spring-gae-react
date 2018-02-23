@@ -10,6 +10,7 @@ const UserProfileForm = ({ handleSubmit, submitting }) => (
   <form onSubmit={handleSubmit}>
     <Field
       name="name"
+      autoComplete="name"
       component={TextField}
       hintText="Your full name"
       floatingLabelText="Full name"
@@ -18,6 +19,7 @@ const UserProfileForm = ({ handleSubmit, submitting }) => (
     />
     <Field
       name="email"
+      autoComplete="email"
       component={TextField}
       hintText="Your email address"
       floatingLabelText="Email"

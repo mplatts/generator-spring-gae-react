@@ -6,7 +6,6 @@ import { func, object } from 'prop-types';
 import CenteredPanelLayout from './CenteredPanelLayout';
 import LoginForm from '../components/forms/LoginForm';
 import * as authActions from '../actions/auth';
-import api from '../services/api';
 import './LoginPage.less';
 
 class LoginPage extends Component {
@@ -20,15 +19,8 @@ class LoginPage extends Component {
     const { location, login, navigateTo } = this.props;
     const next = location.query.next || '/';
 
-    if (values.password) {
-      return login(values)
-        .then(() => navigateTo(next))
-        .catch((error) => {
-          throw new SubmissionError({ _error: error.message });
-        });
-    }
-    return api.users.requestMagicLink(values.id)
-      .then(() => this.setState({ magicLinkSent: true }))
+    return login(values)
+      .then(() => navigateTo(next))
       .catch((error) => {
         throw new SubmissionError({ _error: error.message });
       });
@@ -37,7 +29,7 @@ class LoginPage extends Component {
   render() {
     return (
       <CenteredPanelLayout title="Sign in">
-          <LoginForm onSubmit={this.handleSubmit} />
+        <LoginForm onSubmit={this.handleSubmit} />
       </CenteredPanelLayout>
     );
   }
