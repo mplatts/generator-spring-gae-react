@@ -83,7 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/system/**", "/task/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/register/**").permitAll()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll()
+            .and()
+                .headers()
+                .contentSecurityPolicy("default-src 'self'; script-src 'self' https://cdn.polyfill.io; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com blob:; font-src 'self' https://fonts.gstatic.com");
         // @formatter:on
     }
 
