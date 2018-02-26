@@ -20,8 +20,8 @@
 
     <properties>
         <scm.url>scm:git:<%= gitPath %></scm.url>
-        <appId><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></appId>
-        <appVersion>1</appVersion>
+        <app.id><%= _.unescape('${project.artifactId}')%>-<%= _.unescape('${project.activeProfiles[0].id}')%></app.id>
+        <app.version>1</app.version>
         <gae.version>1.9.59</gae.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
