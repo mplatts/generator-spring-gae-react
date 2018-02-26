@@ -319,8 +319,6 @@
                     <project>${app.id}</project>
                     <version>${app.version}</version>
                     <port>8080</port>
-                    <enableJarSplitting>true</enableJarSplitting>
-                    <enableJarClasses>true</enableJarClasses>
                 </configuration>
             </plugin>
         </plugins>
