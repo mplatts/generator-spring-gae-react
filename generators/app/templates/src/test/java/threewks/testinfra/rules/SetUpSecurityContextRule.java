@@ -5,14 +5,14 @@ import org.mockito.Mockito;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import threewks.framework.usermanagement.model.UserDetails;
+import threewks.framework.usermanagement.dto.AuthUser;
 
 import static org.mockito.Mockito.when;
 
 public class SetUpSecurityContextRule extends ExternalResource {
-    private UserDetails loggedIn;
+    private AuthUser loggedIn;
 
-    public SetUpSecurityContextRule(UserDetails loggedIn) {
+    public SetUpSecurityContextRule(AuthUser loggedIn) {
         this.loggedIn = loggedIn;
     }
 
@@ -23,12 +23,12 @@ public class SetUpSecurityContextRule extends ExternalResource {
     protected void after() {
     }
 
-    private void initializeSecurityContext(UserDetails userDetails) {
+    private void initializeSecurityContext(AuthUser authUser) {
         Authentication authentication = Mockito.mock(Authentication.class);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         when(securityContext.getAuthentication()).thenReturn(authentication);
         SecurityContextHolder.setContext(securityContext);
-        when(authentication.getPrincipal()).thenReturn(userDetails);
+        when(authentication.getPrincipal()).thenReturn(authUser);
     }
 
 }

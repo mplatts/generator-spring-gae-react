@@ -12,7 +12,7 @@ app:
 tasks:
     email:
         queue: default
-        invite: /_ah/tasks/send-user-invite
+        invite: /task/send-user-invite
 
 spring:
     mail:
@@ -31,3 +31,6 @@ spring:
             security:
                 remember-me:
                     key: 'tb:[91bt;6u6N:aUh|(mm}!$b0a |{|+6&P;3`<]tD wtAbCUe|uG =IYQx^(9d}'
+
+mailSender:
+    fromAddress: '<%= emailFromAddress %>'

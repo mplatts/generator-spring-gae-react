@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import threewks.framework.usermanagement.Role;
+import threewks.framework.usermanagement.dto.AuthUser;
 import threewks.framework.usermanagement.service.UserService;
 
 import java.util.ArrayList;
@@ -64,8 +65,7 @@ public class UserAdapterImpl implements UserAdapter<User> {
 
     @Override
     public UserDetails toUserDetails(User user) {
-        return threewks.framework.usermanagement.model.UserDetails
-            .withId(user.getId())
+        return AuthUser.withId(user.getId())
             .username(byEmail ? user.getEmail() : user.getId())
             .password(user.getPassword())
             .authorities(new ArrayList<>(user.getRoles()))
@@ -86,8 +86,8 @@ public class UserAdapterImpl implements UserAdapter<User> {
 
     public static Optional<Key<User>> currentUserKey() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof threewks.framework.usermanagement.model.UserDetails) {
-            return Optional.of(Key.create(User.class, ((threewks.framework.usermanagement.model.UserDetails) principal).getId()));
+        if (principal instanceof AuthUser) {
+            return Optional.of(Key.create(User.class, ((AuthUser) principal).getId()));
         }
         return Optional.empty();
     }

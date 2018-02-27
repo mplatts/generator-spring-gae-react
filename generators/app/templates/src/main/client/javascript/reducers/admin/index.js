@@ -1,34 +1,28 @@
 import { combineReducers } from 'redux';
 
-const users = (state = { inviteUserDialogOpen: false, users: [] }, action) => {
+const inviteUsers = (state = { dialogOpen: false }, action) => {
   switch (action.type) {
     case 'OPEN_INVITE_USER_DIALOG':
       return {
         ...state,
-        inviteUserDialogOpen: true,
+        dialogOpen: true,
       };
     case 'CLOSE_INVITE_USER_DIALOG':
       return {
         ...state,
-        inviteUserDialogOpen: false,
-      };
-    case 'FETCH_USERS_SUCCESS':
-      return {
-        ...state,
-        users: action.response,
+        dialogOpen: false,
       };
     case 'INVITE_USER_SUCCESS':
       return {
         ...state,
-        inviteUserDialogOpen: false,
+        dialogOpen: false,
       };
     default: return state;
   }
 };
 
-export const getUsers = state =>
-  state.users;
+export const isInviteUserDialogOpen = state => state.inviteUsers.dialogOpen;
 
 export default combineReducers({
-  users,
+  inviteUsers,
 });

@@ -4,13 +4,13 @@ import { Link } from 'react-router';
 import * as PropTypes from 'prop-types';
 import { Chip, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
 import SendIcon from 'material-ui/svg-icons/content/send';
-import AppPropTypes from '../../components/AppPropTypes';
+import { user } from '../../model';
 import theme from '../../theme';
 import './ManageUsersPage.less';
 import FormDialog from '../../components/forms/FormDialog';
 import InviteUserForm from '../../components/forms/InviteUserForm';
 import * as fromMainReducer from '../../reducers';
-import { inviteUser, fetchUsers, closeInviteUserDialog, openInviteUserDialog } from '../../actions/manageUsers';
+import { inviteUser, fetchUsers, closeInviteUserDialog, openInviteUserDialog } from '../../actions/users';
 
 const UserTable = ({ users }) => (
   <Table className="user-table" multiSelectable>
@@ -23,18 +23,18 @@ const UserTable = ({ users }) => (
       </TableRow>
     </TableHeader>
     <TableBody>
-      {users.map(user => (
-        <TableRow key={user.id}>
+      {users.map(usr => (
+        <TableRow key={usr.id}>
           <TableRowColumn>
-            <Link to={`/admin/users/${user.id}`}>{user.email}</Link>
+            <Link to={`/admin/users/${usr.id}`}>{usr.email}</Link>
           </TableRowColumn>
-          <TableRowColumn>{user.name}</TableRowColumn>
+          <TableRowColumn>{usr.name}</TableRowColumn>
           <TableRowColumn>
             <div className="roles">
-              {user.roles.map(role => <Chip key={role} className="role" backgroundColor={theme.palette.primary1Color} labelColor="white">{role}</Chip>)}
+              {usr.roles.map(role => <Chip key={role} className="role" backgroundColor={theme.palette.primary1Color} labelColor="white">{role}</Chip>)}
             </div>
           </TableRowColumn>
-          <TableRowColumn>{`${user.enabled}`}</TableRowColumn>
+          <TableRowColumn>{`${usr.enabled}`}</TableRowColumn>
         </TableRow>
       ))}
     </TableBody>
@@ -42,7 +42,7 @@ const UserTable = ({ users }) => (
 );
 
 UserTable.propTypes = {
-  users: PropTypes.arrayOf(AppPropTypes.user).isRequired,
+  users: PropTypes.arrayOf(user).isRequired,
 };
 
 const UsersPage = props => (
@@ -63,7 +63,7 @@ const UsersPage = props => (
       submitButtonText="Invite"
       formComponent={InviteUserForm}
       formName="inviteUser"
-      open={props.inviteUserDialogOpen}
+      open={props.dialogOpen}
       onCancel={props.closeInviteUserDialog}
       onSubmit={props.inviteUser}
     />
@@ -74,8 +74,8 @@ UsersPage.propTypes = {
   openInviteUserDialog: PropTypes.func.isRequired,
   closeInviteUserDialog: PropTypes.func.isRequired,
   inviteUser: PropTypes.func.isRequired,
-  inviteUserDialogOpen: PropTypes.bool.isRequired,
-  users: PropTypes.arrayOf(AppPropTypes.user).isRequired,
+  dialogOpen: PropTypes.bool.isRequired,
+  users: PropTypes.arrayOf(user).isRequired,
 
 };
 
@@ -93,7 +93,10 @@ ManageUsersContainer.propTypes = {
   fetchUsers: PropTypes.func.isRequired,
 };
 
-const stateToProps = state => fromMainReducer.getUsers(state);
+const mapStateToProps = state => ({
+  users: fromMainReducer.getUsers(state),
+  dialogOpen: fromMainReducer.isInviteUserDialogOpen(state),
+});
 
 const mapDispatchToProps = {
   inviteUser,
@@ -102,4 +105,4 @@ const mapDispatchToProps = {
   openInviteUserDialog,
 };
 
-export default connect(stateToProps, mapDispatchToProps)(ManageUsersContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ManageUsersContainer);

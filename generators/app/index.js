@@ -41,6 +41,12 @@ module.exports = class extends Generator {
         name: 'adminEmail',
         message: 'What email address should we use to create the initial admin login?',
         store: true
+      },
+      {
+        name: 'emailFromAddress',
+        message: 'What email address would you like system emails to appear to come from?',
+        store: true,
+        default: `${slugify(this.appname)}@email.org`
       }
     ];
 

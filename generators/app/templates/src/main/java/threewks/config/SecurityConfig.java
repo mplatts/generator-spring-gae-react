@@ -23,7 +23,6 @@ import threewks.framework.usermanagement.model.UserAdapterImpl;
 import threewks.framework.usermanagement.service.UserService;
 
 import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @SuppressWarnings("SpringJavaAutowiredFieldsWarningInspection")
@@ -54,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http
             .csrf()
-                .ignoringAntMatchers("/system/**", "/_ah/**")
+                .ignoringAntMatchers("/system/**", "/task/**", "/cron/**", "/_ah/**")
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
             .and()
                 .exceptionHandling()
@@ -78,9 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .authorizeRequests()
                 .antMatchers("/_ah/**").permitAll()
+                .antMatchers("/system/**", "/task/**", "/cron/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
                 .antMatchers("/api/login").permitAll()
                 .antMatchers(GET, "/api/reference-data").permitAll()
-                .antMatchers("/system/**", "/task/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/**").permitAll()

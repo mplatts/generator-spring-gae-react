@@ -2,7 +2,6 @@ package threewks.testinfra.rules;
 
 import org.junit.Rule;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -10,7 +9,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import threewks.framework.usermanagement.model.LoginIdentifier;
 import threewks.framework.usermanagement.model.User;
-import threewks.framework.usermanagement.model.UserDetails;
+import threewks.framework.usermanagement.dto.AuthUser;
 import threewks.testinfra.TestApplicationContext;
 
 import java.util.Arrays;
@@ -25,7 +24,7 @@ public abstract class BaseIntegrationTest {
 
     @Rule
     public SetUpSecurityContextRule setUpSecurityContextRule =
-        new SetUpSecurityContextRule(new UserDetails(loggedIn.getId(), "andres", "passw", Arrays.asList()));
+        new SetUpSecurityContextRule(new AuthUser(loggedIn.getId(), "andres", "passw", Arrays.asList()));
 
 
     @Rule

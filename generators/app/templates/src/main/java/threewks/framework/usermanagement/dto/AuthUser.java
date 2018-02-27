@@ -1,4 +1,4 @@
-package threewks.framework.usermanagement.model;
+package threewks.framework.usermanagement.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -11,14 +11,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class UserDetails extends User {
+public class AuthUser extends User {
     private final String id;
 
-    public UserDetails(String id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(String id, String username, String password, Collection<? extends GrantedAuthority> authorities) {
         this(id, username, password, true, true, true, true, authorities);
     }
 
-    public UserDetails(String id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(String id, String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
     }
@@ -208,8 +208,8 @@ public class UserDetails extends User {
             return this;
         }
 
-        public UserDetails build() {
-            return new UserDetails(id, username, password, !disabled, !accountExpired,
+        public AuthUser build() {
+            return new AuthUser(id, username, password, !disabled, !accountExpired,
                 !credentialsExpired, !accountLocked, authorities);
         }
     }

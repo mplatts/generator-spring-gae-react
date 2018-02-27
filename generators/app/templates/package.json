@@ -43,6 +43,7 @@
     "xml2js": "^0.4.17"
   },
   "dependencies": {
+    "ajv": "^6.2.0",
     "async": "^2.5.0",
     "babel-polyfill": "^6.23.0",
     "bootstrap": "^3.3.7",
@@ -53,6 +54,7 @@
     "material-ui-chip-input": "^0.18.2",
     "moment": "^2.18.1",
     "normalize.css": "^7.0.0",
+    "normalizr": "^3.2.4",
     "numeral": "^2.0.6",
     "prop-types": "^15.5.10",
     "react": "^15.6.2",
@@ -73,6 +75,7 @@
     "redux-form": "^7.1.1",
     "redux-form-material-ui": "^4.2.0",
     "redux-thunk": "^2.2.0",
+    "reselect": "^3.0.1",
     "universal-cookie": "^2.1.2"
   },
   "engines": {

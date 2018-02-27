@@ -19,7 +19,8 @@ public class MailConfig {
         return new LoggingMailSenderStub(new HtmlFormatter());
     }
 
-    //Uncomment for GAE mail api.
+    // If you define properties via spring.mail.host, etc then you do not need this bean definition. This is specifically
+    // used to setup the default appengine mailer that has very low usage limitations.
     @Profile("gae")
     @Bean
     public JavaMailSender gaeMailSender() {

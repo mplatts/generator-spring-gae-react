@@ -1,13 +1,9 @@
 import { arrayOf, shape, string } from 'prop-types';
 
-const user = shape({
+export default shape({
   username: string,
   email: string,
   name: string,
   roles: arrayOf(string),
   status: string,
 });
-
-export default {
-  user,
-};

@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import threewks.framework.usermanagement.dto.UpdateUserRequest;
+import threewks.framework.usermanagement.dto.AuthUser;
 import threewks.framework.usermanagement.model.User;
 import threewks.testinfra.BaseControllerTest;
 
@@ -36,7 +37,7 @@ public class UserControllerTest extends BaseControllerTest {
     public void user_WillGetUserByName() throws Exception {
         given(userService.get("bob")).willReturn(of(byEmail("bob@email.com", "password")));
 
-        UserDetails userDetails = new threewks.framework.usermanagement.model.UserDetails("id", "bob", "password", emptyList());
+        UserDetails userDetails = new AuthUser("id", "bob", "password", emptyList());
 
         mvc.perform(
             get("/api/users/me").contentType(APPLICATION_JSON).with(user(userDetails)))

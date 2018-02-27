@@ -74,4 +74,5 @@ const requestWithData = (path, method, data, headers = {}) => {
 
 export const requestJSON = (path, method, data, headers = {}) =>
   (data ? requestWithData(path, method, data, headers) : request(path, method, null, headers))
-    .then(response => (response.status !== 204 ? response.json() : null));
+    .then(response => response.text())
+    .then(responseText => responseText && JSON.parse(responseText));
