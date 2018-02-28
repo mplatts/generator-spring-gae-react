@@ -7,16 +7,19 @@ import { Provider } from 'react-redux';
 import getRoutes from '../routes';
 import store from '../store';
 import theme from '../theme';
+import ErrorBoundary from "./ErrorBoundary";
 
 const App = () => (
   <AppContainer>
-    <Provider store={store}>
-      <IntlProvider locale="en-AU">
-        <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-          {getRoutes(store.getState, store.dispatch)}
-        </MuiThemeProvider>
-      </IntlProvider>
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <IntlProvider locale="en-AU">
+          <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+            {getRoutes(store.getState, store.dispatch)}
+          </MuiThemeProvider>
+        </IntlProvider>
+      </Provider>
+    </ErrorBoundary>
   </AppContainer>
 );
 

@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/system/**", "/task/**", "/cron/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
                 .antMatchers("/api/login").permitAll()
                 .antMatchers(GET, "/api/reference-data").permitAll()
+                .antMatchers("/api/error/**").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/register/**").permitAll()
                 .antMatchers("/**").permitAll()
