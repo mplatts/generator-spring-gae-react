@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import threewks.controller.dto.IndexMeta;
 
@@ -27,7 +28,9 @@ public class IndexController {
         return indexPage(request, model);
     }
 
-    @RequestMapping("{[path:[^\\.]*}")
+    @GetMapping(
+        value = "/**",
+        produces = MediaType.TEXT_HTML_VALUE)
     public String indexPage(HttpServletRequest request, Model model) {
         return getIndex(request, model);
     }
