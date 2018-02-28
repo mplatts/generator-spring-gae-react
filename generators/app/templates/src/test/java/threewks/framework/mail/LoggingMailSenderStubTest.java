@@ -9,7 +9,8 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import threewks.framework.MockLogback;
+
+import threewks.framework.MockJdkLogging;
 import threewks.framework.MockLogging;
 import threewks.util.HtmlFormatter;
 
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class LoggingMailSenderStubTest {
     @Rule
-    public MockLogging mockLogging = new MockLogback(LoggingMailSenderStub.class);
+    public MockLogging mockLogging = new MockJdkLogging(LoggingMailSenderStub.class);
 
     @InjectMocks
     private LoggingMailSenderStub loggingMailSender;
