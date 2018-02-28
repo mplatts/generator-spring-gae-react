@@ -16,7 +16,7 @@ module.exports = class extends Generator {
   prompting() {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the excellent ' + chalk.red('generator-thundr-gae-react') + ' generator!'
+      'Welcome to the excellent ' + chalk.red('generator-spring-gae-react') + ' generator!'
     ));
 
     const prompts = [
