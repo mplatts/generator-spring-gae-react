@@ -227,7 +227,7 @@
                     <artifactId>maven-scm-plugin</artifactId>
                     <version>1.9.5</version>
                     <configuration>
-                        <tag><%= _.unescape('${appId}-v-${appVersion}-${build.time}')%></tag>
+                        <tag><%= _.unescape('${app.id}-v-${app.version}-${build.time}')%></tag>
                     </configuration>
                 </plugin>
             </plugins>
