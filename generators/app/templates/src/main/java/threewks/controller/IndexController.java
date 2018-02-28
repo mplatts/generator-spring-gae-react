@@ -31,7 +31,8 @@ public class IndexController {
 
     @GetMapping(
         value = "/**",
-        produces = MediaType.TEXT_HTML_VALUE)
+        produces = MediaType.TEXT_HTML_VALUE,
+        headers = {"!X-Appengine-Cron"})
     public String indexPage(HttpServletRequest request, Model model) {
         return getIndex(request, model);
     }
