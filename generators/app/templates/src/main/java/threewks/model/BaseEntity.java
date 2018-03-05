@@ -7,10 +7,11 @@ import com.googlecode.objectify.annotation.Ignore;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Load;
 import com.googlecode.objectify.annotation.OnSave;
+import hut34.wallet.framework.usermanagement.model.User;
+import hut34.wallet.framework.usermanagement.model.UserAdapterImpl;
 import org.springframework.contrib.gae.objectify.Refs;
 import org.springframework.contrib.gae.search.IndexType;
 import org.springframework.contrib.gae.search.SearchIndex;
-import threewks.framework.usermanagement.model.User;
 
 import java.time.OffsetDateTime;
 
@@ -115,12 +116,8 @@ public abstract class BaseEntity {
     }
 
     private Ref<User> getCurrentUserRef() {
-
-        // TODO: Add user adapter
-//        return UserAdapterImpl.currentUserRef()
-//            .orElse(null);
-
-        return null;
+        return UserAdapterImpl.currentUserRef()
+            .orElse(null);
     }
 
 }
