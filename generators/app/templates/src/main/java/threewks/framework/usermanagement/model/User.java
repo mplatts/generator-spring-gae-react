@@ -1,9 +1,11 @@
 package threewks.framework.usermanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import org.springframework.contrib.gae.security.GaeUser;
+import threewks.framework.BaseEntityCore;
 import threewks.framework.usermanagement.Role;
 
 import java.io.Serializable;
@@ -14,8 +16,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
+@Cache
 @Entity
-public class User implements GaeUser, Serializable {
+public class User extends BaseEntityCore implements GaeUser, Serializable {
     @Id
     private String id;
     private String email;

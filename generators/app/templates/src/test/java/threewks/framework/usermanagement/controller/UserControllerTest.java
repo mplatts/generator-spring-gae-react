@@ -3,13 +3,15 @@ package threewks.framework.usermanagement.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
-import threewks.framework.usermanagement.dto.UpdateUserRequest;
 import threewks.framework.usermanagement.dto.AuthUser;
+import threewks.framework.usermanagement.dto.UpdateUserRequest;
 import threewks.framework.usermanagement.model.User;
-import threewks.testinfra.BaseControllerTest;
+import threewks.framework.usermanagement.service.UserService;
+import threewks.testinfra.BaseControllerIntegrationTest;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -23,37 +25,37 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static threewks.framework.usermanagement.model.User.byEmail;
 
-public class UserControllerTest extends BaseControllerTest {
+public class UserControllerTest extends BaseControllerIntegrationTest {
 
+    @MockBean
+    private UserService userService;
     @Autowired
     private ObjectMapper objectMapper;
 
     @Test
-    public void user_WillGetUserByName() throws Exception {
-        given(userService.get("bob")).willReturn(of(byEmail("bob@email.com", "password")));
-
+    public void user_WillGetUserByCurrentPrincipal() throws Exception {
+        given(userService.getById("id")).willReturn(of(byEmail("bob@email.com", "password")));
         UserDetails userDetails = new AuthUser("id", "bob", "password", emptyList());
 
         mvc.perform(
             get("/api/users/me").contentType(APPLICATION_JSON).with(user(userDetails)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.email", is("bob@email.com")));
+            .andExpect(jsonPath("email", is("bob@email.com")));
     }
 
-    @WithMockUser(roles = "ADMIN")
     @Test
-    public void user_WillGetUserByUserId() throws Exception {
-        given(userService.getById("userId")).willReturn(of(byEmail("bob@email.com", "password")));
-
+    public void user_WillReturnNoContentWhenNoAuthedUser() throws Exception {
         mvc.perform(
-            get("/api/users/userId"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.email", is("bob@email.com")));
+            get("/api/users/me").contentType(APPLICATION_JSON))
+            .andExpect(status().isNoContent())
+            .andExpect(content().string(""));
     }
 
     @WithMockUser(roles = "ADMIN")

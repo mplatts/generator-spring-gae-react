@@ -1,14 +1,14 @@
 logging:
     pattern:
         console: '%-40.40logger{39} %n%-5p %m%n'
+
+app:
+    host: https://<%= _.unescape('${app.id}')%>.appspot.com
+
 spring:
-    mail:
-        host: smtp.gmail.com
-        port: 587
-        username: springbuskers@gmail.com
-        password: 3Wks1234
-        properties:
-            mail:
-                smtp:
-                    starttls:
-                        required: true
+    contrib:
+        gae:
+            security:
+                remember-me:
+                    key: '<%= nonProdKey %>'
+

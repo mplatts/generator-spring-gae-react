@@ -7,18 +7,37 @@ import com.google.appengine.tools.development.testing.LocalTaskQueueTestConfig;
 import com.googlecode.objectify.ObjectifyService;
 import com.googlecode.objectify.util.Closeable;
 import org.junit.rules.ExternalResource;
+import threewks.framework.config.ObjectifyConfig;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LocalServicesRule extends ExternalResource {
     private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(),
         new LocalTaskQueueTestConfig());
     private Closeable ofyService;
-    private Class<?>[] entities;
+    private List<Class<?>> entities;
 
-    public LocalServicesRule(Class<?>... entities) {
-        this.entities = entities;
+    /**
+     * By default this will register all entities as defined in {@link ObjectifyConfig}.
+     */
+    public LocalServicesRule() {
+        this(new ObjectifyConfig().registerObjectifyEntities().toArray(new Class[0]));
     }
 
-    protected void before() throws Throwable {
+    public LocalServicesRule(Class<?>... entities) {
+        this.entities = Stream.of(entities).collect(Collectors.toList());
+    }
+
+    public void registerAdditionalEntities(Class<?>... entities) {
+        for (Class<?> entity : entities) {
+            ObjectifyService.register(entity);
+            this.entities.add(entity);
+        }
+    }
+
+    protected void before() {
         helper.setUp();
         ofyService = ObjectifyService.begin();
 

@@ -1,5 +1,8 @@
 package threewks.framework.usermanagement.controller;
 
+import org.apache.http.HttpStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,13 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 import threewks.framework.usermanagement.dto.RedeemInvitationRequest;
 import threewks.framework.usermanagement.dto.UpdateUserRequest;
 import threewks.framework.usermanagement.model.User;
+import threewks.framework.usermanagement.model.UserAdapterGae;
 import threewks.framework.usermanagement.service.InviteUserRequest;
 import threewks.framework.usermanagement.service.UserInviteService;
 import threewks.framework.usermanagement.service.UserService;
 
-import java.security.Principal;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -25,17 +30,30 @@ import static threewks.util.RestUtils.response;
 @RequestMapping("/api/users")
 public class UserController {
 
-    private final UserService userService;
-    private UserInviteService userInviteService;
+    private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
-    public UserController(UserService userService, UserInviteService userInviteService) {
+    private final UserAdapterGae userAdapter;
+    private final UserService userService;
+    private final UserInviteService userInviteService;
+
+    public UserController(UserAdapterGae userAdapter, UserService userService, UserInviteService userInviteService) {
+        this.userAdapter = userAdapter;
         this.userService = userService;
         this.userInviteService = userInviteService;
     }
 
     @RequestMapping(method = GET, path = "/me")
-    public User user(Principal principal) {
-        return response(userService.get(principal.getName()));
+    public User user(HttpServletResponse response) {
+        Optional<User> currentUser = userAdapter.getCurrentUser();
+
+        if (currentUser.isPresent()) {
+            LOG.debug("Found existing authenticated user {}", currentUser.get().getEmail());
+            return response(currentUser);
+        }
+
+        LOG.debug("User not authenticated");
+        response.setStatus(HttpStatus.SC_NO_CONTENT);
+        return null;
     }
 
     @RequestMapping(method = GET, path = "/{userId}")
@@ -66,4 +84,5 @@ public class UserController {
     public List<User> list() {
         return userService.list();
     }
+
 }

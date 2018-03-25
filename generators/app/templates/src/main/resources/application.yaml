@@ -1,13 +1,20 @@
 logging:
     level:
+        ROOT: WARN
         threewks: DEBUG
         org.springframework: INFO
+        # Log how long scanning objectify entity classes takes
+        org.springframework.contrib.gae.objectify.config.ObjectifyEntityScanner: DEBUG
+        # Detailed startup logs
+        org.springframework.boot.StartupInfoLogger: DEBUG
         # Below is to log servlet response mapping exceptions
         org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod: TRACE
 
 app:
     name: <%= projectName %>
-    host: https://<%= project %>-dev.appspot.com
+    id: <%= _.unescape('${com.google.appengine.application.id:no_app_id}')%>
+    environment: <%= _.unescape('${com.google.appengine.runtime.environment:Local Test}')%>
+    host: '- no host -'
 
 tasks:
     email:

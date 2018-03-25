@@ -110,7 +110,7 @@ public class AuthUser extends User {
          * additional attributes for this user)
          */
         public UserBuilder roles(String... roles) {
-            List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>(
+            List<GrantedAuthority> authorities = new ArrayList<>(
                 roles.length);
             for (String role : roles) {
                 Assert.isTrue(!role.startsWith("ROLE_"), role
@@ -143,7 +143,7 @@ public class AuthUser extends User {
          * @see #roles(String...)
          */
         public UserBuilder authorities(List<? extends GrantedAuthority> authorities) {
-            this.authorities = new ArrayList<GrantedAuthority>(authorities);
+            this.authorities = new ArrayList<>(authorities);
             return this;
         }
 

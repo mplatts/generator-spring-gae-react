@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import threewks.framework.usermanagement.Role;
 import threewks.framework.usermanagement.model.User;
-import threewks.framework.usermanagement.model.UserAdapterImpl;
+import threewks.framework.usermanagement.model.UserAdapterGae;
 import threewks.framework.usermanagement.model.UserInviteLink;
 import threewks.framework.usermanagement.repository.UserInviteRepository;
 import threewks.util.Assert;
@@ -49,7 +49,7 @@ public class UserInviteService {
 
     public User invite(final String inviteeEmail, Set<String> requestRoles) {
         Set<Role> inviteeRoles = Role.parseSet(requestRoles);
-        Optional<Ref<User>> userRef = UserAdapterImpl.currentUserRef();
+        Optional<Ref<User>> userRef = UserAdapterGae.currentUserRef();
         final User issuer = userRef.flatMap(ref -> Optional.ofNullable(ref.get())).orElse(null);
         Assert.notNull(issuer, "Cannot issue invite. Issuer must be provided.");
         Assert.notBlank(inviteeEmail, "Cannot issue invite. Invitee email address must be provided.");

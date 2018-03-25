@@ -1,18 +1,18 @@
 package threewks.testinfra.rules;
 
 import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import threewks.framework.usermanagement.model.LoginIdentifier;
-import threewks.framework.usermanagement.model.User;
-import threewks.framework.usermanagement.dto.AuthUser;
+import threewks.framework.usermanagement.repository.UserRepository;
 import threewks.testinfra.TestApplicationContext;
 
-import java.util.Arrays;
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 @RunWith(SpringRunner.class)
 @ActiveProfiles("test")
@@ -20,14 +20,19 @@ import java.util.Arrays;
 @ContextConfiguration(classes = TestApplicationContext.class)
 @SpringBootTest
 public abstract class BaseIntegrationTest {
-    protected User loggedIn = User.byEmail("admin@3wks.com.au", "myPass");
+    @Autowired
+    protected UserRepository userRepository;
 
     @Rule
-    public SetUpSecurityContextRule setUpSecurityContextRule =
-        new SetUpSecurityContextRule(new AuthUser(loggedIn.getId(), "andres", "passw", Arrays.asList()));
-
+    public final ExpectedException thrown = ExpectedException.none();
 
     @Rule
-    public LocalServicesRule localServicesRule = new LocalServicesRule(User.class, LoginIdentifier.class);
+    public LocalServicesRule localServicesRule = new LocalServicesRule();
 
+
+    @SuppressWarnings("unchecked")
+    protected <E> E save(E entity) {
+        ofy().save().entities(entity).now();
+        return entity;
+    }
 }

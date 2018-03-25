@@ -88,12 +88,6 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    private Optional<LoginIdentifier> getLoginIdentifier(String loginIdentifier) {
-        return Optional.ofNullable(loginIdentifier)
-            .map(String::toLowerCase)
-            .flatMap(loginIdentifierRepository::findById);
-    }
-
     private void checkAvailability(String loginIdentifier) {
         Assert.notNull(loginIdentifier, "Availability check failed. Login identifier is required");
 

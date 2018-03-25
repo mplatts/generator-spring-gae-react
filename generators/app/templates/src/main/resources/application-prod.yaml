@@ -5,15 +5,3 @@ spring:
                 remember-me:
                     key: '<%= prodKey %>'
 
-    mail:
-        host: smtp.gmail.com
-        port: 587
-        username: springbuskers@gmail.com
-        password: 3Wks1234
-        properties:
-            mail:
-                smtp:
-                    starttls:
-                        required: true
-app:
-    host: https://<%= project %>-prod.appspot.com

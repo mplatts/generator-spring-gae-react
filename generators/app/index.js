@@ -61,8 +61,7 @@ module.exports = class extends Generator {
       project: slugify(this.props.project),
       slugify,
       localKey: makeKey(),
-      devKey: makeKey(),
-      uatKey: makeKey(),
+      nonProdKey: makeKey(),
       prodKey: makeKey(),
       _
     });

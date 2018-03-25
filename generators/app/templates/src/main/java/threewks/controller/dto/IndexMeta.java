@@ -1,6 +1,8 @@
 package threewks.controller.dto;
 
-public class IndexMeta {
+import threewks.util.ValueObject;
+
+public class IndexMeta extends ValueObject {
 
     private String url;
     private String title;

@@ -1,39 +1,65 @@
 package threewks.testinfra;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.boot.jackson.JsonComponentModule;
+import org.springframework.data.geo.GeoModule;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import threewks.framework.ref.ReferenceDataService;
-import threewks.framework.usermanagement.service.UserService;
+import threewks.framework.controller.advice.ExceptionHandlerAdvice;
+import threewks.testinfra.rules.LocalServicesRule;
 
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+/**
+ * Test controller via {@link MockMvc} without requiring a full container load - faster. If you want to test
+ * Spring Security, use {@link BaseControllerIntegrationTest} which sets up web application context.
+ */
+@RunWith(MockitoJUnitRunner.class)
 public abstract class BaseControllerTest {
+
+    @Rule
+    public LocalServicesRule localServicesRule = new LocalServicesRule();
 
     protected MockMvc mvc;
 
-    @MockBean
-    protected UserService userService;
+    protected abstract Object controller();
 
-    @MockBean
-    protected ReferenceDataService referenceDataService;
-
-    @Autowired
-    private WebApplicationContext wac;
+    private ObjectMapper objectMapper;
 
     @Before
     public void setup() {
+        // Try to set this up the same as we have it in Spring
+        objectMapper = new ObjectMapper()
+            .registerModules(
+                new JavaTimeModule(),
+                new JsonComponentModule(),
+                new GeoModule(),
+                new JodaModule()
+            )
+            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
         mvc = MockMvcBuilders
-            .webAppContextSetup(wac)
-            .apply(springSecurity())
+            .standaloneSetup(controller())
+            .setControllerAdvice(new ExceptionHandlerAdvice())
+            .alwaysDo(print())
             .build();
     }
+
+    protected String asString(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Exception converting object to string for test", e);
+        }
+    }
+
+
 }

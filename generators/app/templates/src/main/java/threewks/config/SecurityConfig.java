@@ -3,7 +3,6 @@ package threewks.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.contrib.gae.security.UserAdapter;
 import org.springframework.contrib.gae.security.config.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -19,7 +18,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import threewks.framework.usermanagement.model.User;
-import threewks.framework.usermanagement.model.UserAdapterImpl;
+import threewks.framework.usermanagement.model.UserAdapterGae;
 import threewks.framework.usermanagement.service.UserService;
 
 import static org.springframework.http.HttpMethod.GET;
@@ -76,13 +75,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
             .and()
                 .authorizeRequests()
-                .antMatchers("/_ah/**").permitAll()
-                .antMatchers("/system/**", "/task/**", "/cron/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
-                .antMatchers("/api/login").permitAll()
+                .antMatchers("/_ah/**", "/system/**", "/task/**", "/cron/**").permitAll()  // protected by security-constraint in web.xml which delegates to GCP's IAM
+                .antMatchers("/api/login", "/api/users/me", "/api/error/**").permitAll()
                 .antMatchers(GET, "/api/reference-data").permitAll()
-                .antMatchers("/api/error/**").permitAll()
-                .antMatchers("/api/**").authenticated()
                 .antMatchers("/register/**").permitAll()
+                .antMatchers("/api/**").authenticated()
                 .antMatchers("/**").permitAll()
             .and()
                 .headers()
@@ -96,7 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public UserAdapter<User> gaeUserHelper(UserService userService) {
-        return UserAdapterImpl.byEmail(userService);
+    public UserAdapterGae gaeUserHelper(UserService userService) {
+        return UserAdapterGae.byEmail(userService);
     }
 }
