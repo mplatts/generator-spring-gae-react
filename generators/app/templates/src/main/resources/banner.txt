@@ -1,15 +1,17 @@
 
 *********************************************************************
-     __________                 __
-     \______   \ __ __   ______|  | __  ____  _______
-      |    |  _/|  |  \ /  ___/|  |/ /_/ __ \ \_  __ \
-      |    |   \|  |  / \___ \ |    < \  ___/  |  | \/
-      |______  /|____/ /____  >|__|_ \ \___  > |__|
-             \/             \/      \/     \/
+             _____         __
+            |__  /      __/ /_______
+             /_ < | /| / / //_/ ___/
+           ___/ / |/ |/ / ,< (__  )
+          /____/|__/|__/_/|_/____/
 
+Customise above banner with your project name & remove this comment:
+   http://patorjk.com/software/taag/#p=testall&f=Graffiti&t=3wks
 
-   Spring-Boot Version:  ${spring-boot.version}
-
-   -- put other properties here --
+   Spring-Boot Version :  ${spring-boot.version}
+   App id              :  ${app.id}
+   App environment     :  ${app.environment}
+   App host            :  ${app.host}
 
 *********************************************************************
