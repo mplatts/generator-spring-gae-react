@@ -7,6 +7,7 @@ import UserProfileForm from '../../components/forms/UserProfileForm';
 import api from '../../services/api';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import NotFoundPage from '../NotFoundPage';
+import './UserProfilePage.less';
 
 class UserProfilePage extends Component {
   static propTypes = {
@@ -59,7 +60,7 @@ class UserProfilePage extends Component {
     }
 
     return (
-      <div>
+      <div className="user-profile-page">
         <Avatar className="avatar" name={user.name} email={user.email} size={96} round />
 
         <UserProfileForm initialValues={user} onSubmit={this.handleSubmit} />

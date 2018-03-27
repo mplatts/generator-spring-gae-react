@@ -7,7 +7,7 @@ const CenteredPanelLayout = ({ children, title }) => (
     <div>
       <h1 className="display-3">{title}</h1>
 
-      <Paper className="centered-panel" zDepth={5}>
+      <Paper className="centered-panel" elevation={5}>
         {children}
       </Paper>
     </div>

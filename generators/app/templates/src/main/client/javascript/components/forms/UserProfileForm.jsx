@@ -2,28 +2,39 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
 import { bool, func } from 'prop-types';
-import { RaisedButton } from 'material-ui';
-import { MultiselectField } from './fields';
-import { email, required } from './validators';
+import { Button } from 'material-ui';
+import { email, required } from 'redux-form-validators';
+import ChipSelectField from '../common/ChipSelectField';
+
+const roles = [{
+  label: 'Admin',
+  value: 'admin',
+}, {
+  label: 'Member',
+  value: 'member',
+}, {
+  label: 'User',
+  value: 'user',
+}];
 
 const UserProfileForm = ({ handleSubmit, submitting }) => (
   <form onSubmit={handleSubmit}>
     <Field
       name="name"
-      autoComplete="name"
       component={TextField}
-      hintText="Your full name"
-      floatingLabelText="Full name"
+      placeholder="Your full name"
+      label="Full name"
+      margin="normal"
       validate={required('Your full name is required')}
       fullWidth
     />
     <Field
       name="email"
-      autoComplete="email"
       component={TextField}
-      hintText="Your email address"
-      floatingLabelText="Email"
+      placeholder="Your email address"
+      label="Email"
       type="email"
+      margin="normal"
       validate={[
         required('Email address is required'),
         email('Enter a valid email'),
@@ -32,22 +43,26 @@ const UserProfileForm = ({ handleSubmit, submitting }) => (
     />
     <Field
       name="roles"
-      component={MultiselectField}
-      dataSource={['ADMIN', 'USER']}
-      format={value => (value === '' ? null : value)}
-      floatingLabelText="Roles"
-      hintText="Start typing roles..."
-      newChipKeyCodes={[]}
+      component={ChipSelectField}
+      options={roles}
+      label="Roles"
+      margin="normal"
+      multi
+      placeholder="Start typing roles..."
       fullWidth
+      removeSelected
+      clearable={false}
     />
 
     <div className="actions">
-      <RaisedButton
-        label={submitting ? 'Saving...' : 'Save'}
+      <Button
+        variant="raised"
         type="submit"
         disabled={submitting}
-        primary
-      />
+        color="primary"
+      >
+        {submitting ? 'Saving...' : 'Save'}
+      </Button>
     </div>
   </form>
 );

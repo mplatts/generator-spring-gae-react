@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
-import RaisedButton from 'material-ui/RaisedButton';
+import { Button } from 'material-ui';
 import PropTypes from 'prop-types';
 import { required } from './validators';
 
@@ -9,16 +9,18 @@ const RegisterForm = ({ handleSubmit, submitting }) => (
   <form onSubmit={handleSubmit} noValidate>
     <Field
       name="name"
+      margin="normal"
       component={TextField}
-      hintText="Your full name"
-      floatingLabelText="Full name"
+      placeholder="Your full name"
+      label="Full name"
       validate={required('Your full name is required')}
       fullWidth
     />
     <Field
       name="password"
-      hintText="Choose your password"
-      floatingLabelText="Choose Password"
+      margin="normal"
+      placeholder="Choose your password"
+      label="Choose Password"
       component={TextField}
       type="password"
       validate={required('Password is required')}
@@ -26,13 +28,15 @@ const RegisterForm = ({ handleSubmit, submitting }) => (
     />
 
     <div className="actions">
-      <RaisedButton
-        label={submitting ? 'Completing setup...' : 'Complete setup'}
+      <Button
+        variant="raised"
         type="submit"
         disabled={submitting}
-        primary
+        color="primary"
         fullWidth
-      />
+      >
+        {submitting ? 'Completing setup...' : 'Complete setup'}
+      </Button>
     </div>
   </form>
 );

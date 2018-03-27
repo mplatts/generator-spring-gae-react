@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardText } from 'material-ui';
+import { Card, CardHeader, CardContent } from 'material-ui';
 import moment from 'moment';
 import React from 'react';
 import { compose } from 'redux';
@@ -24,13 +24,13 @@ const HomePage = () => (
     <h2 className="display-1">Some bundled widgets</h2>
     <div className="widgets">
       <div>
-        Overwrite this page when you creath your app, but in the mean time here is some info ...
+        Overwrite this page when you create your app, but in the mean time here is some info ...
       </div>
       <Card>
         <CardHeader
           title="MaterialSelectField"
         />
-        <CardText>
+        <CardContent>
           <div>
             A select field that also supports typeahead and uses material look and feel.
           </div>
@@ -45,14 +45,16 @@ const HomePage = () => (
             normalize={defaultNull}
             valueKey="name"
             labelKey="name"
+            margin="normal"
+            fullWidth
           />
-        </CardText>
+        </CardContent>
       </Card>
       <Card>
         <CardHeader
           title="TimeAgo"
         />
-        <CardText>
+        <CardContent>
           <p>
             A widget that displays a date/time as &quot;time ago&quot; and optionally
             click to expand to full date/time and collapse again.
@@ -60,12 +62,11 @@ const HomePage = () => (
           <p>
             <TimeAgo value={moment().subtract(5, 'minutes').toDate()} expandable/>
           </p>
-        </CardText>
+        </CardContent>
       </Card>
     </div>
   </div>
 );
-
 
 const form = reduxForm({ form: 'widget-form' });
 export default compose(form)(HomePage);

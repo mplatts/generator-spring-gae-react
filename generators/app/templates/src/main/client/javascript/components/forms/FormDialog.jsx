@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { submit } from 'redux-form';
-import { Dialog, FlatButton } from 'material-ui';
+import { Dialog, Button, DialogActions, DialogContent, DialogTitle } from 'material-ui';
 
 class FormDialog extends Component {
   static propTypes = {
@@ -55,20 +55,32 @@ class FormDialog extends Component {
       ...rest
     } = this.props;
 
-    const actions = [
-      <FlatButton label={cancelButtonText} onTouchTap={onCancel} />,
-      onDelete && <FlatButton label={deleteButtonText} secondary onTouchTap={this.handleDelete} />,
-      <FlatButton
-        label={submitButtonText}
-        primary
-        keyboardFocused
-        onTouchTap={this.handleSubmit}
-      />,
-    ];
+    const actions = (
+      <Fragment>
+        <Button variant="flat" onTouchTap={onCancel}>
+          {cancelButtonText}
+        </Button>
+        {onDelete && <Button variant="flat" secondary onTouchTap={this.handleDelete}>{deleteButtonText}</Button>}
+        <Button
+          variant="flat"
+          color="primary"
+          onTouchTap={this.handleSubmit}
+        >
+          {submitButtonText}
+        </Button>
+      </Fragment>);
 
     return (
-      <Dialog title={title} open={open} onRequestClose={onCancel} actions={actions}>
-        <FormComponent onSubmit={onSubmit} {...rest} />
+      <Dialog title={title} open={open} onClose={onCancel} fullWidth maxWidth="sm">
+        <DialogTitle>
+          {title}
+        </DialogTitle>
+        <DialogContent>
+          <FormComponent onSubmit={onSubmit} {...rest} />
+        </DialogContent>
+        <DialogActions>
+          {actions}
+        </DialogActions>
       </Dialog>
     );
   }

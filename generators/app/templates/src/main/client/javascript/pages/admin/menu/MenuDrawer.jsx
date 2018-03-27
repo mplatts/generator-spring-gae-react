@@ -1,49 +1,77 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import { func, object } from 'prop-types';
-import { Divider, Drawer, MenuItem, Subheader } from 'material-ui';
-import ExitIcon from 'material-ui/svg-icons/action/exit-to-app';
-import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
-import PersonIcon from 'material-ui/svg-icons/social/person';
-import PeopleIcon from 'material-ui/svg-icons/social/people';
+import { func, object, bool } from 'prop-types';
+import { Divider, Drawer, ListSubheader, List, ListItem, ListItemIcon, ListItemText } from 'material-ui';
+import ExitIcon from 'material-ui-icons/ExitToApp';
+import DashboardIcon from 'material-ui-icons/Dashboard';
+import PersonIcon from 'material-ui-icons/Person';
+import PeopleIcon from 'material-ui-icons/People';
 import ProfileCard from './ProfileCard';
 import * as authActions from '../../../actions/auth';
-import { getLoggedInUser } from '../../../reducers';
+import { getLoggedInUser, getOpenDrawer } from '../../../reducers';
+import { closeDrawer as closeDrawerAction } from '../../../actions/drawer';
 
 const MenuDrawer = ({
-  loggedInUser, logout, navigateTo, ...rest
-}) => (loggedInUser ? (
-  <Drawer {...rest} docked={false} width={280}>
-    <ProfileCard user={loggedInUser} />
+  loggedInUser,
+  logout,
+  navigateTo,
+  closeDrawer,
+  isOpen,
+  ...rest
+}) => (
+  <Drawer onClose={closeDrawer} open={isOpen} {...rest}>
+    <div onClick={closeDrawer}>
+      <ProfileCard user={loggedInUser}/>
 
-    <MenuItem
-      primaryText="Dashboard"
-      leftIcon={<DashboardIcon />}
-      onClick={() => navigateTo('/admin')}
-    />
-    <MenuItem
-      primaryText="Manage users"
-      leftIcon={<PeopleIcon />}
-      onClick={() => navigateTo('/admin/users')}
-    />
+      <Divider/>
+      <List>
+        <ListItem
+          button
+          onClick={() => navigateTo('/admin')}
+        >
+          <ListItemIcon><DashboardIcon/></ListItemIcon>
+          <ListItemText primary="Dashboard"/>
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => navigateTo('/admin/users')}
+        >
+          <ListItemIcon><PeopleIcon/></ListItemIcon>
+          <ListItemText primary="Manage users"/>
+        </ListItem>
+      </List>
 
-    <Divider />
-    <Subheader>My account</Subheader>
+      <Divider/>
+      <ListSubheader>My account</ListSubheader>
 
-    <MenuItem
-      primaryText="Profile"
-      leftIcon={<PersonIcon />}
-      onClick={() => navigateTo(`/admin/users/${loggedInUser.username}`)}
-    />
-    <MenuItem primaryText="Sign out" leftIcon={<ExitIcon />} onClick={() => logout()} />
+      <List>
+        <ListItem
+          button
+          onClick={() => navigateTo(`/admin/users/${loggedInUser.username}`)}
+        >
+          <ListItemIcon><PersonIcon/></ListItemIcon>
+          <ListItemText primary="Profile"/>
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => logout()}
+        >
+          <ListItemIcon><ExitIcon/></ListItemIcon>
+          <ListItemText primary="Sign out"/>
+        </ListItem>
+      </List>
+    </div>
   </Drawer>
-) : null);
+);
 
 MenuDrawer.propTypes = {
   loggedInUser: object,
   logout: func.isRequired,
   navigateTo: func.isRequired,
+  closeDrawer: func.isRequired,
+  isOpen: bool.isRequired,
 };
 
 MenuDrawer.defaultProps = {
@@ -52,11 +80,13 @@ MenuDrawer.defaultProps = {
 
 const mapStateToProps = state => ({
   loggedInUser: getLoggedInUser(state),
+  isOpen: getOpenDrawer(state) === 'admin',
 });
 
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(authActions.logout()).then(() => dispatch(push('/'))),
   navigateTo: path => dispatch(push(path)),
+  closeDrawer: () => dispatch(closeDrawerAction()),
 });
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
@@ -64,7 +94,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => ({
   ...dispatchProps,
   ...ownProps,
   navigateTo: (path) => {
-    ownProps.onRequestChange(false); // Ensure drawer closes upon navigation
     dispatchProps.navigateTo(path);
   },
 });

@@ -1,45 +1,41 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
-import { arrayOf, node, oneOfType } from 'prop-types';
-import { AppBar } from 'material-ui';
+import { arrayOf, node, oneOfType, func } from 'prop-types';
+import { AppBar, Toolbar, IconButton, Typography } from 'material-ui';
+import MenuIcon from 'material-ui-icons/Menu';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import MenuDrawer from './menu/MenuDrawer';
+import { openDrawer as openDrawerAction } from '../../actions/drawer';
 
-class AdminLayout extends Component {
-  static propTypes = {
-    children: oneOfType([node, arrayOf(node)]).isRequired,
-  };
+const AdminLayout = ({ children, openDrawer }) => (
+  <div className="admin-layout">
+    <Alert effect="slide" position="bottom-right" stack />
 
-  constructor(props) {
-    super(props);
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton aria-label="Menu"color="inherit" onClick={openDrawer}>
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="title" color="inherit">
+          Material UI Next
+        </Typography>
+      </Toolbar>
+    </AppBar>
 
-    this.state = { drawerOpen: false };
-  }
+    <MenuDrawer />
 
-  toggleDrawer = () => {
-    this.setState({ drawerOpen: !this.state.drawerOpen });
-  };
+    <div className="main">{children}</div>
+  </div>);
 
-  render() {
-    const { drawerOpen } = this.state;
-    const { children } = this.props;
+AdminLayout.propTypes = {
+  children: oneOfType([node, arrayOf(node)]).isRequired,
+  openDrawer: func.isRequired,
+};
 
-    return (
-      <div className="admin-layout">
-        <Alert effect="slide" position="bottom-right" stack />
+export const mapDispatchToProps = dispatch => ({
+  openDrawer: () => dispatch(openDrawerAction('admin')),
+});
 
-        <AppBar title="<%= projectName %>" onLeftIconButtonTouchTap={this.toggleDrawer} />
-
-        <MenuDrawer
-          open={drawerOpen}
-          onRequestChange={open => this.setState({ drawerOpen: open })}
-        />
-
-        <div className="main">{children}</div>
-      </div>
-    );
-  }
-}
-
-export default AdminLayout;
+export default connect(null, mapDispatchToProps)(AdminLayout);

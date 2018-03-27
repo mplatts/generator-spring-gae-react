@@ -1,8 +1,19 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { TextField } from 'redux-form-material-ui';
-import { MultiselectField } from './fields';
 import { email, required } from './validators';
+import ChipSelectField from '../common/ChipSelectField';
+
+const roles = [{
+  label: 'Admin',
+  value: 'admin',
+}, {
+  label: 'Member',
+  value: 'member',
+}, {
+  label: 'User',
+  value: 'user',
+}];
 
 // eslint-disable-next-line react/prop-types
 const InviteUserForm = ({ error }) => (
@@ -11,9 +22,10 @@ const InviteUserForm = ({ error }) => (
     <Field
       name="email"
       component={TextField}
-      hintText="Your email address"
-      floatingLabelText="Email"
+      placeholder="Your email address"
+      label="Email"
       type="email"
+      margin="normal"
       validate={[
         required('Email address is required'),
         email('Enter a valid email'),
@@ -22,13 +34,15 @@ const InviteUserForm = ({ error }) => (
     />
     <Field
       name="roles"
-      component={MultiselectField}
-      dataSource={['admin', 'user', 'member']}
-      format={value => (value === '' ? null : value)}
-      floatingLabelText="Roles"
-      hintText="Start typing roles..."
-      newChipKeyCodes={[]}
+      component={ChipSelectField}
+      options={roles}
+      label="Roles"
+      placeholder="Start typing roles..."
+      margin="normal"
       fullWidth
+      multi
+      removeSelected
+      clearable={false}
     />
   </form>
 );

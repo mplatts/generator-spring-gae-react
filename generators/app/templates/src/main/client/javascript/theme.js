@@ -1,16 +1,40 @@
 import Color from 'color';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import { createMuiTheme } from 'material-ui/styles';
 
-export default {
-  ...lightBaseTheme,
+const spacing = 8;
+
+export default createMuiTheme({
   palette: {
-    ...lightBaseTheme.palette,
-    primary1Color: Color('#8bd1cc').darken(0.15).hex(),
-    primary2Color: Color('#8bd1cc').darken(0.4).hex(),
-    accent1Color: '#fdbe5a',
-    accent2Color: Color('#fdbe5a').darken(0.2).hex(),
+    primary: {
+      main: Color('#8bd1cc').darken(0.15).hex(),
+      contrastText: '#ffffff',
+    },
   },
-  appBar: {
-    color: '#2f353a',
+  spacing: {
+    unit: spacing,
   },
-};
+  overrides: {
+    MuiButton: {
+      root: {
+        marginLeft: spacing,
+        '&:nth-child(1)': {
+          marginLeft: 0,
+        },
+      },
+    },
+    MuiChip: {
+      root: {
+        marginLeft: spacing / 2,
+        '&:nth-child(1)': {
+          marginLeft: 0,
+        },
+      },
+    },
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: 'rgba(0, 0, 0, 0.87)',
+        color: '#FFFFFF',
+      },
+    },
+  },
+});

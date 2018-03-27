@@ -33,6 +33,16 @@ const MaterialSelectField = (props) => {
     ...custom
   } = props;
 
+  const onChange = (evt) => {
+    if (evt) {
+      if (Array.isArray(evt)) {
+        input.onChange(evt.map(v => v[valueKey || 'value']));
+      } else {
+        input.onChange(evt[valueKey || 'value']);
+      }
+    }
+  };
+
   return (
     <MaterialSelect
       labelText={label}
@@ -42,7 +52,7 @@ const MaterialSelectField = (props) => {
       value={input.value}
       valueKey={valueKey}
       onBlur={() => input.onBlur(input.value)}
-      onChange={evt => input.onChange(evt ? evt[valueKey] : evt)}
+      onChange={onChange}
       filterOptions={computeOptions(props.valueKey)}
     />);
 };

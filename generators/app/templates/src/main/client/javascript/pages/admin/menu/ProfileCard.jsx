@@ -1,37 +1,39 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import { object } from 'prop-types';
-import { Card, CardMedia } from 'material-ui';
+import { Card } from 'material-ui';
 import './ProfileCard.less';
 
-const ProfileCard = ({ user }) => (
-  <Card className="profile-card">
-    <CardMedia
-      className="profile-media"
-      overlay={
-        <div className="profile-details">
-          <Avatar
-            className="avatar"
-            name={user.name}
-            email={user.email}
-            size={48}
-            round
-          />
-          <div className="name">
-            {user.name || user.email}
-          </div>
-          <div className="email">
-            {user.name && user.email}
-          </div>
+const ProfileCard = ({ user }) => {
+  const { email, name } = user || {};
+
+  return (
+    <Card className="profile-card">
+      <div className="profile-details">
+        <Avatar
+          className="avatar"
+          name={name}
+          email={email}
+          size={48}
+          round
+        />
+        <div className="name">
+          {name || email}
         </div>
-      }
-      overlayContentStyle={{ background: 'none' }}
-    />
-  </Card>
-);
+        <div className="email">
+          {name && email}
+        </div>
+      </div>
+    </Card>
+  );
+};
 
 ProfileCard.propTypes = {
-  user: object.isRequired,
+  user: object,
+};
+
+ProfileCard.defaultProps = {
+  user: {},
 };
 
 export default ProfileCard;

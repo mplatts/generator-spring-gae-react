@@ -1,40 +1,39 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import Alert from 'react-s-alert';
 import { Link } from 'react-router';
-import * as PropTypes from 'prop-types';
-import { Chip, RaisedButton, Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from 'material-ui';
-import SendIcon from 'material-ui/svg-icons/content/send';
-import { user } from '../../model';
-import theme from '../../theme';
+import { SubmissionError } from 'redux-form';
+import { arrayOf } from 'prop-types';
+import { Button, Chip, Table, TableBody, TableCell, TableHead, TableRow } from 'material-ui';
+import SendIcon from 'material-ui-icons/Send';
+import AppPropTypes from '../../components/AppPropTypes';
+import api from '../../services/api';
 import './ManageUsersPage.less';
 import FormDialog from '../../components/forms/FormDialog';
 import InviteUserForm from '../../components/forms/InviteUserForm';
-import * as fromMainReducer from '../../reducers';
-import { inviteUser, fetchUsers, closeInviteUserDialog, openInviteUserDialog } from '../../actions/users';
 
 const UserTable = ({ users }) => (
-  <Table className="user-table" multiSelectable>
-    <TableHeader>
+  <Table className="user-table">
+    <TableHead>
       <TableRow>
-        <TableHeaderColumn>Email</TableHeaderColumn>
-        <TableHeaderColumn>Name</TableHeaderColumn>
-        <TableHeaderColumn>Roles</TableHeaderColumn>
-        <TableHeaderColumn>Enabled</TableHeaderColumn>
+        <TableCell>Email</TableCell>
+        <TableCell>Name</TableCell>
+        <TableCell>Roles</TableCell>
+        <TableCell>Status</TableCell>
       </TableRow>
-    </TableHeader>
+    </TableHead>
     <TableBody>
-      {users.map(usr => (
-        <TableRow key={usr.id}>
-          <TableRowColumn>
-            <Link to={`/admin/users/${usr.id}`}>{usr.email}</Link>
-          </TableRowColumn>
-          <TableRowColumn>{usr.name}</TableRowColumn>
-          <TableRowColumn>
+      {users.map(user => (
+        <TableRow key={user.id}>
+          <TableCell>
+            <Link to={`/admin/users/${user.id}`}>{user.email}</Link>
+          </TableCell>
+          <TableCell>{user.name}</TableCell>
+          <TableCell>
             <div className="roles">
-              {usr.roles.map(role => <Chip key={role} className="role" backgroundColor={theme.palette.primary1Color} labelColor="white">{role}</Chip>)}
+              {user.roles.map(role => <Chip key={role} className="role" label={role} />)}
             </div>
-          </TableRowColumn>
-          <TableRowColumn>{`${usr.enabled}`}</TableRowColumn>
+          </TableCell>
+          <TableCell>{user.status}</TableCell>
         </TableRow>
       ))}
     </TableBody>
@@ -42,67 +41,70 @@ const UserTable = ({ users }) => (
 );
 
 UserTable.propTypes = {
-  users: PropTypes.arrayOf(user).isRequired,
+  users: arrayOf(AppPropTypes.user).isRequired,
 };
 
-const UsersPage = props => (
-  <div className="manage-users-page">
-    <h1 className="display-1">Manage users</h1>
+class ManageUsersPage extends Component {
+  state = { inviteUserDialogOpen: false, users: [] };
 
-    <RaisedButton
-      className="invite-user-btn"
-      label="Invite User"
-      icon={<SendIcon />}
-      onClick={props.openInviteUserDialog}
-    />
-
-    <UserTable users={props.users} />
-
-    <FormDialog
-      title="Invite user"
-      submitButtonText="Invite"
-      formComponent={InviteUserForm}
-      formName="inviteUser"
-      open={props.dialogOpen}
-      onCancel={props.closeInviteUserDialog}
-      onSubmit={props.inviteUser}
-    />
-  </div>
-);
-
-UsersPage.propTypes = {
-  openInviteUserDialog: PropTypes.func.isRequired,
-  closeInviteUserDialog: PropTypes.func.isRequired,
-  inviteUser: PropTypes.func.isRequired,
-  dialogOpen: PropTypes.bool.isRequired,
-  users: PropTypes.arrayOf(user).isRequired,
-
-};
-
-class ManageUsersContainer extends Component {
   componentDidMount() {
-    this.props.fetchUsers();
+    this.fetchUsers();
   }
 
+  fetchUsers() {
+    api.users.list()
+      .then(users => this.setState({ users }))
+      .catch(error => Alert.error(`Error fetching users: ${error.message}`));
+  }
+
+  handleInviteUser = values =>
+    api.users.invite(values)
+      .then(() => {
+        Alert.success('User invite sent!');
+        this.closeInviteUserDialog();
+      })
+      .catch((error) => {
+        throw new SubmissionError({ _error: error.message });
+      });
+
+  openInviteUserDialog = () => {
+    this.setState({ inviteUserDialogOpen: true });
+  };
+
+  closeInviteUserDialog = () => {
+    this.setState({ inviteUserDialogOpen: false });
+  };
+
   render() {
-    return UsersPage(this.props);
+    const { inviteUserDialogOpen, users } = this.state;
+
+    return (
+      <div className="manage-users-page">
+        <h1 className="display-1">Manage users</h1>
+
+        <Button
+          variant="raised"
+          className="invite-user-btn"
+          onClick={this.openInviteUserDialog}
+        >
+          Invite User
+          <SendIcon className="invite-user-btn-icon"/>
+        </Button>
+
+        <UserTable users={users} />`
+
+        <FormDialog
+          title="Invite user"
+          submitButtonText="Invite"
+          formComponent={InviteUserForm}
+          formName="inviteUser"
+          open={inviteUserDialogOpen}
+          onCancel={this.closeInviteUserDialog}
+          onSubmit={this.handleInviteUser}
+        />
+      </div>
+    );
   }
 }
 
-ManageUsersContainer.propTypes = {
-  fetchUsers: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  users: fromMainReducer.getUsers(state),
-  dialogOpen: fromMainReducer.isInviteUserDialogOpen(state),
-});
-
-const mapDispatchToProps = {
-  inviteUser,
-  fetchUsers,
-  closeInviteUserDialog,
-  openInviteUserDialog,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ManageUsersContainer);
+export default ManageUsersPage;
