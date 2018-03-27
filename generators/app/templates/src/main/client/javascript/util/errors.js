@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import parser from 'stacktrace-parser';
 import api from '../services/api';
 

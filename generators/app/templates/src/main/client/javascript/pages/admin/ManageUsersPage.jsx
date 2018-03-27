@@ -91,7 +91,7 @@ class ManageUsersPage extends Component {
           <SendIcon className="invite-user-btn-icon"/>
         </Button>
 
-        <UserTable users={users} />`
+        <UserTable users={users} />
 
         <FormDialog
           title="Invite user"

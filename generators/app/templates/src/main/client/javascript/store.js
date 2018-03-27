@@ -1,11 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
+import reduxCatch from 'redux-catch';
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
-import reduxCatch from 'redux-catch';
-import { logReduxError } from "./util/errors";
+import { logReduxError } from './util/errors';
 
 const middleware = [routerMiddleware(browserHistory), thunk, reduxCatch(logReduxError)];
 

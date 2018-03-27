@@ -12,7 +12,7 @@ import './LoginPage.less';
 
 const MagicLinkInstructions = () => (
   <div className="magic-link-instructions">
-    {/*<RetinaImage src="envelope.png" alt="Envelope" />*/}
+    <RetinaImage src="envelope.png" alt="Envelope" />
     <p className="subheading-2">Magic link sent! Check your email and click the button inside to login.</p>
   </div>
 );

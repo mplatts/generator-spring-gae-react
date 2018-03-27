@@ -5,7 +5,7 @@ import 'normalize.css';
 
 import App from './components/App';
 import '../less/styles/main.less';
-import {attachErrorLogger} from './util/errors';
+import { attachErrorLogger } from './util/errors';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -14,7 +14,7 @@ attachErrorLogger();
 
 // Define render as a function so we can re-render when using Hot Module Replacement
 const render = (Component) => {
-  ReactDOM.render(<Component />, document.getElementById('root'));
+  ReactDOM.render(<Component/>, document.getElementById('root'));
 };
 
 // Perform initial render
