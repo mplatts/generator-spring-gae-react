@@ -6,13 +6,13 @@ import ChipSelectField from '../common/ChipSelectField';
 
 const roles = [{
   label: 'Admin',
-  value: 'admin',
+  value: 'ADMIN',
 }, {
-  label: 'Member',
-  value: 'member',
+  label: 'Super',
+  value: 'SUPER',
 }, {
   label: 'User',
-  value: 'user',
+  value: 'USER',
 }];
 
 // eslint-disable-next-line react/prop-types

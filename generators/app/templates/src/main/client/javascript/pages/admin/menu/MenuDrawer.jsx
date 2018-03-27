@@ -49,7 +49,7 @@ const MenuDrawer = ({
       <List>
         <ListItem
           button
-          onClick={() => navigateTo(`/admin/users/${loggedInUser.username}`)}
+          onClick={() => navigateTo(`/admin/users/${loggedInUser.id}`)}
         >
           <ListItemIcon><PersonIcon/></ListItemIcon>
           <ListItemText primary="Profile"/>

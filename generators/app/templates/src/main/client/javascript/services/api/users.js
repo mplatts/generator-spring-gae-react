@@ -12,9 +12,6 @@ const list = () =>
 const login = credentials =>
   request('/login', 'POST', formEncode({ ...credentials, 'remember-me': true }), { 'Content-Type': 'application/x-www-form-urlencoded' });
 
-const requestMagicLink = email =>
-  requestJSON('/users/login/magic', 'POST', { email });
-
 const logout = () =>
   request('/logout', 'POST');
 
@@ -35,6 +32,5 @@ export default {
   logout,
   me,
   redeemInvite,
-  requestMagicLink,
   save,
 };

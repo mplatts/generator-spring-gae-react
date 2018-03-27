@@ -45,7 +45,6 @@ public class UserService {
 
             user.setRoles(request.getRoles());
             user.setName(request.getName());
-
             return userRepository.save(user);
         });
     }
