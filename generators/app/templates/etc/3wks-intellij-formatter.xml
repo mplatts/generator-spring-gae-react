@@ -1,9 +1,35 @@
-<code_scheme name="3wks">
+<code_scheme name="3wks" version="173">
   <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
   <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
   <option name="RIGHT_MARGIN" value="200" />
   <option name="FORMATTER_TAGS_ENABLED" value="true" />
+  <JSCodeStyleSettings>
+    <option name="USE_DOUBLE_QUOTES" value="false" />
+    <option name="SPACES_WITHIN_OBJECT_LITERAL_BRACES" value="true" />
+    <option name="SPACES_WITHIN_IMPORTS" value="true" />
+    <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+  </JSCodeStyleSettings>
+  <JavaCodeStyleSettings>
+    <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
+    <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="9999" />
+  </JavaCodeStyleSettings>
+  <Properties>
+    <option name="KEEP_BLANK_LINES" value="true" />
+  </Properties>
+  <TypeScriptCodeStyleSettings>
+    <option name="IMPORT_SORT_MODULE_NAME" value="true" />
+  </TypeScriptCodeStyleSettings>
+  <codeStyleSettings language="HTML">
+    <option name="RIGHT_MARGIN" value="300" />
+  </codeStyleSettings>
   <codeStyleSettings language="JAVA">
     <option name="ALIGN_MULTILINE_PARAMETERS" value="false" />
+  </codeStyleSettings>
+  <codeStyleSettings language="JavaScript">
+    <indentOptions>
+      <option name="INDENT_SIZE" value="2" />
+      <option name="CONTINUATION_INDENT_SIZE" value="2" />
+      <option name="TAB_SIZE" value="2" />
+    </indentOptions>
   </codeStyleSettings>
 </code_scheme>
