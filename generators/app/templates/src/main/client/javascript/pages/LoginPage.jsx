@@ -5,9 +5,7 @@ import { SubmissionError } from 'redux-form';
 import { func, object } from 'prop-types';
 import CenteredPanelLayout from './CenteredPanelLayout';
 import LoginForm from '../components/forms/LoginForm';
-import RetinaImage from '../components/RetinaImage';
 import * as authActions from '../actions/auth';
-import api from '../services/api';
 import './LoginPage.less';
 
 class LoginPage extends Component {
