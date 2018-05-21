@@ -35,7 +35,7 @@
     "lodash": "^4.17.4",
     "random-string": "^0.2.0",
     "slugify": "^1.1.0",
-    "yeoman-generator": "^1.0.0",
+    "yeoman-generator": "^2.0.5",
     "yosay": "^2.0.0"
   },
   "jest": {
