@@ -8,6 +8,7 @@ import { fetchUser } from '../actions/auth';
 const { dispatch, getState } = store;
 
 const withLogin = nextPage => ({ pathname: '/login', query: { next: nextPage } });
+const withHomepage = () => ({ pathname: '/' });
 
 export const composeOnEnterHooks = (...hooks) => (nextState, replace, callback) => {
   applyEachSeries(hooks, nextState, replace, (error) => {
@@ -27,7 +28,12 @@ export const loginRequired = (nextState, replace, callback) => {
 
   dispatch(fetchUser()).then(
     () => {
-      callback();
+      if (getIsAuthenticated(getState())) {
+        callback();
+      } else {
+        replace(withLogin(nextState.location.pathname));
+        callback(new Error('Login required'));
+      }
     },
     (error) => {
       replace(withLogin(nextState.location.pathname));
@@ -45,6 +51,6 @@ export const hasAnyRole = (...roles) => (nextState, replace, callback) => {
     return;
   }
 
-  replace(withLogin(nextState.location.pathname));
+  replace(withHomepage());
   callback(new Error('User lacks required role'));
 };
