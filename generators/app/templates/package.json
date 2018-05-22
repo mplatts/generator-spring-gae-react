@@ -90,6 +90,9 @@
       "<rootDir>/src/main/client/javascript",
       "<rootDir>/src/test/javascript"
     ],
-    "testPathIgnorePatterns": ["/node_modules/", "/target/"]
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/target/"
+    ]
   }
 }
