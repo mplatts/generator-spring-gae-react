@@ -13,6 +13,7 @@ public class UpdateUserRequest {
     @NotBlank
     @Email
     private String email;
+    @NotBlank
     private String name;
     private Set<Role> roles = new HashSet<>();
 

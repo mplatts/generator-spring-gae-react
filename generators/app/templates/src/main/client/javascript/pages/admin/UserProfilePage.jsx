@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key,react/jsx-indent,react/jsx-closing-tag-location */
 import React, { Component } from 'react';
 import Alert from 'react-s-alert';
 import Avatar from 'react-avatar';
@@ -44,8 +45,10 @@ class UserProfilePage extends Component {
       .save(values)
       .then(() => Alert.success('User updated'))
       .catch((error) => {
-        Alert.error(error.message);
-        throw new SubmissionError({ _error: error.message });
+        Alert.error(<div>
+          { error.messages.map((err, index) => <p key={index}>{err}</p>) }
+        </div>);
+        throw new SubmissionError({ _error: error });
       });
 
   render() {

@@ -42,7 +42,8 @@ export const request = (path, method = 'GET', body = null, headers = {}) => {
         // Attempt to parse body as JSON, fallback to plain text if parsing fails
         const data = JSON.parse(text);
         error = new Error(data.message);
-        error.type = data.type;
+        error.type = data.error;
+        error.messages = data.messages;
       } catch (e) {
         // Fallback to plain text
         error = new Error(response.statusText);

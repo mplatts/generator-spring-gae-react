@@ -1,9 +1,12 @@
 package threewks.framework.usermanagement.service;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class InviteUserRequest {
+    @NotBlank
     private String email;
     private List<String> roles = new ArrayList<>();
 

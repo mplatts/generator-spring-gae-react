@@ -1,12 +1,22 @@
 package threewks.framework.controller.advice;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class ResponseError {
     private final String error;
-    private final String message;
+    private final List<String> messages = new ArrayList<>();
+
+    public ResponseError(String error, Collection<String> messages) {
+        this.error = error;
+        this.messages.addAll(messages);
+    }
 
     public ResponseError(String error, String message) {
         this.error = error;
-        this.message = message;
+        this.messages.add(message);
     }
 
     public String getError() {
@@ -14,7 +24,11 @@ public class ResponseError {
     }
 
     public String getMessage() {
-        return message;
+        return messages.stream().collect(Collectors.joining(", "));
+    }
+
+    public List<String> getMessages() {
+        return messages;
     }
 
 }

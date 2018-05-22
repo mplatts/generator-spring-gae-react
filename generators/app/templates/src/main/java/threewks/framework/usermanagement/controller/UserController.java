@@ -17,7 +17,8 @@ import threewks.framework.usermanagement.service.UserInviteService;
 import threewks.framework.usermanagement.service.UserService;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashSet;
+    import javax.validation.Valid;
+    import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +65,7 @@ public class UserController {
 
     @RequestMapping(method = POST, path = "/invite")
     @PreAuthorize("hasRole('ADMIN')")
-    public User inviteUser(@RequestBody InviteUserRequest inviteUserRequest) {
+    public User inviteUser(@RequestBody @Valid InviteUserRequest inviteUserRequest) {
         return userInviteService.invite(inviteUserRequest.getEmail(), new HashSet<>(inviteUserRequest.getRoles()));
     }
 
@@ -75,7 +76,7 @@ public class UserController {
 
     @RequestMapping(method = PUT, path = "/{userId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public User saveUser(@PathVariable("userId") String userId, @RequestBody UpdateUserRequest request) {
+    public User saveUser(@PathVariable("userId") String userId, @RequestBody @Valid UpdateUserRequest request) {
         return userService.update(userId, request);
     }
 
