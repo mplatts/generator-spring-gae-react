@@ -5,6 +5,8 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.contrib.gae.objectify.ObjectifyProxy;
+import org.springframework.contrib.gae.search.SearchService;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -20,6 +22,10 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 public abstract class BaseIntegrationTest {
     @Autowired
     protected UserRepository userRepository;
+    @Autowired
+    protected ObjectifyProxy objectifyProxy;
+    @Autowired
+    protected SearchService searchService;
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
