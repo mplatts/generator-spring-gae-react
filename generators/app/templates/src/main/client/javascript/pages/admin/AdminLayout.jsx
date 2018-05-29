@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Alert from 'react-s-alert';
 import { arrayOf, node, oneOfType, func } from 'prop-types';
 import { AppBar, Toolbar, IconButton, Typography } from 'material-ui';
-import MenuIcon from 'material-ui-icons/Menu';
+import MenuIcon from '@material-ui/icons/Menu';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/slide.css';
 import MenuDrawer from './menu/MenuDrawer';

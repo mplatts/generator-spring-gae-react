@@ -3,10 +3,10 @@ import React from 'react';
 import * as PropTypes from 'prop-types';
 import { Chip, MenuItem, Typography } from 'material-ui';
 import Select from 'react-select';
-import ArrowDropDownIcon from 'material-ui-icons/ArrowDropDown';
-import CancelIcon from 'material-ui-icons/Cancel';
-import ClearIcon from 'material-ui-icons/Clear';
-import ArrowDropUpIcon from 'material-ui-icons/ArrowDropUp';
+import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
+import CancelIcon from '@material-ui/icons/Cancel';
+import ClearIcon from '@material-ui/icons/Clear';
+import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ReactDOM from 'react-dom';
 
 class Option extends React.Component {
