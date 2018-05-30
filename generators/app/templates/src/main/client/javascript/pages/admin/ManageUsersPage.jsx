@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { SubmissionError } from 'redux-form';
 import { arrayOf } from 'prop-types';
 import { Button, Chip, Table, TableBody, TableCell, TableHead, TableRow } from 'material-ui';
-import SendIcon from 'material-ui-icons/Send';
+import SendIcon from '@material-ui/icons/Send';
 import AppPropTypes from '../../components/AppPropTypes';
 import api from '../../services/api';
 import './ManageUsersPage.less';
